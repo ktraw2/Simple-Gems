@@ -8,8 +8,8 @@ public class EmeraldLamp extends Block {
     public EmeraldLamp() {
         super(Properties.create(Material.REDSTONE_LIGHT)
                         .sound(SoundType.GLASS)
-                        .hardnessAndResistance(2.0f)
-                        .lightValue(14));
+                        .hardnessAndResistance(0.5f, 15f)
+                        .lightValue(15));
 
         setRegistryName("emerald_lamp");
     }

@@ -4,6 +4,7 @@ import com.ktraw.mymod.blocks.EmeraldLamp;
 import com.ktraw.mymod.blocks.ModBlocks;
 import com.ktraw.mymod.setup.ClientProxy;
 import com.ktraw.mymod.setup.IProxy;
+import com.ktraw.mymod.setup.ModSetup;
 import com.ktraw.mymod.setup.ServerProxy;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
@@ -23,6 +24,8 @@ public class MyMod
 {
     public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
 
+    public static ModSetup setup = ModSetup.getSetup();
+
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -33,7 +36,8 @@ public class MyMod
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-
+        setup.init();
+        proxy.init();
     }
 
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
@@ -47,7 +51,7 @@ public class MyMod
 
         @SubscribeEvent
         public static void onItemsRegistry(final RegistryEvent.Register<Item> event) {
-            event.getRegistry().register(new BlockItem(ModBlocks.EMERALDLAMP, new Item.Properties()).setRegistryName("emerald_lamp"));
+            event.getRegistry().register(new BlockItem(ModBlocks.EMERALDLAMP, new Item.Properties().group(setup.getCreativeTab())).setRegistryName("emerald_lamp"));
         }
     }
 }

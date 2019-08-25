@@ -1,3 +1,6 @@
 {
-  "block.mymod.emerald_lamp": "Emerald Lamp"
+  "block.mymod.emerald_lamp": "Emerald Lamp",
+
+  "_comment": "Creative Tabs",
+  "itemGroup.mymod": "My Mod"
 }
