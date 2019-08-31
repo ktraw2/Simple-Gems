@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:emerald"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "mymod:ruby"
+    },
+    {
+      "item": "mymod:amethyst"
+    }
+  ],
+  "result": {
+    "item": "mymod:gem",
+    "count": 1
+  }
+}

@@ -5,6 +5,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
 public class EmeraldLamp extends Block {
+
     public EmeraldLamp() {
         super(Properties.create(Material.REDSTONE_LIGHT)
                         .sound(SoundType.GLASS)
@@ -13,4 +14,6 @@ public class EmeraldLamp extends Block {
 
         setRegistryName("emerald_lamp");
     }
+
+
 }

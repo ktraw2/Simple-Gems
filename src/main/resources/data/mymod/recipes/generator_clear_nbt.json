@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mymod:generator"
+    }
+  ],
+  "result": {
+    "item": "mymod:generator",
+    "count": 1
+  }
+}

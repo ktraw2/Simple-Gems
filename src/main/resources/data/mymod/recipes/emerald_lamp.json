@@ -10,7 +10,7 @@
       "item": "minecraft:glowstone"
     },
     "E": {
-      "item": "minecraft:emerald"
+      "item": "mymod:charged_emerald_dust"
     }
   },
   "result": {

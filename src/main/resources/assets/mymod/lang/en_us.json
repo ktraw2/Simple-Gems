@@ -1,5 +1,23 @@
 {
   "block.mymod.emerald_lamp": "Emerald Lamp",
+  "block.mymod.ruby_ore": "Ruby Ore",
+  "block.mymod.ruby_block": "Ruby Block",
+  "block.mymod.amethyst_ore": "Amethyst Ore",
+  "block.mymod.amethyst_block": "Amethyst Block",
+  "block.mymod.generator": "Generator",
+  "item.mymod.ruby": "Ruby",
+  "item.mymod.charged_emerald_dust": "Charged Emerald Dust",
+  "item.mymod.gem": "Gem",
+  "item.mymod.gem_pickaxe": "Gem Pickaxe",
+  "item.mymod.gem_sword": "Gem Sword",
+  "item.mymod.gem_axe": "Gem Axe",
+  "item.mymod.gem_shovel": "Gem Shovel",
+  "item.mymod.gem_hoe": "Gem Hoe",
+  "item.mymod.gem_helmet": "Gem Helmet",
+  "item.mymod.gem_chestplate": "Gem Chestplate",
+  "item.mymod.gem_leggings": "Gem Leggings",
+  "item.mymod.gem_boots": "Gem Boots",
+  "item.mymod.amethyst": "Amethyst",
 
   "_comment": "Creative Tabs",
   "itemGroup.mymod": "My Mod"
