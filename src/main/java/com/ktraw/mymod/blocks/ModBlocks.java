@@ -24,6 +24,9 @@ public class ModBlocks {
     @ObjectHolder("mymod:amethyst_block")
     public static AmethystBlock AMETHYST_BLOCK;
 
+    @ObjectHolder("mymod:gem_block")
+    public static GemBlock GEM_BLOCK;
+
     @ObjectHolder("mymod:generator")
     public static Generator GENERATOR;
 

@@ -20,6 +20,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.Rarity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -81,6 +82,7 @@ public class MyMod
             registry.register(new RubyBlock());
             registry.register(new AmethystOre());
             registry.register(new AmethystBlock());
+            registry.register(new GemBlock());
             registry.register(new Generator());
         }
 
@@ -94,7 +96,8 @@ public class MyMod
             registry.register(new BlockItem(ModBlocks.RUBY_BLOCK, new Item.Properties().group(setup.getCreativeTab())).setRegistryName("ruby_block"));
             registry.register(new BlockItem(ModBlocks.AMETHYST_ORE, new Item.Properties().group(setup.getCreativeTab())).setRegistryName("amethyst_ore"));
             registry.register(new BlockItem(ModBlocks.AMETHYST_BLOCK, new Item.Properties().group(setup.getCreativeTab())).setRegistryName("amethyst_block"));
-            registry.register(new BlockItem(ModBlocks.GENERATOR, new Item.Properties().group(setup.getCreativeTab())).setRegistryName("generator"));
+            registry.register(new BlockItem(ModBlocks.GEM_BLOCK, new Item.Properties().group(setup.getCreativeTab())).setRegistryName("gem_block"));
+            registry.register(new BlockItem(ModBlocks.GENERATOR, new Item.Properties().group(setup.getCreativeTab()).rarity(Rarity.RARE)).setRegistryName("generator"));
 
             // Regular items
             registry.register(new Ruby());

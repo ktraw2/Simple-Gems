@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": {"model":  "mymod:block/gem_block"}
+  }
+}
