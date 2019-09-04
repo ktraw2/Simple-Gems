@@ -1,5 +1,20 @@
 {
   "variants": {
-    "": {"model":  "mymod:block/emerald_lamp"}
+    "level=0": {"model":  "mymod:block/emerald_lamp"},
+    "level=1": {"model":  "mymod:block/emerald_lamp_on"},
+    "level=2": {"model":  "mymod:block/emerald_lamp_on"},
+    "level=3": {"model":  "mymod:block/emerald_lamp_on"},
+    "level=4": {"model":  "mymod:block/emerald_lamp_on"},
+    "level=5": {"model":  "mymod:block/emerald_lamp_on"},
+    "level=6": {"model":  "mymod:block/emerald_lamp_on"},
+    "level=7": {"model":  "mymod:block/emerald_lamp_on"},
+    "level=8": {"model":  "mymod:block/emerald_lamp_on"},
+    "level=9": {"model":  "mymod:block/emerald_lamp_on"},
+    "level=10": {"model":  "mymod:block/emerald_lamp_on"},
+    "level=11": {"model":  "mymod:block/emerald_lamp_on"},
+    "level=12": {"model":  "mymod:block/emerald_lamp_on"},
+    "level=13": {"model":  "mymod:block/emerald_lamp_on"},
+    "level=14": {"model":  "mymod:block/emerald_lamp_on"},
+    "level=15": {"model":  "mymod:block/emerald_lamp_on"}
   }
 }
