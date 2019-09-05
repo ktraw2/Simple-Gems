@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " G ",
+    " S ",
+    " S "
+  ],
+  "key": {
+    "G": {
+      "item": "simplegems:gem"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "simplegems:gem_shovel"
+  }
+}

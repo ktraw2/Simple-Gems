@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "simplegems:generator"
+    }
+  ],
+  "result": {
+    "item": "simplegems:generator",
+    "count": 1
+  }
+}

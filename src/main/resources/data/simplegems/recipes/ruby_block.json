@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "simplegems:ruby"
+    }
+  },
+  "result": {
+    "item": "simplegems:ruby_block"
+  }
+}

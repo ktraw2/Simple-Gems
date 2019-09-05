@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "AEA",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "item": "simplegems:amethyst"
+    },
+    "E": {
+      "item": "minecraft:apple"
+    }
+  },
+  "result": {
+    "item": "simplegems:ender_apple"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "G G"
+  ],
+  "key": {
+    "G": {
+      "item": "simplegems:gem"
+    }
+  },
+  "result": {
+    "item": "simplegems:gem_helmet"
+  }
+}

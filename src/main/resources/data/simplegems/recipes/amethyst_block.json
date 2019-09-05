@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "simplegems:amethyst"
+    }
+  },
+  "result": {
+    "item": "simplegems:amethyst_block"
+  }
+}

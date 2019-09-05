@@ -1,0 +1,26 @@
+{
+  "block.simplegems.emerald_lamp": "Emerald Lamp",
+  "block.simplegems.ruby_ore": "Ruby Ore",
+  "block.simplegems.ruby_block": "Ruby Block",
+  "block.simplegems.amethyst_ore": "Amethyst Ore",
+  "block.simplegems.amethyst_block": "Amethyst Block",
+  "block.simplegems.gem_block": "Gem Block",
+  "block.simplegems.generator": "Generator",
+  "item.simplegems.ruby": "Ruby",
+  "item.simplegems.charged_emerald_dust": "Charged Emerald Dust",
+  "item.simplegems.gem": "Gem",
+  "item.simplegems.gem_pickaxe": "Gem Pickaxe",
+  "item.simplegems.gem_sword": "Gem Sword",
+  "item.simplegems.gem_axe": "Gem Axe",
+  "item.simplegems.gem_shovel": "Gem Shovel",
+  "item.simplegems.gem_hoe": "Gem Hoe",
+  "item.simplegems.gem_helmet": "Gem Helmet",
+  "item.simplegems.gem_chestplate": "Gem Chestplate",
+  "item.simplegems.gem_leggings": "Gem Leggings",
+  "item.simplegems.gem_boots": "Gem Boots",
+  "item.simplegems.amethyst": "Amethyst",
+  "item.simplegems.ender_apple": "Ender Apple",
+
+  "_comment": "Creative Tabs",
+  "itemGroup.simplegems": "Simple Gems"
+}

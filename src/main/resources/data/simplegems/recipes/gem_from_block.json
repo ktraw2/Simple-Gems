@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "simplegems:gem_block"
+    }
+  ],
+  "result": {
+    "item": "simplegems:gem",
+    "count": 9
+  }
+}
