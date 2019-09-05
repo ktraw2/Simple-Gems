@@ -48,4 +48,7 @@ public class ModItems {
 
     @ObjectHolder("mymod:amethyst")
     public static Amethyst AMETHYST;
+
+    @ObjectHolder("mymod:ender_apple")
+    public static EnderApple ENDER_APPLE;
 }

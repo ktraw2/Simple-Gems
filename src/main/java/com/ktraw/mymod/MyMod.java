@@ -113,6 +113,7 @@ public class MyMod
             registry.register(new GemLeggings());
             registry.register(new GemBoots());
             registry.register(new Amethyst());
+            registry.register(new EnderApple());
         }
 
         @SubscribeEvent
