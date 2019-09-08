@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "simplegems:block/infuser" },
+    "facing=south": { "model": "simplegems:block/infuser", "y": 180 },
+    "facing=west": { "model": "simplegems:block/infuser", "y": 270 },
+    "facing=east": { "model": "simplegems:block/infuser", "y": 90 }
+  }
+}

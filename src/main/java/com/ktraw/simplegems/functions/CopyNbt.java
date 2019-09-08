@@ -12,9 +12,9 @@ import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import net.minecraftforge.common.util.Constants;
 
 
-public class GeneratorCopyNbt extends LootFunction {
+public class CopyNbt extends LootFunction {
 
-    public GeneratorCopyNbt(ILootCondition[] conditionsIn) {
+    public CopyNbt(ILootCondition[] conditionsIn) {
         super(conditionsIn);
     }
 
@@ -62,17 +62,17 @@ public class GeneratorCopyNbt extends LootFunction {
         return stack;
     }
 
-    public static class Serializer extends LootFunction.Serializer<GeneratorCopyNbt> {
+    public static class Serializer extends LootFunction.Serializer<CopyNbt> {
         public Serializer() {
-            super(new ResourceLocation("simplegems_generator_copy_nbt"), GeneratorCopyNbt.class);
+            super(new ResourceLocation("simplegems_copy_nbt"), CopyNbt.class);
         }
 
-        public void serialize(JsonObject object, GeneratorCopyNbt functionClazz, JsonSerializationContext serializationContext) {
+        public void serialize(JsonObject object, CopyNbt functionClazz, JsonSerializationContext serializationContext) {
             super.serialize(object, functionClazz, serializationContext);
         }
 
-        public GeneratorCopyNbt deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
-            return new GeneratorCopyNbt(conditionsIn);
+        public CopyNbt deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
+            return new CopyNbt(conditionsIn);
         }
     }
 }

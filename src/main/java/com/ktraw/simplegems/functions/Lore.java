@@ -6,7 +6,6 @@ import com.google.gson.JsonSerializationContext;
 import com.ktraw.simplegems.items.ModItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.JSONUtils;
@@ -22,7 +21,7 @@ import net.minecraftforge.common.util.Constants;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-public class GeneratorLore extends SetLore {
+public class Lore extends SetLore {
 
 
     private static ArrayList<ITextComponent> fallbackLore = new ArrayList<>();
@@ -82,25 +81,25 @@ public class GeneratorLore extends SetLore {
         }
     }
 
-    public GeneratorLore(ILootCondition[] p_i51220_1_, boolean replace) {
+    public Lore(ILootCondition[] p_i51220_1_, boolean replace) {
         super(p_i51220_1_, replace, new ArrayList<ITextComponent>(), LootContext.EntityTarget.THIS);
 
         this.replace = replace;
     }
 
-    public static class Serializer extends LootFunction.Serializer<GeneratorLore> {
+    public static class Serializer extends LootFunction.Serializer<Lore> {
         public Serializer() {
-            super(new ResourceLocation("simplegems_generator_lore"), GeneratorLore.class);
+            super(new ResourceLocation("simplegems_lore"), Lore.class);
         }
 
-        public void serialize(JsonObject object, GeneratorLore functionClazz, JsonSerializationContext serializationContext) {
+        public void serialize(JsonObject object, Lore functionClazz, JsonSerializationContext serializationContext) {
             super.serialize(object, functionClazz, serializationContext);
             object.addProperty("replace", functionClazz.replace);
         }
 
-        public GeneratorLore deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
+        public Lore deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
             boolean flag = JSONUtils.getBoolean(object, "replace", false);
-            return new GeneratorLore(conditionsIn, flag);
+            return new Lore(conditionsIn, flag);
         }
     }
 

@@ -89,7 +89,7 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
     }
 
     private IEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(100000, 0);
+        return new CustomEnergyStorage(100000, 100);
     }
 
     @Nonnull

@@ -4,6 +4,8 @@ import com.ktraw.simplegems.blocks.*;
 import com.ktraw.simplegems.blocks.generator.Generator;
 import com.ktraw.simplegems.blocks.generator.GeneratorContainer;
 import com.ktraw.simplegems.blocks.generator.GeneratorTile;
+import com.ktraw.simplegems.blocks.infuser.Infuser;
+import com.ktraw.simplegems.blocks.infuser.InfuserTile;
 import com.ktraw.simplegems.events.PlayerEvents;
 import com.ktraw.simplegems.items.*;
 import com.ktraw.simplegems.items.armor.GemBoots;
@@ -84,6 +86,7 @@ public class SimpleGems
             registry.register(new AmethystBlock());
             registry.register(new GemBlock());
             registry.register(new Generator());
+            registry.register(new Infuser());
         }
 
         @SubscribeEvent
@@ -98,6 +101,7 @@ public class SimpleGems
             registry.register(new BlockItem(ModBlocks.AMETHYST_BLOCK, new Item.Properties().group(setup.getCreativeTab())).setRegistryName("amethyst_block"));
             registry.register(new BlockItem(ModBlocks.GEM_BLOCK, new Item.Properties().group(setup.getCreativeTab())).setRegistryName("gem_block"));
             registry.register(new BlockItem(ModBlocks.GENERATOR, new Item.Properties().group(setup.getCreativeTab()).rarity(Rarity.RARE)).setRegistryName("generator"));
+            registry.register(new BlockItem(ModBlocks.INFUSER, new Item.Properties().group(setup.getCreativeTab())).setRegistryName("infuser"));
 
             // Regular items
             registry.register(new Ruby());
@@ -121,6 +125,7 @@ public class SimpleGems
             IForgeRegistry<TileEntityType<?>> registry = event.getRegistry();
 
             registry.register(TileEntityType.Builder.create(GeneratorTile::new, ModBlocks.GENERATOR).build(null).setRegistryName("generator"));
+            registry.register(TileEntityType.Builder.create(InfuserTile::new, ModBlocks.INFUSER).build(null).setRegistryName("infuser"));
         }
 
         @SubscribeEvent

@@ -1,8 +1,8 @@
 package com.ktraw.simplegems.setup;
 
 import com.ktraw.simplegems.blocks.ModBlocks;
-import com.ktraw.simplegems.functions.GeneratorCopyNbt;
-import com.ktraw.simplegems.functions.GeneratorLore;
+import com.ktraw.simplegems.functions.CopyNbt;
+import com.ktraw.simplegems.functions.Lore;
 import com.ktraw.simplegems.items.ModItems;
 import com.ktraw.simplegems.world.OreGeneration;
 import net.minecraft.item.Item;
@@ -36,8 +36,8 @@ public final class ModSetup {
 
     public void init() {
         OreGeneration.setupOreGeneration();
-        LootFunctionManager.registerFunction(new GeneratorLore.Serializer());
-        LootFunctionManager.registerFunction(new GeneratorCopyNbt.Serializer());
+        LootFunctionManager.registerFunction(new Lore.Serializer());
+        LootFunctionManager.registerFunction(new CopyNbt.Serializer());
 
         try {
             Method addMix = PotionBrewing.class.getDeclaredMethod("addMix", Potion.class, Item.class, Potion.class);
@@ -46,6 +46,7 @@ public final class ModSetup {
         }
         catch (Exception e) {
             System.err.println("Error adding custom potions.");
+            e.printStackTrace();
         }
     }
 }

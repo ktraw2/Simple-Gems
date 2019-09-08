@@ -3,6 +3,8 @@ package com.ktraw.simplegems.blocks;
 import com.ktraw.simplegems.blocks.generator.Generator;
 import com.ktraw.simplegems.blocks.generator.GeneratorContainer;
 import com.ktraw.simplegems.blocks.generator.GeneratorTile;
+import com.ktraw.simplegems.blocks.infuser.Infuser;
+import com.ktraw.simplegems.blocks.infuser.InfuserTile;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.registries.ObjectHolder;
@@ -35,4 +37,10 @@ public class ModBlocks {
 
     @ObjectHolder("simplegems:generator")
     public static ContainerType<GeneratorContainer> GENERATOR_CONTAINER;
+
+    @ObjectHolder("simplegems:infuser")
+    public static Infuser INFUSER;
+
+    @ObjectHolder("simplegems:infuser")
+    public static TileEntityType<InfuserTile> INFUSER_TILE;
 }
