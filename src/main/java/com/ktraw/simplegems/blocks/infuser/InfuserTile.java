@@ -23,7 +23,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class InfuserTile extends TileEntity implements ITickableTileEntity, IRecipeContainer {
+public class InfuserTile extends TileEntity implements ITickableTileEntity {
     private LazyOptional<ItemStackHandler> items = LazyOptional.of(this::createItemHandler);
     private LazyOptional<CustomEnergyStorage> energy = LazyOptional.of(this::createEnergyStorage);
 
@@ -72,15 +72,5 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, IRec
     @Override
     public void tick() {
 
-    }
-
-    @Override
-    public CraftResultInventory getCraftResult() {
-        return null;
-    }
-
-    @Override
-    public CraftingInventory getCraftMatrix() {
-        return null;
     }
 }

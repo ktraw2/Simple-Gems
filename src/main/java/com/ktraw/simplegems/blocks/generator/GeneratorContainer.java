@@ -3,10 +3,12 @@ package com.ktraw.simplegems.blocks.generator;
 import com.ktraw.simplegems.blocks.ModBlocks;
 import com.ktraw.simplegems.items.ModItems;
 import com.ktraw.simplegems.tools.CustomEnergyStorage;
+import com.ktraw.simplegems.tools.SimpleGemsContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
@@ -20,21 +22,16 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-public class GeneratorContainer extends Container {
-    private TileEntity tileEntity;
-    private PlayerEntity player;
-    private IItemHandler playerInventory;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+public class GeneratorContainer extends SimpleGemsContainer<GeneratorContainer> {
+    private List<Item> validMergeItems = Arrays.asList(new Item[]{ModItems.CHARGED_EMERALD_DUST});
 
     public GeneratorContainer(int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
-        super(ModBlocks.GENERATOR_CONTAINER, windowId);
-        tileEntity = world.getTileEntity(pos);
-        this.player = player;
-        this.playerInventory = new InvWrapper(playerInventory);
-
-        tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-            addSlot(new SlotItemHandler(h, 0, 80, 31));
-        });
-        layoutPlayerInventorySlots(8, 84);
+        super(ModBlocks.GENERATOR_CONTAINER, windowId, world, pos, playerInventory, player);
 
         trackInt(new IntReferenceHolder() {
             @Override
@@ -44,97 +41,26 @@ public class GeneratorContainer extends Container {
 
             @Override
             public void set(int value) {
-                tileEntity.getCapability(CapabilityEnergy.ENERGY).ifPresent(h -> ((CustomEnergyStorage)h).setEnergy(value));
+                tileEntity.getCapability(CapabilityEnergy.ENERGY).ifPresent(h -> ((CustomEnergyStorage) h).setEnergy(value));
             }
         });
     }
 
+
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
-        ItemStack itemStack = ItemStack.EMPTY;
-        Slot slot = inventorySlots.get(index);
-
-        if (slot != null && slot.getHasStack()) {
-            ItemStack stack = slot.getStack();
-            itemStack = stack.copy();
-
-            if (index == 0) {
-                if (!mergeItemStack(stack, 1, 37, true)) {
-                    return ItemStack.EMPTY;
-                }
-                slot.onSlotChange(stack, itemStack);
-            }
-            else {
-                if (stack.getItem() == ModItems.CHARGED_EMERALD_DUST) {
-                    if (!this.mergeItemStack(stack, 0, 1, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                }
-                else if (index < 28) {
-                    if (!this.mergeItemStack(stack, 28, 37, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                }
-                else if (index < 37) {
-                    if (!this.mergeItemStack(stack, 1, 28, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                }
-            }
-
-            if (stack.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
-            }
-            else {
-                slot.onSlotChanged();
-            }
-
-            if (stack.getCount() == itemStack.getCount()) {
-                return ItemStack.EMPTY;
-            }
-
-            slot.onTake(playerIn, stack);
-        }
-
-        return itemStack;
+    public int getSlots() {
+        return 1;
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), player, ModBlocks.GENERATOR);
+    protected void initContainerSlots() {
+        tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+            addSlot(new SlotItemHandler(h, 0, 80, 31));
+        });
     }
 
-    public int getEnergy() {
-        return tileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
-    }
-
-    private int addSlotRow(IItemHandler handler, int index, int x, int y, int width, int dx) {
-        for (int i = 0; i < width; i++) {
-            addSlot(new SlotItemHandler(handler, index, x, y));
-            x += dx;
-            index++;
-        }
-        return index;
-    }
-
-    private int addSlotBox(IItemHandler handler, int index, int x, int y, int width, int dx, int height, int dy) {
-        for (int i = 0; i < height; i++) {
-            index = addSlotRow(handler, index, x, y, width, dx);
-            y += dy;
-        }
-        return index;
-    }
-
-    private void layoutPlayerInventorySlots(int leftCol, int topRow) {
-        // Inventory
-        addSlotBox(playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
-
-        // Hotbar
-        topRow += 58;
-        addSlotRow(playerInventory, 0, leftCol, topRow, 9, 18);
-    }
-
-    public TileEntity getTileEntity() {
-        return tileEntity;
+    @Override
+    protected Optional<List<Item>> getValidMergeItems() {
+        return Optional.of(validMergeItems);
     }
 }
