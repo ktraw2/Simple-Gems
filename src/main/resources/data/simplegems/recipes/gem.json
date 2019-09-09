@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "simplegems:infuser",
   "ingredients": [
     {
       "item": "minecraft:emerald"
@@ -14,6 +14,8 @@
       "item": "simplegems:amethyst"
     }
   ],
+  "energy": 1000,
+  "processTime": 600,
   "result": {
     "item": "simplegems:gem",
     "count": 1

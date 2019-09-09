@@ -5,8 +5,11 @@ import com.ktraw.simplegems.blocks.generator.GeneratorContainer;
 import com.ktraw.simplegems.blocks.generator.GeneratorTile;
 import com.ktraw.simplegems.blocks.infuser.Infuser;
 import com.ktraw.simplegems.blocks.infuser.InfuserContainer;
+import com.ktraw.simplegems.blocks.infuser.InfuserRecipe;
 import com.ktraw.simplegems.blocks.infuser.InfuserTile;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.registries.ObjectHolder;
 
@@ -47,4 +50,9 @@ public class ModBlocks {
 
     @ObjectHolder("simplegems:infuser")
     public static ContainerType<InfuserContainer> INFUSER_CONTAINER;
+
+    @ObjectHolder("simplegems:infuser")
+    public static IRecipeSerializer<InfuserRecipe> INFUSER_SERIALIZER;
+
+    public static IRecipeType<InfuserRecipe> INFUSER_RECIPE_TYPE;
 }

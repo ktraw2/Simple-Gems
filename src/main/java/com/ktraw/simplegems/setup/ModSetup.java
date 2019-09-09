@@ -1,6 +1,8 @@
 package com.ktraw.simplegems.setup;
 
+import com.ktraw.simplegems.SimpleGems;
 import com.ktraw.simplegems.blocks.ModBlocks;
+import com.ktraw.simplegems.blocks.infuser.InfuserRecipe;
 import com.ktraw.simplegems.functions.CopyNbt;
 import com.ktraw.simplegems.functions.Lore;
 import com.ktraw.simplegems.items.ModItems;
@@ -8,8 +10,11 @@ import com.ktraw.simplegems.world.OreGeneration;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.potion.*;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.lang.reflect.Method;
 

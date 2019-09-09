@@ -7,6 +7,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -92,7 +94,9 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
 
     @Override
     public void tick() {
-
+        if (!world.isRemote) {
+            IRecipe<?> recipe = world.getRecipeManager().getRecipe(ModBlocks.INFUSER_RECIPE_TYPE, this, world).orElse(null);
+        }
     }
 
     @Override

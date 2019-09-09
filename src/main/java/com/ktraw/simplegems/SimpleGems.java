@@ -6,6 +6,7 @@ import com.ktraw.simplegems.blocks.generator.GeneratorContainer;
 import com.ktraw.simplegems.blocks.generator.GeneratorTile;
 import com.ktraw.simplegems.blocks.infuser.Infuser;
 import com.ktraw.simplegems.blocks.infuser.InfuserContainer;
+import com.ktraw.simplegems.blocks.infuser.InfuserRecipe;
 import com.ktraw.simplegems.blocks.infuser.InfuserTile;
 import com.ktraw.simplegems.events.PlayerEvents;
 import com.ktraw.simplegems.items.*;
@@ -24,6 +25,9 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Rarity;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -33,9 +37,12 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sun.java2d.pipe.SpanShapeRenderer;
@@ -145,6 +152,16 @@ public class SimpleGems
 
                 return new InfuserContainer(windowId, SimpleGems.proxy.getClientWorld(), pos, inv, SimpleGems.proxy.getClientPlayer());
             })).setRegistryName("infuser"));
+        }
+
+        @SubscribeEvent
+        public static void onRecipeSerializerRegistry(final RegistryEvent.Register<IRecipeSerializer<?>> event) {
+            IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
+
+            /* doing this first line here because Forge doesn't have its own registry for recipe types (yet?)
+               TODO come back to this line of code if Forge has it's own registry for recipe types */
+            ModBlocks.INFUSER_RECIPE_TYPE = IRecipeType.register(SimpleGems.MODID + ":infuser");
+            registry.register(new InfuserRecipe.Serializer());
         }
     }
 }
