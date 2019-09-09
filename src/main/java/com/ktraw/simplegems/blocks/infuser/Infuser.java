@@ -7,6 +7,8 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
@@ -19,6 +21,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
@@ -57,7 +60,16 @@ public class Infuser extends Block {
 
     @Override
     public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+        if (!worldIn.isRemote) {
+            TileEntity tileEntity = worldIn.getTileEntity(pos);
+            if (tileEntity instanceof INamedContainerProvider) {
+                NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
+            }
+            return true;
+        }
+        else {
+            return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+        }
     }
 
     @Override

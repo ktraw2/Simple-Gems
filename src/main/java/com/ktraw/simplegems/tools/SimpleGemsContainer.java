@@ -1,6 +1,7 @@
 package com.ktraw.simplegems.tools;
 
 import com.ktraw.simplegems.blocks.ModBlocks;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ContainerType;
@@ -42,6 +43,8 @@ public abstract class SimpleGemsContainer<T extends Container> extends Container
     public abstract int getSlots();
 
     protected abstract void initContainerSlots();
+
+    protected abstract Block getContainerBlockType();
 
     protected Optional<List<Item>> getValidMergeItems() {
         return Optional.empty();
@@ -106,7 +109,7 @@ public abstract class SimpleGemsContainer<T extends Container> extends Container
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
-        return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), player, ModBlocks.GENERATOR);
+        return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), player, getContainerBlockType());
     }
 
     public int getEnergy() {

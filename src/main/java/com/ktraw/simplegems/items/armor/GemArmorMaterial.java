@@ -1,5 +1,6 @@
 package com.ktraw.simplegems.items.armor;
 
+import com.ktraw.simplegems.SimpleGems;
 import com.ktraw.simplegems.items.ModItems;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IArmorMaterial;
@@ -41,7 +42,7 @@ public class GemArmorMaterial implements IArmorMaterial {
 
     @Override
     public String getName() {
-        return "simplegems:gem";
+        return SimpleGems.MODID + ":gem";
     }
 
     @Override

@@ -1,12 +1,10 @@
 package com.ktraw.simplegems.items;
 
+import com.ktraw.simplegems.items.armor.GemBoots;
 import com.ktraw.simplegems.items.armor.GemChestplate;
 import com.ktraw.simplegems.items.armor.GemHelmet;
 import com.ktraw.simplegems.items.armor.GemLeggings;
-import com.ktraw.simplegems.items.tools.GemAxe;
-import com.ktraw.simplegems.items.tools.GemHoe;
-import com.ktraw.simplegems.items.tools.GemPickaxe;
-import com.ktraw.simplegems.items.tools.GemSword;
+import com.ktraw.simplegems.items.tools.*;
 import net.minecraftforge.registries.ObjectHolder;
 
 public class ModItems {
@@ -29,7 +27,7 @@ public class ModItems {
     public static GemAxe GEM_AXE;
 
     @ObjectHolder("simplegems:gem_shovel")
-    public static GemPickaxe GEM_SHOVEL;
+    public static GemShovel GEM_SHOVEL;
 
     @ObjectHolder("simplegems:gem_hoe")
     public static GemHoe GEM_HOE;
@@ -44,7 +42,7 @@ public class ModItems {
     public static GemLeggings GEM_LEGGINGS;
 
     @ObjectHolder("simplegems:gem_boots")
-    public static GemChestplate GEM_BOOTS;
+    public static GemBoots GEM_BOOTS;
 
     @ObjectHolder("simplegems:amethyst")
     public static Amethyst AMETHYST;

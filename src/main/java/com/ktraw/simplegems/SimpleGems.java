@@ -5,6 +5,7 @@ import com.ktraw.simplegems.blocks.generator.Generator;
 import com.ktraw.simplegems.blocks.generator.GeneratorContainer;
 import com.ktraw.simplegems.blocks.generator.GeneratorTile;
 import com.ktraw.simplegems.blocks.infuser.Infuser;
+import com.ktraw.simplegems.blocks.infuser.InfuserContainer;
 import com.ktraw.simplegems.blocks.infuser.InfuserTile;
 import com.ktraw.simplegems.events.PlayerEvents;
 import com.ktraw.simplegems.items.*;
@@ -37,6 +38,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("simplegems")
@@ -137,6 +139,12 @@ public class SimpleGems
 
                 return new GeneratorContainer(windowId, SimpleGems.proxy.getClientWorld(), pos, inv, SimpleGems.proxy.getClientPlayer());
             }).setRegistryName("generator"));
+
+            registry.register(IForgeContainerType.create(((windowId, inv, data) -> {
+                BlockPos pos = data.readBlockPos();
+
+                return new InfuserContainer(windowId, SimpleGems.proxy.getClientWorld(), pos, inv, SimpleGems.proxy.getClientPlayer());
+            })).setRegistryName("infuser"));
         }
     }
 }

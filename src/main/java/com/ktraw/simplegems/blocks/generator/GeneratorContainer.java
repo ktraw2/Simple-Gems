@@ -4,6 +4,7 @@ import com.ktraw.simplegems.blocks.ModBlocks;
 import com.ktraw.simplegems.items.ModItems;
 import com.ktraw.simplegems.tools.CustomEnergyStorage;
 import com.ktraw.simplegems.tools.SimpleGemsContainer;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -57,6 +58,11 @@ public class GeneratorContainer extends SimpleGemsContainer<GeneratorContainer> 
         tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
             addSlot(new SlotItemHandler(h, 0, 80, 31));
         });
+    }
+
+    @Override
+    protected Block getContainerBlockType() {
+        return ModBlocks.GENERATOR;
     }
 
     @Override
