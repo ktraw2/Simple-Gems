@@ -1,17 +1,18 @@
 package com.ktraw.simplegems.tools;
 
-import com.ktraw.simplegems.blocks.ModBlocks;
+import com.ktraw.simplegems.blocks.infuser.InfuserTile;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.util.IIntArray;
+import net.minecraft.util.IntArray;
 import net.minecraft.inventory.container.Container;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -24,27 +25,43 @@ import java.util.Optional;
 
 
 public abstract class SimpleGemsContainer<T extends Container> extends Container {
-    protected TileEntity tileEntity;
-    protected PlayerEntity player;
+    //protected TileEntity tileEntity;
     protected IItemHandler playerInventory;
-    private int slots;
+    protected IInventory inventory;
+    protected int slots;
+    protected IIntArray data;
 
-    public SimpleGemsContainer(ContainerType<T> type, int windowId, World world, BlockPos pos, PlayerInventory playerInventory, PlayerEntity player) {
+    /**
+     * Client side constructor, fills in data that client doesn't know with default values
+     * @param type
+     * @param windowId
+     * @param playerInventory
+     */
+    protected SimpleGemsContainer(ContainerType type, int windowId, PlayerInventory playerInventory, int inventorySize, int dataSize) {
+        this(type, windowId, playerInventory, new Inventory(inventorySize), new IntArray(dataSize));
+    }
+
+    /**
+     * Server side constructor
+     * @param type type of the container
+     * @param windowId the ID of the window
+     * @param playerInventory the inventory of the player
+     * @param inventory the inventory of the container
+     * @param data the serverside tile entity data
+     */
+    protected SimpleGemsContainer(ContainerType<T> type, int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray data) {
         super(type, windowId);
-        tileEntity = world.getTileEntity(pos);
-        this.player = player;
         this.playerInventory = new InvWrapper(playerInventory);
-        this.slots = getSlots();
+        this.inventory = inventory;
+        this.slots = inventory.getSizeInventory();
+        this.data = data;
 
         initContainerSlots();
         layoutPlayerInventorySlots(8, 84);
+        trackIntArray(data);
     }
 
-    public abstract int getSlots();
-
     protected abstract void initContainerSlots();
-
-    protected abstract Block getContainerBlockType();
 
     protected Optional<List<Item>> getValidMergeItems() {
         return Optional.empty();
@@ -109,11 +126,11 @@ public abstract class SimpleGemsContainer<T extends Container> extends Container
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
-        return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), player, getContainerBlockType());
+        return inventory.isUsableByPlayer(playerIn);
     }
 
     public int getEnergy() {
-        return tileEntity.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
+        return data.get(InfuserTile.INT_ENERGY);
     }
 
     protected int addSlotRow(IItemHandler handler, int index, int x, int y, int width, int dx) {
@@ -133,6 +150,24 @@ public abstract class SimpleGemsContainer<T extends Container> extends Container
         return index;
     }
 
+
+    protected int addSlotRow(IInventory inventory, int index, int x, int y, int width, int dx) {
+        for (int i = 0; i < width; i++) {
+            addSlot(new Slot(inventory, index, x, y));
+            x += dx;
+            index++;
+        }
+        return index;
+    }
+
+    protected int addSlotBox(IInventory inventory, int index, int x, int y, int width, int dx, int height, int dy) {
+        for (int i = 0; i < height; i++) {
+            index = addSlotRow(inventory, index, x, y, width, dx);
+            y += dy;
+        }
+        return index;
+    }
+
     private void layoutPlayerInventorySlots(int leftCol, int topRow) {
         // Inventory
         addSlotBox(playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
@@ -142,7 +177,10 @@ public abstract class SimpleGemsContainer<T extends Container> extends Container
         addSlotRow(playerInventory, 0, leftCol, topRow, 9, 18);
     }
 
-    public TileEntity getTileEntity() {
-        return tileEntity;
+    public int getDataAt(int index) {
+        return data.get(index);
     }
+    /*public TileEntity getTileEntity() {
+        return tileEntity;
+    }*/
 }

@@ -6,15 +6,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
 public class InfuserScreen extends ContainerScreen<InfuserContainer> {
+    private static final int ARROW_WIDTH = 22;
+    private static final int ARROW_HEIGHT = 17;
 
     private ResourceLocation GUI = new ResourceLocation(SimpleGems.MODID, "textures/gui/infuser_gui.png");
+    private InfuserContainer typedContainer;
 
     public InfuserScreen(InfuserContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
+        typedContainer = screenContainer;
     }
 
     @Override
@@ -24,6 +29,14 @@ public class InfuserScreen extends ContainerScreen<InfuserContainer> {
         final int shiftedX = (width - xSize) / 2;
         final int shiftedY = (height - ySize) / 2;
         blit(shiftedX, shiftedY, 0, 0, xSize, ySize);
+
+        final int timer = typedContainer.getDataAt(InfuserTile.INT_TIMER);
+        if (timer > 0) {
+            final int processTime = typedContainer.getDataAt(InfuserTile.INT_RECIPE_PROCESS_TIME);
+            final int scaledProgress = (timer) / (processTime / ARROW_WIDTH);
+
+            blit(shiftedX + 82, shiftedY + 34, 177, 0, ARROW_WIDTH - scaledProgress, ARROW_HEIGHT);
+        }
     }
 
     @Override

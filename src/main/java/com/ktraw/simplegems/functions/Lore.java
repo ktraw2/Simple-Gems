@@ -17,6 +17,7 @@ import net.minecraft.world.storage.loot.LootFunction;
 import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import net.minecraft.world.storage.loot.functions.SetLore;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -50,9 +51,18 @@ public class Lore extends SetLore {
                 // Get the inventory and process it to see if lore is needed
                 ListNBT inventory = tag.getCompound("inventory").getList("Items", Constants.NBT.TAG_COMPOUND);
                 if (!inventory.isEmpty()) {
+                    int size = inventory.size();
                     // Make sure the item is Charged Emerald Dust
-                    if (inventory.getCompound(0).getString("id").equals(ModItems.CHARGED_EMERALD_DUST.getRegistryName().toString())) {
+                    if (size == 1 && inventory.getCompound(0).getString("id").equals(ModItems.CHARGED_EMERALD_DUST.getRegistryName().toString())) {
                         generatorLore.add(new StringTextComponent("Dust: " + inventory.getCompound(0).getByte("Count")));
+                    }
+                    else {
+                        // Iterate through inventory
+                        generatorLore.add(new StringTextComponent("Contents:"));
+                        for (int i = 0; i < size; i++) {
+                            CompoundNBT current = inventory.getCompound(i);
+                            generatorLore.add(new StringTextComponent(" - " + current.getByte("Count") + " x " + ForgeRegistries.ITEMS.getValue(new ResourceLocation(current.getString("id"))).getRegistryName().getPath()));
+                        }
                     }
                 }
 

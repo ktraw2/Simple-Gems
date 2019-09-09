@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 
 public class Generator extends Block {
 
-    public Generator (){
+    public Generator() {
         super(Properties.create(Material.IRON)
                 .sound(SoundType.METAL)
                 .harvestTool(ToolType.PICKAXE)

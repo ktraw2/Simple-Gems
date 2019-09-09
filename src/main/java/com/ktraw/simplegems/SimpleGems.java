@@ -141,17 +141,9 @@ public class SimpleGems
         public static void onContainerRegistry(final RegistryEvent.Register<ContainerType<?>> event) {
             IForgeRegistry<ContainerType<?>> registry = event.getRegistry();
 
-            registry.register(IForgeContainerType.create((windowId, inv, data) -> {
-                BlockPos pos = data.readBlockPos();
+            registry.register(IForgeContainerType.create((windowId, inv, data) -> new GeneratorContainer(windowId, inv)).setRegistryName("generator"));
 
-                return new GeneratorContainer(windowId, SimpleGems.proxy.getClientWorld(), pos, inv, SimpleGems.proxy.getClientPlayer());
-            }).setRegistryName("generator"));
-
-            registry.register(IForgeContainerType.create(((windowId, inv, data) -> {
-                BlockPos pos = data.readBlockPos();
-
-                return new InfuserContainer(windowId, SimpleGems.proxy.getClientWorld(), pos, inv, SimpleGems.proxy.getClientPlayer());
-            })).setRegistryName("infuser"));
+            registry.register(IForgeContainerType.create(((windowId, inv, data) -> new InfuserContainer(windowId, inv))).setRegistryName("infuser"));
         }
 
         @SubscribeEvent

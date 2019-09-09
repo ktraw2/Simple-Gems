@@ -14,9 +14,11 @@ public class GeneratorScreen extends ContainerScreen<GeneratorContainer> {
     private static final int FLAME_SIDE = 13;
 
     private ResourceLocation GUI = new ResourceLocation(SimpleGems.MODID, "textures/gui/generator_gui.png");
+    private GeneratorContainer typedContainer;
 
     public GeneratorScreen(GeneratorContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
+        typedContainer = screenContainer;
     }
 
     @Override
@@ -40,16 +42,12 @@ public class GeneratorScreen extends ContainerScreen<GeneratorContainer> {
         final int shiftedY = (height - ySize) / 2;
         blit(shiftedX, shiftedY, 0, 0, xSize, ySize);
 
-        final TileEntity tileEntity = container.getTileEntity();
-        if (tileEntity instanceof GeneratorTile) {
-            final GeneratorTile casted = (GeneratorTile) tileEntity;
-            if (casted.isProcessing()) {
-                final int timer = casted.getCounter();
-                final int scaledProgress = (timer) / (GeneratorTile.PROCESS_TICKS / FLAME_SIDE);
+        final int timer = typedContainer.getDataAt(GeneratorTile.INT_TIMER);
+        if (timer > 0) {
+            final int scaledProgress = (timer) / (GeneratorTile.PROCESS_TICKS / FLAME_SIDE);
 
-                blit(shiftedX + 81 - 1, shiftedY + 51 + scaledProgress - 1, 176, scaledProgress, FLAME_SIDE, FLAME_SIDE);
-            }
+            // blit(xCoord, yCoord, copyFromX, copyFromY, copyFromWidth, copyFromHeight)
+            blit(shiftedX + 80, shiftedY + 50 + scaledProgress, 176, scaledProgress, FLAME_SIDE, FLAME_SIDE);
         }
-
     }
 }

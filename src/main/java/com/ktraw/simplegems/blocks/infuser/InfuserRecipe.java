@@ -47,7 +47,7 @@ public class InfuserRecipe implements IRecipe<InfuserTile> {
         java.util.List<ItemStack> inputs = new java.util.ArrayList<>();
         int i = 0;
 
-        for(int j = 0; j < inv.getSizeInventory(); ++j) {
+        for(int j = 0; j < InfuserTile.TOTAL_CRAFTING_SLOTS; ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
             if (!itemstack.isEmpty()) {
                 ++i;
@@ -69,6 +69,11 @@ public class InfuserRecipe implements IRecipe<InfuserTile> {
     @Override
     public boolean canFit(int width, int height) {
         return ingredients.size() <= width * height;
+    }
+
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
+        return ingredients;
     }
 
     @Override
@@ -98,6 +103,10 @@ public class InfuserRecipe implements IRecipe<InfuserTile> {
 
     public int getEnergy() {
         return energy;
+    }
+
+    public int getProcessTime() {
+        return processTime;
     }
 
     @Override
