@@ -13,10 +13,10 @@
               "source": "block_entity"
             },
             {
-              "function": "minecraft:simplegems_copy_nbt"
+              "function": "simplegems:copy_nbt"
             },
             {
-              "function": "minecraft:simplegems_lore",
+              "function": "simplegems:lore",
               "replace": true
             }
 

@@ -3,8 +3,8 @@
     <envs>
       <env name="MOD_CLASSES" value="examplemod%%C:\Users\ktraw\IdeaProjects\Simple-Gems\build\resources\main;examplemod%%C:\Users\ktraw\IdeaProjects\Simple-Gems\build\classes\java\main" />
       <env name="MCP_MAPPINGS" value="snapshot_20190719-1.14.3" />
-      <env name="MCP_VERSION" value="20190719.225934" />
-      <env name="FORGE_VERSION" value="28.0.55" />
+      <env name="MCP_VERSION" value="20190829.143755" />
+      <env name="FORGE_VERSION" value="28.0.102" />
       <env name="assetIndex" value="1.14" />
       <env name="assetDirectory" value="C:\Users\ktraw\.gradle\caches\forge_gradle\assets" />
       <env name="nativesDirectory" value="C:\Users\ktraw\IdeaProjects\Simple-Gems\build\natives" />

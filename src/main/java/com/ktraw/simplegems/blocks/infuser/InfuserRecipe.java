@@ -207,4 +207,9 @@ public class InfuserRecipe implements IRecipe<InfuserTile> {
             buffer.writeItemStack(recipe.recipeOutput);
         }
     }
+
+    @Override
+    public ItemStack getIcon() {
+        return new ItemStack(ModBlocks.INFUSER);
+    }
 }

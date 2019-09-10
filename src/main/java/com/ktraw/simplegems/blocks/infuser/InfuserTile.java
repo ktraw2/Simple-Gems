@@ -79,7 +79,7 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
         }
     };
 
-    private LazyOptional<ItemStackHandler> items = LazyOptional.of(this::createItemHandler);
+    private LazyOptional<InfuserItemStackHandler> items = LazyOptional.of(this::createItemHandler);
     private LazyOptional<CustomEnergyStorage> energy = LazyOptional.of(this::createEnergyStorage);
 
     // TODO Serialize and deserialize any local fields I add here
@@ -90,24 +90,8 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
         super(ModBlocks.INFUSER_TILE);
     }
 
-    private ItemStackHandler createItemHandler() {
-        return new ItemStackHandler(TOTAL_SLOTS){
-            @Nonnull
-            @Override
-            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-//                if (slot != OUTPUT_SLOT_INDEX) {
-                    return super.insertItem(slot, stack, simulate);
-//                }
-//                else {
-//                    return stack;
-//                }
-            }
-
-            @Override
-            protected void onContentsChanged(int slot) {
-                markDirty();
-            }
-        };
+    private InfuserItemStackHandler createItemHandler() {
+        return new InfuserItemStackHandler(TOTAL_SLOTS, this);
     }
 
     private CustomEnergyStorage createEnergyStorage() {
@@ -158,12 +142,11 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
         else {
             int numOccupiedSlots = 0;
             for (int i = 0; i < TOTAL_CRAFTING_SLOTS; i++) {
-                if (!getStackInAnySlot(i).isEmpty()) {
+                if (!getStackInSlot(i).isEmpty()) {
                     numOccupiedSlots++;
                 }
             }
 
-            System.out.println(recipe.getIngredients().size());
             if (numOccupiedSlots != recipe.getIngredients().size()) {
                 return false;
             }
@@ -206,17 +189,6 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
                         items.ifPresent(h -> {
                             h.extractItem(finalI, 1, false);
                         });
-//                        ItemStack stack = getStackInSlot(i);
-//                        if (!stack.isEmpty()){
-//                            int count = stack.getCount();
-//                            if (count == 1) {
-//                                setInventorySlotContents(i, ItemStack.EMPTY);
-//                            }
-//                            else {
-//                                stack.setCount(count - 1);
-//                                setInventorySlotContents(i, stack);
-//                            }
-//                        }
                     }
                     currentRecipe = recipe;
                     markDirty();
@@ -226,16 +198,8 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
                 timer--;
                 if (timer <= 0 && currentRecipe != null) {
                     items.ifPresent(h -> {
-                        h.insertItem(OUTPUT_SLOT_INDEX, currentRecipe.getRecipeOutput().copy(), false);
+                        h.insertItemNoCheck(OUTPUT_SLOT_INDEX, currentRecipe.getRecipeOutput().copy(), false);
                     });
-//                    ItemStack stack = getStackInAnySlot(OUTPUT_SLOT_INDEX);
-//                    if (!stack.isEmpty()) {
-//                        stack.setCount(stack.getCount() + currentRecipe.getRecipeOutput().getCount());
-//                        setInventorySlotContents(OUTPUT_SLOT_INDEX, stack);
-//                    }
-//                    else {
-//                        setInventorySlotContents(OUTPUT_SLOT_INDEX, currentRecipe.getRecipeOutput().copy());
-//                    }
                     currentRecipe = null;
                     markDirty();
                 }
@@ -258,6 +222,11 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
     /* MARK IInventory */
 
     @Override
+    public boolean isItemValidForSlot(int index, ItemStack stack) {
+        return index != OUTPUT_SLOT_INDEX;
+    }
+
+    @Override
     public int getSizeInventory() {
         return items.map(ItemStackHandler::getSlots).orElse(0);
     }
@@ -274,24 +243,17 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
             }
 
             return result;
-        }).orElse(false);
+        }).orElse(true);
     }
 
-    // TODO See if I want to change this, look at Minecraft's actual recipe blocks to see how they handle the problem of counting the output slot
     @Override
     public ItemStack getStackInSlot(int index) {
         return items.map(h -> h.getStackInSlot(index)).orElse(ItemStack.EMPTY);
     }
 
-    private ItemStack getStackInAnySlot(int index) {
-        return items.map(h -> h.getStackInSlot(index)).orElse(ItemStack.EMPTY);
-    }
-
     @Override
     public ItemStack decrStackSize(int index, int count) {
-        return items.map(h -> {
-            return h.extractItem(index, count, false);
-        }).orElse(ItemStack.EMPTY);
+        return items.map(h -> h.extractItem(index, count, false)).orElse(ItemStack.EMPTY);
     }
 
     @Override

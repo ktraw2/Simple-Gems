@@ -15,7 +15,7 @@
     }
   ],
   "energy": 1000,
-  "processTime": 100,
+  "processTime": 600,
   "result": {
     "item": "simplegems:gem",
     "count": 1

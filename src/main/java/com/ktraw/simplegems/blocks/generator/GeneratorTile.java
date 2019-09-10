@@ -32,7 +32,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class GeneratorTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IInventory {
     public static final int PROCESS_TICKS = 80;
-    public static final int TOTAL_SLOTS = 1;
+    public static final int FUEL_SLOT = 0;
+    public static final int CHARGE_SLOT = 1;
+    public static final int TOTAL_SLOTS = 2;
 
     private LazyOptional<ItemStackHandler> items = LazyOptional.of(this::createHandler);
     private LazyOptional<CustomEnergyStorage> energy = LazyOptional.of(this::createEnergy);
@@ -103,7 +105,7 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
     }
 
     private ItemStackHandler createHandler() {
-        return new ItemStackHandler(1) {
+        return new ItemStackHandler(TOTAL_SLOTS) {
             @Override
             protected void onContentsChanged(int slot) {
                 markDirty();
@@ -111,16 +113,16 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
 
             @Override
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                return stack.getItem() == ModItems.CHARGED_EMERALD_DUST;
-            }
+                switch (slot) {
+                    case FUEL_SLOT:
+                        return stack.getItem() == ModItems.CHARGED_EMERALD_DUST;
 
-            @Nonnull
-            @Override
-            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-                if (stack.getItem() != ModItems.CHARGED_EMERALD_DUST) {
-                    return stack;
+                    case CHARGE_SLOT:
+                        return stack.getCapability(CapabilityEnergy.ENERGY).isPresent();
+
+                    default:
+                        return false;
                 }
-                return super.insertItem(slot, stack, simulate);
             }
         };
     }
@@ -157,11 +159,11 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
                 markDirty();
             } else {
                 items.ifPresent(h -> {
-                    ItemStack stack = h.getStackInSlot(0);
+                    ItemStack stack = h.getStackInSlot(FUEL_SLOT);
                     if (stack.getItem() == ModItems.CHARGED_EMERALD_DUST) {
                         energy.ifPresent(e -> {
                             if (e.getEnergyStored() < e.getMaxEnergyStored()) {
-                                h.extractItem(0, 1, false);
+                                h.extractItem(FUEL_SLOT, 1, false);
                                 timer = PROCESS_TICKS;
                                 processing = true;
                                 markDirty();
@@ -170,8 +172,36 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
                     }
                 });
             }
-            sendOutPower();
+
+            boolean sendPowerToBlocks = items.map(h -> {
+                ItemStack stack = h.getStackInSlot(CHARGE_SLOT);
+                if (stack.isEmpty()) {
+                    return true;
+                }
+                else {
+                    energizeItem(stack);
+                    return false;
+                }
+            }).orElse(true);
+
+            if (sendPowerToBlocks) {
+                sendOutPower();
+            }
         }
+    }
+
+    private void energizeItem(@Nonnull ItemStack stack) {
+        energy.ifPresent(energy -> {
+            AtomicInteger storedEnergy = new AtomicInteger(energy.getEnergyStored());
+            if (storedEnergy.get() > 0) {
+                stack.getCapability(CapabilityEnergy.ENERGY).ifPresent(e -> {
+                    int received = e.receiveEnergy(Math.min(storedEnergy.get(), 100), false);
+                    storedEnergy.addAndGet(-received);
+                    energy.consumeEnergy(received);
+                    markDirty();
+                });
+            }
+        });
     }
 
     private void sendOutPower() {
@@ -185,7 +215,7 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
                             if (handler.canReceive()) {
                                 int received = handler.receiveEnergy(Math.min(storedEnergy.get(), 100), false);
                                 storedEnergy.addAndGet(-received);
-                                ((CustomEnergyStorage)energy).consumeEnergy(received);
+                                energy.consumeEnergy(received);
                                 markDirty();
                                 return storedEnergy.get() > 0;
                             }
@@ -216,6 +246,11 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
     /* MARK IInventory */
 
     @Override
+    public boolean isItemValidForSlot(int index, ItemStack stack) {
+        return items.map(h -> h.isItemValid(index, stack)).orElse(false);
+    }
+
+    @Override
     public int getSizeInventory() {
         return items.map(ItemStackHandler::getSlots).orElse(0);
     }
@@ -232,10 +267,9 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
             }
 
             return result;
-        }).orElse(false);
+        }).orElse(true);
     }
 
-    // TODO See if I want to change this, look at Minecraft's actual recipe blocks to see how they handle the problem of counting the output slot
     @Override
     public ItemStack getStackInSlot(int index) {
         return items.map(h -> h.getStackInSlot(index)).orElse(ItemStack.EMPTY);
@@ -243,14 +277,7 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
 
     @Override
     public ItemStack decrStackSize(int index, int count) {
-        return items.map(h -> {
-            ItemStack stack = h.getStackInSlot(index);
-            int currentCount = stack.getCount();
-            stack.setCount((currentCount > count) ? currentCount - count : 0);
-            stack = (stack.getCount() == 0) ? ItemStack.EMPTY : stack;
-            h.setStackInSlot(index, stack);
-            return stack;
-        }).orElse(ItemStack.EMPTY);
+        return items.map(h -> h.extractItem(index, count, false)).orElse(ItemStack.EMPTY);
     }
 
     @Override

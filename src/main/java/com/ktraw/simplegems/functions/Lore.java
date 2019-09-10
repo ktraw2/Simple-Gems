@@ -3,6 +3,7 @@ package com.ktraw.simplegems.functions;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
+import com.ktraw.simplegems.SimpleGems;
 import com.ktraw.simplegems.items.ModItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -99,7 +100,7 @@ public class Lore extends SetLore {
 
     public static class Serializer extends LootFunction.Serializer<Lore> {
         public Serializer() {
-            super(new ResourceLocation("simplegems_lore"), Lore.class);
+            super(new ResourceLocation(SimpleGems.MODID,"lore"), Lore.class);
         }
 
         public void serialize(JsonObject object, Lore functionClazz, JsonSerializationContext serializationContext) {

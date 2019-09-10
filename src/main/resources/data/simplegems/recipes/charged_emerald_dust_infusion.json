@@ -1,0 +1,17 @@
+{
+  "type": "simplegems:infuser",
+  "ingredients": [
+    {
+      "item": "minecraft:emerald"
+    },
+    {
+      "item": "minecraft:redstone"
+    }
+  ],
+  "energy": 1000,
+  "processTime": 300,
+  "result": {
+    "item": "simplegems:charged_emerald_dust",
+    "count": 2
+  }
+}

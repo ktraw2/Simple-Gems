@@ -66,10 +66,11 @@ public class Generator extends Block {
             if (tileEntity instanceof INamedContainerProvider) {
                 NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
             }
-            return true;
+            //return true;
         }
         else {
             return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
         }
+        return true;
     }
 }

@@ -3,6 +3,7 @@ package com.ktraw.simplegems.functions;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
+import com.ktraw.simplegems.SimpleGems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -64,7 +65,7 @@ public class CopyNbt extends LootFunction {
 
     public static class Serializer extends LootFunction.Serializer<CopyNbt> {
         public Serializer() {
-            super(new ResourceLocation("simplegems_copy_nbt"), CopyNbt.class);
+            super(new ResourceLocation(SimpleGems.MODID, "copy_nbt"), CopyNbt.class);
         }
 
         public void serialize(JsonObject object, CopyNbt functionClazz, JsonSerializationContext serializationContext) {

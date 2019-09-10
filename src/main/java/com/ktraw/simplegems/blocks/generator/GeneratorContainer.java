@@ -20,6 +20,7 @@ import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -57,7 +58,18 @@ public class GeneratorContainer extends SimpleGemsContainer<GeneratorContainer> 
 
     @Override
     protected void initContainerSlots() {
-        addSlot(new Slot(inventory, 0, 80, 31));
+        addSlot(new Slot(inventory, GeneratorTile.FUEL_SLOT, 80, 31){
+            @Override
+            public boolean isItemValid(ItemStack stack) {
+                return stack.getItem().equals(ModItems.CHARGED_EMERALD_DUST);
+            }
+        });
+        addSlot(new Slot(inventory, GeneratorTile.CHARGE_SLOT, 134, 49){
+            @Override
+            public boolean isItemValid(ItemStack stack) {
+                return stack.getCapability(CapabilityEnergy.ENERGY).isPresent();
+            }
+        });
     }
 
     @Override

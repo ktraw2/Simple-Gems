@@ -17,13 +17,13 @@ public class ClientProxy implements IProxy {
         ScreenManager.registerFactory(ModBlocks.INFUSER_CONTAINER, InfuserScreen::new);
     }
 
-    @Override
-    public World getClientWorld() {
-        return Minecraft.getInstance().world;
-    }
-
-    @Override
-    public PlayerEntity getClientPlayer() {
-        return Minecraft.getInstance().player;
-    }
+//    @Override
+//    public World getClientWorld() {
+//        return Minecraft.getInstance().world;
+//    }
+//
+//    @Override
+//    public PlayerEntity getClientPlayer() {
+//        return Minecraft.getInstance().player;
+//    }
 }
