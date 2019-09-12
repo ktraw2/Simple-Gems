@@ -57,4 +57,10 @@ public class ModItems {
 
     @ObjectHolder("simplegems:gem_ring")
     public static GemRing GEM_RING;
+
+    @ObjectHolder("simplegems:ring_of_haste")
+    public static GemRing RING_OF_HASTE;
+
+    @ObjectHolder("simplegems:ring_of_levitation")
+    public static GemRing RING_OF_LEVITATION;
 }

@@ -32,25 +32,27 @@ import java.util.List;
 public class GemRing extends Item {
     private static int ENERGY_PER_TICK = 10;
     private static Style GREEN_STYLE = new Style().setColor(TextFormatting.GREEN);
-    private EffectInstance ringEffect = new EffectInstance(Effects.HASTE, 20);
+    private EffectInstance ringEffect;
 
-    public GemRing() {
+    public GemRing(String registryName, @Nullable EffectInstance ringEffect) {
         super(new Properties()
                 .group(SimpleGems.setup.getCreativeTab())
                 .maxStackSize(1));
 
-        setRegistryName("gem_ring");
+        this.ringEffect = ringEffect;
+        setRegistryName(registryName);
     }
 
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        return new GemRingCapabilityProvider(stack);
+
+        return (ringEffect != null) ? new GemRingCapabilityProvider(stack) : null;
     }
 
     @Override
     public boolean hasEffect(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean("active");
+        return (ringEffect != null) && (stack.getOrCreateTag().getBoolean("active"));
     }
 
     @Override
@@ -65,11 +67,15 @@ public class GemRing extends Item {
 
     @Override
     public boolean showDurabilityBar(ItemStack stack) {
-        return true;
+        return ringEffect != null;
     }
 
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
+        if (ringEffect == null) {
+            return 0.0;
+        }
+
         return stack.getCapability(CapabilityEnergy.ENERGY).map(e -> {
             double stored = e.getEnergyStored();
             double max = e.getMaxEnergyStored();
@@ -84,18 +90,26 @@ public class GemRing extends Item {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        if (ringEffect == null) {
+            return;
+        }
+
         tooltip.add(new StringTextComponent("Energy: " + stack.getOrCreateTag().getInt("energy") + " FE").setStyle(GREEN_STYLE));
     }
 
     @Override
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        if (ringEffect == null) {
+            return;
+        }
+
         stack.getCapability(CapabilityEnergy.ENERGY).ifPresent(e -> {
             if (stack.hasTag()) {
                 CompoundNBT tag = stack.getTag();
                 if (entityIn instanceof PlayerEntity) {
                     if (tag.getBoolean("active")) {
                         PlayerEntity casted = (PlayerEntity) entityIn;
-                        if ((isSelected || casted.getHeldItemOffhand().equals(stack)) && e.getEnergyStored() >= ENERGY_PER_TICK) {
+                        if ((isSelected || casted.getHeldItemOffhand().equals(stack)) && (e.getEnergyStored() >= ENERGY_PER_TICK || casted.isCreative())) {
                             casted.addPotionEffect(ringEffect);
                             if (!casted.isCreative()) {
                                 e.extractEnergy(ENERGY_PER_TICK, false);
@@ -115,6 +129,10 @@ public class GemRing extends Item {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        if (ringEffect == null) {
+            return super.onItemRightClick(worldIn, playerIn, handIn);
+        }
+
         ItemStack currentStack = playerIn.getHeldItem(handIn);
         CompoundNBT tag = currentStack.getOrCreateTag();
 

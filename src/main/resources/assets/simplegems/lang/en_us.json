@@ -23,6 +23,8 @@
   "item.simplegems.ender_apple": "Ender Apple",
   "item.simplegems.gold_ring": "Gold Ring",
   "item.simplegems.gem_ring": "Gem Ring",
+  "item.simplegems.ring_of_haste": "Ring of Haste",
+  "item.simplegems.ring_of_levitation": "Ring of Levitation",
 
   "_comment": "Creative Tabs",
   "itemGroup.simplegems": "Simple Gems"

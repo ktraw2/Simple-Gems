@@ -1,0 +1,23 @@
+{
+  "type": "simplegems:infuser",
+  "ingredients": [
+    {
+      "item": "simplegems:gem_ring"
+    },
+    {
+      "item": "simplegems:gem_pickaxe"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "simplegems:charged_emerald_dust"
+    }
+  ],
+  "energy": 500,
+  "processTime": 300,
+  "result": {
+    "item": "simplegems:ring_of_haste",
+    "count": 1
+  }
+}
