@@ -4,6 +4,8 @@ import com.ktraw.simplegems.items.armor.GemBoots;
 import com.ktraw.simplegems.items.armor.GemChestplate;
 import com.ktraw.simplegems.items.armor.GemHelmet;
 import com.ktraw.simplegems.items.armor.GemLeggings;
+import com.ktraw.simplegems.items.rings.GemRing;
+import com.ktraw.simplegems.items.rings.GoldRing;
 import com.ktraw.simplegems.items.tools.*;
 import net.minecraftforge.registries.ObjectHolder;
 
@@ -49,4 +51,10 @@ public class ModItems {
 
     @ObjectHolder("simplegems:ender_apple")
     public static EnderApple ENDER_APPLE;
+
+    @ObjectHolder("simplegems:gold_ring")
+    public static GoldRing GOLD_RING;
+
+    @ObjectHolder("simplegems:gem_ring")
+    public static GemRing GEM_RING;
 }

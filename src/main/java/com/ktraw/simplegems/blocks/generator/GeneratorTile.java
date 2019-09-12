@@ -2,7 +2,7 @@ package com.ktraw.simplegems.blocks.generator;
 
 import com.ktraw.simplegems.blocks.ModBlocks;
 import com.ktraw.simplegems.items.ModItems;
-import com.ktraw.simplegems.tools.CustomEnergyStorage;
+import com.ktraw.simplegems.tools.SimpleGemsEnergyStorage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -10,7 +10,6 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -18,12 +17,10 @@ import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -37,7 +34,7 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
     public static final int TOTAL_SLOTS = 2;
 
     private LazyOptional<ItemStackHandler> items = LazyOptional.of(this::createHandler);
-    private LazyOptional<CustomEnergyStorage> energy = LazyOptional.of(this::createEnergy);
+    private LazyOptional<SimpleGemsEnergyStorage> energy = LazyOptional.of(this::createEnergy);
 
     public static final int INT_TIMER = 0;
     public static final int INT_ENERGY = 1;
@@ -127,8 +124,8 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
         };
     }
 
-    private CustomEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(100000, 100);
+    private SimpleGemsEnergyStorage createEnergy() {
+        return new SimpleGemsEnergyStorage(100000, 100);
     }
 
     @Nonnull

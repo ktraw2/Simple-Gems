@@ -14,6 +14,8 @@ import com.ktraw.simplegems.items.armor.GemBoots;
 import com.ktraw.simplegems.items.armor.GemChestplate;
 import com.ktraw.simplegems.items.armor.GemHelmet;
 import com.ktraw.simplegems.items.armor.GemLeggings;
+import com.ktraw.simplegems.items.rings.GemRing;
+import com.ktraw.simplegems.items.rings.GoldRing;
 import com.ktraw.simplegems.items.tools.*;
 import com.ktraw.simplegems.setup.ClientProxy;
 import com.ktraw.simplegems.setup.IProxy;
@@ -25,7 +27,6 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Rarity;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.tileentity.TileEntityType;
@@ -37,15 +38,11 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sun.java2d.pipe.SpanShapeRenderer;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("simplegems")
@@ -114,8 +111,12 @@ public class SimpleGems
 
             // Regular items
             registry.register(new Ruby());
-            registry.register(new ChargedEmeraldDust());
+            registry.register(new Amethyst());
             registry.register(new Gem());
+            registry.register(new ChargedEmeraldDust());
+            registry.register(new EnderApple());
+            registry.register(new GoldRing());
+            registry.register(new GemRing());
             registry.register(new GemPickaxe());
             registry.register(new GemSword());
             registry.register(new GemAxe());
@@ -125,8 +126,7 @@ public class SimpleGems
             registry.register(new GemChestplate());
             registry.register(new GemLeggings());
             registry.register(new GemBoots());
-            registry.register(new Amethyst());
-            registry.register(new EnderApple());
+
         }
 
         @SubscribeEvent

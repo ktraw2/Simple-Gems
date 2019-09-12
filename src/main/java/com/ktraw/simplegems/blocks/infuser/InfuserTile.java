@@ -1,12 +1,11 @@
 package com.ktraw.simplegems.blocks.infuser;
 
-import com.ktraw.simplegems.tools.CustomEnergyStorage;
+import com.ktraw.simplegems.tools.SimpleGemsEnergyStorage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -80,7 +79,7 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
     };
 
     private LazyOptional<InfuserItemStackHandler> items = LazyOptional.of(this::createItemHandler);
-    private LazyOptional<CustomEnergyStorage> energy = LazyOptional.of(this::createEnergyStorage);
+    private LazyOptional<SimpleGemsEnergyStorage> energy = LazyOptional.of(this::createEnergyStorage);
 
     // TODO Serialize and deserialize any local fields I add here
     private int timer = 0;
@@ -94,8 +93,8 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
         return new InfuserItemStackHandler(TOTAL_SLOTS, this);
     }
 
-    private CustomEnergyStorage createEnergyStorage() {
-        return new CustomEnergyStorage(10000, 100);
+    private SimpleGemsEnergyStorage createEnergyStorage() {
+        return new SimpleGemsEnergyStorage(10000, 100);
     }
 
     @Override

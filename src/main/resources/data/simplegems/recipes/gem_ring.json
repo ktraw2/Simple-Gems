@@ -1,0 +1,17 @@
+{
+  "type": "simplegems:infuser",
+  "ingredients": [
+    {
+      "item": "simplegems:gem"
+    },
+    {
+      "item": "simplegems:gold_ring"
+    }
+  ],
+  "energy": 500,
+  "processTime": 300,
+  "result": {
+    "item": "simplegems:gem_ring",
+    "count": 1
+  }
+}

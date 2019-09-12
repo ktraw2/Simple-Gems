@@ -21,6 +21,8 @@
   "item.simplegems.gem_boots": "Gem Boots",
   "item.simplegems.amethyst": "Amethyst",
   "item.simplegems.ender_apple": "Ender Apple",
+  "item.simplegems.gold_ring": "Gold Ring",
+  "item.simplegems.gem_ring": "Gem Ring",
 
   "_comment": "Creative Tabs",
   "itemGroup.simplegems": "Simple Gems"

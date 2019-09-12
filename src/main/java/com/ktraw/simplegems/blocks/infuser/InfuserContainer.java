@@ -1,26 +1,12 @@
 package com.ktraw.simplegems.blocks.infuser;
 
 import com.ktraw.simplegems.blocks.ModBlocks;
-import com.ktraw.simplegems.tools.CustomEnergyStorage;
 import com.ktraw.simplegems.tools.SimpleGemsContainer;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.CraftResultInventory;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.IntReferenceHolder;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.common.crafting.IRecipeContainer;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 
 
 public class InfuserContainer extends SimpleGemsContainer<InfuserContainer> {
