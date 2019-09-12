@@ -18,6 +18,9 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants;
@@ -28,6 +31,7 @@ import java.util.List;
 
 public class GemRing extends Item {
     private static int ENERGY_PER_TICK = 10;
+    private static Style GREEN_STYLE = new Style().setColor(TextFormatting.GREEN);
     private EffectInstance ringEffect = new EffectInstance(Effects.HASTE, 20);
 
     public GemRing() {
@@ -41,17 +45,6 @@ public class GemRing extends Item {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        System.out.println("OWO");
-        if (stack.getTag() != null) {
-            System.out.println(stack.getTag());
-
-        }
-        System.out.println(stack.getTag() == null);
-
-        if (nbt != null) {
-            System.out.println(nbt);
-        }
-        System.out.println(nbt == null);
         return new GemRingCapabilityProvider(stack);
     }
 
@@ -91,7 +84,7 @@ public class GemRing extends Item {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        tooltip.add(new StringTextComponent("Energy: " + stack.getOrCreateTag().getInt("energy") + " FE").setStyle(GREEN_STYLE));
     }
 
     @Override
