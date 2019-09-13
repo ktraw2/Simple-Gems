@@ -7,6 +7,7 @@
   "block.simplegems.gem_block": "Gem Block",
   "block.simplegems.generator": "Generator",
   "block.simplegems.infuser": "Infuser",
+
   "item.simplegems.ruby": "Ruby",
   "item.simplegems.charged_emerald_dust": "Charged Emerald Dust",
   "item.simplegems.gem": "Gem",
@@ -25,6 +26,14 @@
   "item.simplegems.gem_ring": "Gem Ring",
   "item.simplegems.ring_of_haste": "Ring of Haste",
   "item.simplegems.ring_of_levitation": "Ring of Levitation",
+  "item.simplegems.ring_of_vulnerable_strength": "Ring of Vulnerable Strength",
+  "item.simplegems.ring_of_heavy": "Ring of Heavy",
+
+  "tooltip.simplegems.effect": "%1$s %2$s",
+  "tooltip.simplegems.heavy": "Да",
+
+  "advancements.simplegems.root.title": "Simple Gems",
+  "advancements.simplegems.root.description": "Advancements for the mod!",
 
   "_comment": "Creative Tabs",
   "itemGroup.simplegems": "Simple Gems"

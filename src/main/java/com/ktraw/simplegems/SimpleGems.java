@@ -1,28 +1,24 @@
 package com.ktraw.simplegems;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.ktraw.simplegems.blocks.*;
-import com.ktraw.simplegems.blocks.generator.Generator;
-import com.ktraw.simplegems.blocks.generator.GeneratorContainer;
-import com.ktraw.simplegems.blocks.generator.GeneratorTile;
-import com.ktraw.simplegems.blocks.infuser.Infuser;
-import com.ktraw.simplegems.blocks.infuser.InfuserContainer;
-import com.ktraw.simplegems.blocks.infuser.InfuserRecipe;
-import com.ktraw.simplegems.blocks.infuser.InfuserTile;
+import com.ktraw.simplegems.blocks.generator.*;
+import com.ktraw.simplegems.blocks.infuser.*;
 import com.ktraw.simplegems.events.PlayerEvents;
 import com.ktraw.simplegems.items.*;
-import com.ktraw.simplegems.items.armor.GemBoots;
-import com.ktraw.simplegems.items.armor.GemChestplate;
-import com.ktraw.simplegems.items.armor.GemHelmet;
-import com.ktraw.simplegems.items.armor.GemLeggings;
-import com.ktraw.simplegems.items.rings.GemRing;
-import com.ktraw.simplegems.items.rings.GoldRing;
+import com.ktraw.simplegems.items.armor.*;
+import com.ktraw.simplegems.items.rings.*;
 import com.ktraw.simplegems.items.tools.*;
 import com.ktraw.simplegems.setup.ClientProxy;
 import com.ktraw.simplegems.setup.IProxy;
 import com.ktraw.simplegems.setup.ModSetup;
 import com.ktraw.simplegems.setup.ServerProxy;
+import com.ktraw.simplegems.tools.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -30,10 +26,15 @@ import net.minecraft.item.Rarity;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.EffectType;
 import net.minecraft.potion.Effects;
+import net.minecraft.potion.HealthBoostEffect;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
@@ -46,6 +47,9 @@ import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Arrays;
+import java.util.UUID;
+
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("simplegems")
 public class SimpleGems
@@ -55,6 +59,14 @@ public class SimpleGems
     public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
 
     public static ModSetup setup = ModSetup.getSetup();
+
+    private static final int POTION_TICKS = 60;
+
+    private static final Multimap<String, AttributeModifier> heavyRingAttributes = HashMultimap.create();
+    private static final UUID MAX_HEALTH_UUID = UUID.fromString("5D6F0BA2-1186-46AC-B896-C61C5CEE99CC");
+    static {
+        heavyRingAttributes.put(SharedMonsterAttributes.MAX_HEALTH.getName(), new AttributeModifier(MAX_HEALTH_UUID, "Ring modifier", 4.0, AttributeModifier.Operation.ADDITION));
+    }
 
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
@@ -119,8 +131,10 @@ public class SimpleGems
             registry.register(new EnderApple());
             registry.register(new GoldRing());
             registry.register(new GemRing("gem_ring", null));
-            registry.register(new GemRing("ring_of_haste", new EffectInstance(Effects.HASTE, 20)));
-            registry.register(new GemRing("ring_of_levitation", new EffectInstance(Effects.LEVITATION, 20)));
+            registry.register(new GemRing("ring_of_haste", new SingleEffectProvider(new EffectInstanceWrapper(Effects.HASTE, POTION_TICKS, 1))));
+            registry.register(new GemRing("ring_of_levitation", new SingleEffectProvider(new EffectInstanceWrapper(Effects.LEVITATION, POTION_TICKS))));
+            registry.register(new GemRing("ring_of_vulnerable_strength", new MultiEffectProvider(Arrays.asList(new EffectInstanceWrapper(Effects.STRENGTH, POTION_TICKS, 1), new EffectInstanceWrapper(Effects.RESISTANCE, POTION_TICKS, -5)))));
+            registry.register(new GemRing("ring_of_heavy", new SingleEffectProvider(new EffectInstanceWrapper(Effects.SLOWNESS, POTION_TICKS, 2)), heavyRingAttributes, new TranslationTextComponent("tooltip.simplegems.heavy").setStyle(new Style().setColor(TextFormatting.RED))));
             registry.register(new GemPickaxe());
             registry.register(new GemSword());
             registry.register(new GemAxe());
