@@ -7,7 +7,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -16,10 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -29,17 +26,17 @@ import java.util.List;
 
 public class GemRing extends Item {
     private static final int ENERGY_PER_TICK = 10;
-    private static final Style GREEN_STYLE = new Style().setColor(TextFormatting.GREEN);
-    private static final Style HINT_STYLE = new Style().setItalic(true).setColor(TextFormatting.GRAY);
+    private static final Style GREEN_STYLE = Style.EMPTY.setColor(Color.func_240744_a_(TextFormatting.GREEN));
+    private static final Style HINT_STYLE = Style.EMPTY.setItalic(true).setColor(Color.func_240744_a_(TextFormatting.GRAY));
 
     private static final ITextComponent BLANK_LINE = new StringTextComponent("");
-    private static final ITextComponent PRESS_CTRL = new StringTextComponent("Press <Shift>").setStyle(HINT_STYLE);
+    private static final ITextComponent PRESS_CTRL = new StringTextComponent("Press <Shift>").func_230530_a_(HINT_STYLE);
 
     private IEffectProvider ringEffect;
     private ITextComponent firstLineOfTooltip;
-    private Multimap<String, AttributeModifier> attributeModifierMultimap;
+    private Multimap<Attribute, AttributeModifier> attributeModifierMultimap;
 
-    public GemRing(String registryName, @Nullable IEffectProvider ringEffect, @Nullable Multimap<String, AttributeModifier> attributeModifierMultimap, @Nullable ITextComponent firstLineOfTooltip) {
+    public GemRing(String registryName, @Nullable IEffectProvider ringEffect, @Nullable Multimap<Attribute, AttributeModifier> attributeModifierMultimap, @Nullable ITextComponent firstLineOfTooltip) {
         this(registryName, ringEffect);
         this.attributeModifierMultimap = attributeModifierMultimap;
         this.firstLineOfTooltip = firstLineOfTooltip;
@@ -95,8 +92,8 @@ public class GemRing extends Item {
     }
 
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-        Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+        Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
         if (attributeModifierMultimap == null) {
             return multimap;
@@ -129,7 +126,7 @@ public class GemRing extends Item {
         }
 
         if (Screen.hasShiftDown()) {
-            tooltip.add(new StringTextComponent("Energy: " + stack.getOrCreateTag().getInt("energy") + " FE").setStyle(GREEN_STYLE));
+            tooltip.add(new StringTextComponent("Energy: " + stack.getOrCreateTag().getInt("energy") + " FE").func_230530_a_(GREEN_STYLE));
             tooltip.add(BLANK_LINE);
             ringEffect.addInformation(stack, worldIn, tooltip, flagIn);
         }
@@ -147,12 +144,6 @@ public class GemRing extends Item {
         // check is a living entity
         if (entityIn instanceof LivingEntity) {
             LivingEntity casted = (LivingEntity) entityIn;
-
-            // do a check for max health TODO specific fix for 1 ring, try to genericize this checking behavior, method reference?
-            float maxHealth = casted.getMaxHealth();
-            if (casted.getHealth() > maxHealth) {
-                casted.setHealth(maxHealth);
-            }
 
             // get energy capability
             stack.getCapability(CapabilityEnergy.ENERGY).ifPresent(e -> {

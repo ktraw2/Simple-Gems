@@ -14,6 +14,7 @@ public class AmethystOre extends OreBlock {
         super(Properties.create(Material.ROCK)
                 .sound(SoundType.STONE)
                 .hardnessAndResistance(4f, 20f)
+                .setRequiresTool()
                 .harvestTool(ToolType.PICKAXE)
                 .harvestLevel(3));
 

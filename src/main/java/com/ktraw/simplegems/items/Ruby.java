@@ -11,9 +11,4 @@ public class Ruby extends Item {
                   .group(ModSetup.getSetup().getCreativeTab()));
         setRegistryName("ruby");
     }
-
-    @Override
-    public boolean isBeaconPayment(ItemStack stack) {
-        return true;
-    }
 }

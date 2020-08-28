@@ -20,7 +20,7 @@ public class OreGeneration {
     public static void setupOreGeneration() {
         for (Biome biome : ForgeRegistries.BIOMES) {
             CountRangeConfig rubyOrePlacement = new CountRangeConfig(10, 8, 0, 30);
-            biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ModBlocks.RUBY_ORE.getDefaultState(), 3), Placement.COUNT_RANGE, rubyOrePlacement));
+            biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ModBlocks.RUBY_ORE.getDefaultState(), 3)).withPlacement(Placement.COUNT_RANGE.configure(rubyOrePlacement)));
 
             try {
                 CountRangeConfig amethystOrePlacement = new CountRangeConfig(12, 0, 0, 45);
@@ -46,7 +46,7 @@ public class OreGeneration {
                 oArg[3] = new BlockMatcher(Blocks.END_STONE);
                 OreFeatureConfig.FillerBlockType end_stone = (OreFeatureConfig.FillerBlockType) ca.newInstance(oArg);
 
-                biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(Feature.ORE, new OreFeatureConfig(end_stone, ModBlocks.AMETHYST_ORE.getDefaultState(), 3), Placement.COUNT_RANGE, amethystOrePlacement));
+                biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(end_stone, ModBlocks.AMETHYST_ORE.getDefaultState(), 3)).withPlacement(Placement.COUNT_RANGE.configure(amethystOrePlacement)));
             } catch (Exception e) {
                 System.err.println("Error in reflecting OreFeatureConfig.FillerBlockType, Amethyst Ore will not generate.");
                 e.printStackTrace();

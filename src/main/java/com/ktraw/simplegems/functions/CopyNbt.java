@@ -8,8 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.*;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
+import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraftforge.common.util.Constants;
 
 
@@ -63,13 +63,16 @@ public class CopyNbt extends LootFunction {
         return stack;
     }
 
-    public static class Serializer extends LootFunction.Serializer<CopyNbt> {
-        public Serializer() {
-            super(new ResourceLocation(SimpleGems.MODID, "copy_nbt"), CopyNbt.class);
-        }
+    @Override
+    public LootFunctionType func_230425_b_() {
+        return new LootFunctionType(new Serializer());
+    }
 
-        public void serialize(JsonObject object, CopyNbt functionClazz, JsonSerializationContext serializationContext) {
-            super.serialize(object, functionClazz, serializationContext);
+    public static class Serializer extends LootFunction.Serializer<CopyNbt> {
+
+        @Override
+        public void func_230424_a_(JsonObject object, CopyNbt functionClazz, JsonSerializationContext serializationContext) {
+            super.func_230424_a_(object, functionClazz, serializationContext);
         }
 
         public CopyNbt deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {

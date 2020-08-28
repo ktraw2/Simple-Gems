@@ -31,7 +31,7 @@ public class GemRingCapabilityProvider implements ICapabilityProvider {
             return energy.cast();
         }
         else {
-            return null;
+            return LazyOptional.empty();
         }
     }
 }

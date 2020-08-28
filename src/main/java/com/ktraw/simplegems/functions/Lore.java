@@ -13,10 +13,10 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootFunction;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
-import net.minecraft.world.storage.loot.functions.SetLore;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootFunction;
+import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.loot.functions.SetLore;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -82,7 +82,7 @@ public class Lore extends SetLore {
             ListNBT loreList = resultDisplayTag.getList("Lore", Constants.NBT.TAG_STRING);
             for (int i = 0; i < loreList.size(); i++) {
                 String lore = loreList.getString(i);
-                loreList.set(i, new StringNBT(lore.substring(0, lore.length() - 1) + ",\"color\":\"green\",\"italic\":false}"));
+                loreList.set(i, StringNBT.valueOf(lore.substring(0, lore.length() - 1) + ",\"color\":\"green\",\"italic\":false}"));
             }
 
             return result;
@@ -99,12 +99,10 @@ public class Lore extends SetLore {
     }
 
     public static class Serializer extends LootFunction.Serializer<Lore> {
-        public Serializer() {
-            super(new ResourceLocation(SimpleGems.MODID,"lore"), Lore.class);
-        }
 
-        public void serialize(JsonObject object, Lore functionClazz, JsonSerializationContext serializationContext) {
-            super.serialize(object, functionClazz, serializationContext);
+        @Override
+        public void func_230424_a_(JsonObject object, Lore functionClazz, JsonSerializationContext serializationContext) {
+            super.func_230424_a_(object, functionClazz, serializationContext);
             object.addProperty("replace", functionClazz.replace);
         }
 

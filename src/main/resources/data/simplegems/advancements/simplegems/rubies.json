@@ -1,0 +1,35 @@
+{
+  "parent": "simplegems:simplegems/root",
+  "display": {
+    "icon": {
+      "item": "simplegems:ruby"
+    },
+    "title": {
+      "translate": "advancements.simplegems.rubies.title"
+    },
+    "description": {
+      "translate": "advancements.simplegems.rubies.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "ruby": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "simplegems:ruby"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "ruby"
+    ]
+  ]
+}

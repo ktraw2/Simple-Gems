@@ -13,14 +13,10 @@ public class AmethystBlock extends Block {
         super(Properties.create(Material.IRON)
                 .sound(SoundType.METAL)
                 .hardnessAndResistance(6f, 40f)
+                .setRequiresTool()
                 .harvestTool(ToolType.PICKAXE)
                 .harvestLevel(3));
 
         setRegistryName("amethyst_block");
-    }
-
-    @Override
-    public boolean isBeaconBase(BlockState state, IWorldReader world, BlockPos pos, BlockPos beacon) {
-        return true;
     }
 }

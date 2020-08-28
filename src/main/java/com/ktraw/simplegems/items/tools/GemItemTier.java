@@ -3,7 +3,7 @@ package com.ktraw.simplegems.items.tools;
 import com.ktraw.simplegems.items.ModItems;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.LazyLoadBase;
+import net.minecraft.util.LazyValue;
 
 import java.util.function.Supplier;
 
@@ -13,7 +13,7 @@ public class GemItemTier implements IItemTier {
     private final float efficiency;
     private final float attackDamage;
     private final int enchantability;
-    private final LazyLoadBase<Ingredient> repairMaterial;
+    private final LazyValue<Ingredient> repairMaterial;
     private static final GemItemTier tier = new GemItemTier(4, 2137, 14.0F, 4.0F, 25, () -> {
         return Ingredient.fromItems(ModItems.GEM);
     });
@@ -24,7 +24,7 @@ public class GemItemTier implements IItemTier {
         this.efficiency = efficiencyIn;
         this.attackDamage = attackDamageIn;
         this.enchantability = enchantabilityIn;
-        this.repairMaterial = new LazyLoadBase<>(repairMaterialIn);
+        this.repairMaterial = new LazyValue<>(repairMaterialIn);
     }
 
     public int getMaxUses() {

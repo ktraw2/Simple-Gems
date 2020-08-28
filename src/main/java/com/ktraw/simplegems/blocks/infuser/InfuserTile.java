@@ -1,6 +1,7 @@
 package com.ktraw.simplegems.blocks.infuser;
 
 import com.ktraw.simplegems.tools.SimpleGemsEnergyStorage;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -110,7 +111,7 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
     }
 
     @Override
-    public void read(CompoundNBT compound) {
+    public void read(BlockState stateIn, CompoundNBT compound) {
         items.ifPresent(h -> {
             h.deserializeNBT(compound.getCompound("inventory"));
         });
@@ -118,7 +119,7 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
             h.deserializeNBT(compound.getCompound("energy"));
         });
         timer = compound.getInt("timer");
-        super.read(compound);
+        super.read(stateIn, compound);
     }
 
     @Nonnull

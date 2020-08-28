@@ -11,9 +11,4 @@ public class Amethyst extends Item {
                 .group(ModSetup.getSetup().getCreativeTab()));
         setRegistryName("amethyst");
     }
-
-    @Override
-    public boolean isBeaconPayment(ItemStack stack) {
-        return true;
-    }
 }

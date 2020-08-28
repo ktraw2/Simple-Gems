@@ -13,9 +13,4 @@ public class Gem extends Item {
                 .rarity(Rarity.RARE));
         setRegistryName("gem");
     }
-
-    @Override
-    public boolean isBeaconPayment(ItemStack stack) {
-        return true;
-    }
 }

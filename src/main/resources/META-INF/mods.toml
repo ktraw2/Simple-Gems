@@ -47,6 +47,6 @@ My first Minecraft mod, it adds some ores, gems, tools, armor, and some other fu
 [[dependencies.simplegems]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.4]"
+    versionRange="[1.16,]"
     ordering="NONE"
     side="BOTH"

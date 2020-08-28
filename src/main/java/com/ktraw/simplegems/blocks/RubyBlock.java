@@ -13,14 +13,11 @@ public class RubyBlock extends Block {
         super(Properties.create(Material.IRON)
                 .sound(SoundType.METAL)
                 .hardnessAndResistance(5f, 30f)
+                .setRequiresTool()
                 .harvestTool(ToolType.PICKAXE)
-                .harvestLevel(2));
+                .harvestLevel(2)
+                .setRequiresTool());
 
         setRegistryName("ruby_block");
-    }
-
-    @Override
-    public boolean isBeaconBase(BlockState state, IWorldReader world, BlockPos pos, BlockPos beacon) {
-        return true;
     }
 }

@@ -17,11 +17,13 @@ import com.ktraw.simplegems.setup.ServerProxy;
 import com.ktraw.simplegems.tools.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.item.Rarity;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
@@ -32,6 +34,7 @@ import net.minecraft.potion.HealthBoostEffect;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.Color;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -60,12 +63,12 @@ public class SimpleGems
 
     public static ModSetup setup = ModSetup.getSetup();
 
-    private static final int POTION_TICKS = 60;
+    private static final int POTION_TICKS = 20;
 
-    private static final Multimap<String, AttributeModifier> heavyRingAttributes = HashMultimap.create();
-    private static final UUID MAX_HEALTH_UUID = UUID.fromString("5D6F0BA2-1186-46AC-B896-C61C5CEE99CC");
+    private static final Multimap<Attribute, AttributeModifier> heavyRingAttributes = HashMultimap.create();
+    private static final UUID MAX_HEALTH_UUID = UUID.fromString("5D6F0BAB3-1086-46AC-F896-C61C5CEE99CC");
     static {
-        heavyRingAttributes.put(SharedMonsterAttributes.MAX_HEALTH.getName(), new AttributeModifier(MAX_HEALTH_UUID, "Ring modifier", 4.0, AttributeModifier.Operation.ADDITION));
+        heavyRingAttributes.put(Attributes.MAX_HEALTH, new AttributeModifier(MAX_HEALTH_UUID, "Ring modifier", 10.0, AttributeModifier.Operation.ADDITION));
     }
 
     // Directly reference a log4j logger.
@@ -87,7 +90,7 @@ public class SimpleGems
             return entity.getHorizontalFacing().getOpposite();
         }
         else {
-            return Direction.getFacingFromVector((float) (entity.posX - clickedBlock.getX()), (float) (entity.posY - clickedBlock.getY()), (float) (entity.posZ - clickedBlock.getZ()));
+            return Direction.getFacingFromVector((float) (entity.serverPosX - clickedBlock.getX()), (float) (entity.serverPosY - clickedBlock.getY()), (float) (entity.serverPosZ - clickedBlock.getZ()));
         }
     }
 
@@ -134,7 +137,7 @@ public class SimpleGems
             registry.register(new GemRing("ring_of_haste", new SingleEffectProvider(new EffectInstanceWrapper(Effects.HASTE, POTION_TICKS, 1))));
             registry.register(new GemRing("ring_of_levitation", new SingleEffectProvider(new EffectInstanceWrapper(Effects.LEVITATION, POTION_TICKS))));
             registry.register(new GemRing("ring_of_vulnerable_strength", new MultiEffectProvider(Arrays.asList(new EffectInstanceWrapper(Effects.STRENGTH, POTION_TICKS, 1), new EffectInstanceWrapper(Effects.RESISTANCE, POTION_TICKS, -5)))));
-            registry.register(new GemRing("ring_of_heavy", new SingleEffectProvider(new EffectInstanceWrapper(Effects.SLOWNESS, POTION_TICKS, 2)), heavyRingAttributes, new TranslationTextComponent("tooltip.simplegems.heavy").setStyle(new Style().setColor(TextFormatting.RED))));
+            registry.register(new GemRing("ring_of_heavy", new SingleEffectProvider(new EffectInstanceWrapper(Effects.SLOWNESS, POTION_TICKS, 3)), heavyRingAttributes, new TranslationTextComponent("tooltip.simplegems.heavy").func_230530_a_( Style.EMPTY.setColor(Color.func_240744_a_(TextFormatting.RED)))));
             registry.register(new GemPickaxe());
             registry.register(new GemSword());
             registry.register(new GemAxe());

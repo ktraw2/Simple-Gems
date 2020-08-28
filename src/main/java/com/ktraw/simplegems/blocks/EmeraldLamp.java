@@ -8,7 +8,7 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.state.properties.BlockStateProperties;
 
@@ -21,7 +21,7 @@ public class EmeraldLamp extends Block {
         super(Properties.create(Material.REDSTONE_LIGHT)
                 .sound(SoundType.GLASS)
                 .hardnessAndResistance(0.5f, 15f)
-                .lightValue(0));
+                .setLightLevel(value -> 0));
 
         this.setDefaultState(this.getDefaultState().with(LIGHT_LEVEL, 0));
         setRegistryName("emerald_lamp");
@@ -34,7 +34,7 @@ public class EmeraldLamp extends Block {
     }
 
     @Override
-    public int getLightValue(BlockState state) {
+    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
         return state.get(LIGHT_LEVEL);
     }
 

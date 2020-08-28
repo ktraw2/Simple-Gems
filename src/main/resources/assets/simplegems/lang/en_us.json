@@ -34,6 +34,10 @@
 
   "advancements.simplegems.root.title": "Simple Gems",
   "advancements.simplegems.root.description": "Advancements for the mod!",
+  "advancements.simplegems.rubies.title": "Rubies!",
+  "advancements.simplegems.rubies.description": "Obtain a ruby",
+  "advancements.simplegems.amethysts.title": "Amethysts!",
+  "advancements.simplegems.amethysts.description": "Obtain an amethyst",
 
   "_comment": "Creative Tabs",
   "itemGroup.simplegems": "Simple Gems"

@@ -11,6 +11,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -35,6 +36,15 @@ public class PlayerEvents {
             if (!player.isCreative()) {
                 heldItem.setCount(heldItem.getCount() - 1);
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void playerTick(TickEvent.PlayerTickEvent event) {
+        // fix for health not resetting
+        float maxHealth = event.player.getMaxHealth();
+        if (event.player.getHealth() > maxHealth) {
+            event.player.setHealth(maxHealth);
         }
     }
 }

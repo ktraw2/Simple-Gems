@@ -13,14 +13,10 @@ public class GemBlock extends Block {
         super(Properties.create(Material.IRON)
                 .sound(SoundType.METAL)
                 .hardnessAndResistance(7f, 45f)
+                .setRequiresTool()
                 .harvestTool(ToolType.PICKAXE)
                 .harvestLevel(4));
 
         setRegistryName("gem_block");
-    }
-
-    @Override
-    public boolean isBeaconBase(BlockState state, IWorldReader world, BlockPos pos, BlockPos beacon) {
-        return true;
     }
 }

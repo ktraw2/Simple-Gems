@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public interface IEffectProvider {
-    static ITextComponent EFFECTS = new StringTextComponent("Effects:").setStyle(new Style().setUnderlined(true));
+    static ITextComponent EFFECTS = new StringTextComponent("Effects:").func_230530_a_(Style.EMPTY.setUnderlined(true));
 
     public void doEffect(LivingEntity entity);
 

@@ -15,6 +15,7 @@ public class RubyOre extends OreBlock {
         super(Properties.create(Material.ROCK)
                 .sound(SoundType.STONE)
                 .hardnessAndResistance(3f, 15f)
+                .setRequiresTool()
                 .harvestTool(ToolType.PICKAXE)
                 .harvestLevel(2));
 

@@ -12,8 +12,11 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.loot.LootFunctionType;
 import net.minecraft.potion.*;
-import net.minecraft.world.storage.loot.functions.LootFunctionManager;
+import net.minecraft.loot.functions.LootFunctionManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.lang.reflect.Method;
@@ -41,8 +44,9 @@ public final class ModSetup {
 
     public void init() {
         OreGeneration.setupOreGeneration();
-        LootFunctionManager.registerFunction(new Lore.Serializer());
-        LootFunctionManager.registerFunction(new CopyNbt.Serializer());
+
+        Registry.register(Registry.field_239694_aZ_, new ResourceLocation(SimpleGems.MODID,"lore"), new LootFunctionType(new Lore.Serializer()));
+        Registry.register(Registry.field_239694_aZ_, new ResourceLocation(SimpleGems.MODID, "copy_nbt"), new LootFunctionType(new CopyNbt.Serializer()));
 
         try {
             Method addMix = PotionBrewing.class.getDeclaredMethod("addMix", Potion.class, Item.class, Potion.class);
