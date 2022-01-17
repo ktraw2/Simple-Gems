@@ -1,16 +1,16 @@
 package com.ktraw.simplegems.events;
 
 import com.ktraw.simplegems.items.ChargedEmeraldDust;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.merchant.villager.WanderingTraderEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.WanderingTrader;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,19 +18,19 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class PlayerEvents {
     @SubscribeEvent
     public void entityInteract(PlayerInteractEvent.EntityInteract event) {
-        PlayerEntity player = event.getPlayer();
-        ItemStack heldItem = player.getHeldItem(event.getHand());
+        Player player = event.getPlayer();
+        ItemStack heldItem = player.getItemInHand(event.getHand());
         Entity target = event.getTarget();
 
-        if ((target instanceof VillagerEntity || target instanceof WanderingTraderEntity) && heldItem.getItem() instanceof ChargedEmeraldDust) {
+        if ((target instanceof Villager || target instanceof WanderingTrader) && heldItem.getItem() instanceof ChargedEmeraldDust) {
             // Play firework launch sound
             ResourceLocation location = new ResourceLocation("minecraft", "entity.firework_rocket.launch");
             SoundEvent soundEvent = new SoundEvent(location);
             player.playSound(soundEvent, 100, 1);
 
             // Launch villager and give potion effect
-            target.addVelocity(0, 1, 0);
-            ((MobEntity) target).addPotionEffect(new EffectInstance(Effects.SPEED, 500, 5));
+            target.push(0, 1, 0); // TODO: addVelocity?
+            ((Mob) target).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 500, 5));
 
             // Remove 1 item if not in creative mode
             if (!player.isCreative()) {

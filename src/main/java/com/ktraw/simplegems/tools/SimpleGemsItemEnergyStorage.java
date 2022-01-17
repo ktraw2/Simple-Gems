@@ -1,6 +1,6 @@
 package com.ktraw.simplegems.tools;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.energy.EnergyStorage;
 
 public class SimpleGemsItemEnergyStorage extends EnergyStorage {

@@ -1,6 +1,8 @@
 {
   "block.simplegems.emerald_lamp": "Emerald Lamp",
+  "block.simplegems.inverted_emerald_lamp": "Inverted Emerald Lamp",
   "block.simplegems.ruby_ore": "Ruby Ore",
+  "block.simplegems.deepslate_ruby_ore": "Deepslate Ruby Ore",
   "block.simplegems.ruby_block": "Ruby Block",
   "block.simplegems.amethyst_ore": "Amethyst Ore",
   "block.simplegems.amethyst_block": "Amethyst Block",

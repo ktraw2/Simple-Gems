@@ -1,77 +1,85 @@
 package com.ktraw.simplegems.blocks.generator;
 
 import com.ktraw.simplegems.SimpleGems;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ToolType;
-import net.minecraftforge.fml.network.NetworkHooks;
+import com.ktraw.simplegems.blocks.ModBlocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class Generator extends Block {
+public class Generator extends Block implements EntityBlock {
 
     public Generator() {
-        super(Properties.create(Material.IRON)
+        super(Properties.of(Material.METAL)
                 .sound(SoundType.METAL)
-                .harvestTool(ToolType.PICKAXE)
-                .harvestLevel(1)
-                .hardnessAndResistance(5f, 15f));
+                .strength(5f, 15f));
+                /*.harvestTool(ToolType.PICKAXE)
+                .harvestLevel(1);*/
         setRegistryName("generator");
-        setDefaultState(getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
+        registerDefaultState(defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) { // TODO: onBlockPlacedBy?
         if (placer != null) {
-            worldIn.setBlockState(pos, state.with(BlockStateProperties.HORIZONTAL_FACING, SimpleGems.getFacingFromEntity(pos, placer, true)), 2);
+            worldIn.setBlock(pos, state.setValue(BlockStateProperties.HORIZONTAL_FACING, SimpleGems.getFacingFromEntity(pos, placer, true)), 2);
         }
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(BlockStateProperties.HORIZONTAL_FACING);
     }
 
+//    @Override
+//    public boolean hasTileEntity(BlockState state) {
+//        return true;
+//    }
+
     @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+        if (!worldIn.isClientSide) {
+            BlockEntity tileEntity = worldIn.getBlockEntity(pos);
+            if (tileEntity instanceof MenuProvider) {
+                NetworkHooks.openGui((ServerPlayer) player, (MenuProvider) tileEntity, tileEntity.getBlockPos());
+            }
+
+            return InteractionResult.SUCCESS;
+        }
+        else {
+            return super.use(state, worldIn, pos, player, handIn, hit);
+        }
     }
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new GeneratorTile();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new GeneratorTile(pos, state);
     }
 
+    @Nullable
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (!worldIn.isRemote) {
-            TileEntity tileEntity = worldIn.getTileEntity(pos);
-            if (tileEntity instanceof INamedContainerProvider) {
-                NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
-            }
-            //return true;
-        }
-        else {
-            return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
-        }
-        return ActionResultType.SUCCESS;
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
+        return type == ModBlocks.GENERATOR_TILE ? GeneratorTile::tick : null;
     }
 }

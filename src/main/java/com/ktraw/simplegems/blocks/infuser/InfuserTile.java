@@ -1,22 +1,22 @@
 package com.ktraw.simplegems.blocks.infuser;
 
-import com.ktraw.simplegems.tools.SimpleGemsEnergyStorage;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-
 import com.ktraw.simplegems.blocks.ModBlocks;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import com.ktraw.simplegems.tools.SimpleGemsEnergyStorage;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -27,7 +27,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class InfuserTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IInventory {
+public class InfuserTile extends BlockEntity implements MenuProvider, Container {
     public static final int TOTAL_SLOTS = 5;
     public static final int TOTAL_CRAFTING_SLOTS = TOTAL_SLOTS - 1;
     public static final int OUTPUT_SLOT_INDEX = TOTAL_SLOTS - 1;
@@ -37,7 +37,7 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
     public static final int INT_RECIPE_PROCESS_TIME = 2;
     public static final int DATA_SIZE = 3;
 
-    private IIntArray infuserData = new IIntArray() {
+    private ContainerData infuserData = new ContainerData() {
         @Override
         public int get(int index) {
             switch (index) {
@@ -65,16 +65,16 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
             switch (index) {
                 case INT_TIMER:
                     timer = value;
-                    markDirty();
+                    setChanged();
 
                 case INT_ENERGY:
                     setEnergy(value);
-                    markDirty();
+                    setChanged();
             }
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return DATA_SIZE;
         }
     };
@@ -86,8 +86,8 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
     private int timer = 0;
     InfuserRecipe currentRecipe;
 
-    public InfuserTile() {
-        super(ModBlocks.INFUSER_TILE);
+    public InfuserTile(BlockPos pos, BlockState state) {
+        super(ModBlocks.INFUSER_TILE, pos, state);
     }
 
     private InfuserItemStackHandler createItemHandler() {
@@ -99,7 +99,7 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         items.ifPresent(h -> {
             compound.put("inventory", h.serializeNBT());
         });
@@ -107,11 +107,11 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
             compound.put("energy", h.serializeNBT());
         });
         compound.putInt("timer", timer);
-        return super.write(compound);
+        return super.save(compound);
     }
 
     @Override
-    public void read(BlockState stateIn, CompoundNBT compound) {
+    public void load(CompoundTag compound) { // TODO: read(BlockState stateIn, CompoundTag compound)?
         items.ifPresent(h -> {
             h.deserializeNBT(compound.getCompound("inventory"));
         });
@@ -119,7 +119,7 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
             h.deserializeNBT(compound.getCompound("energy"));
         });
         timer = compound.getInt("timer");
-        super.read(stateIn, compound);
+        super.load(compound);
     }
 
     @Nonnull
@@ -142,7 +142,7 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
         else {
             int numOccupiedSlots = 0;
             for (int i = 0; i < TOTAL_CRAFTING_SLOTS; i++) {
-                if (!getStackInSlot(i).isEmpty()) {
+                if (!getItem(i).isEmpty()) {
                     numOccupiedSlots++;
                 }
             }
@@ -151,19 +151,19 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
                 return false;
             }
             else {
-                ItemStack recipeOutput = recipe.getRecipeOutput();
+                ItemStack recipeOutput = recipe.getResultItem();
                 if (recipeOutput.isEmpty()) {
                     return false;
                 }
                 else {
-                    ItemStack infuserOutputSlot = getStackInSlot(OUTPUT_SLOT_INDEX);
+                    ItemStack infuserOutputSlot = getItem(OUTPUT_SLOT_INDEX);
                     int combinedTotal = infuserOutputSlot.getCount() + recipeOutput.getCount();
                     if (infuserOutputSlot.isEmpty()) {
                         return true;
-                    } else if (!infuserOutputSlot.isItemEqual(recipeOutput)) {
+                    } else if (!infuserOutputSlot.sameItem(recipeOutput)) {
                         return false;
                     }
-                    else if (combinedTotal <= getInventoryStackLimit() && combinedTotal <= infuserOutputSlot.getMaxStackSize()) {
+                    else if (combinedTotal <= getMaxStackSize() && combinedTotal <= infuserOutputSlot.getMaxStackSize()) {
                         return true;
                     }
                     else {
@@ -174,60 +174,62 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
         }
     }
 
-    @Override
-    public void tick() {
-        if (!world.isRemote) {
-            if (timer <= 0) {
-                InfuserRecipe recipe = world.getRecipeManager().getRecipe(ModBlocks.INFUSER_RECIPE_TYPE, this, world).orElse(null);
-                if (recipe != null && canInfuse(recipe)) {
-                    timer = recipe.getProcessTime();
-                    energy.ifPresent(e -> {
+    public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T be) {
+        InfuserTile tile = (InfuserTile) be;
+
+        // your code here
+        if (!level.isClientSide) {
+            if (tile.timer <= 0) {
+                InfuserRecipe recipe = level.getRecipeManager().getRecipeFor(ModBlocks.INFUSER_RECIPE_TYPE, tile, level).orElse(null);
+                if (recipe != null && tile.canInfuse(recipe)) {
+                    tile.timer = recipe.getProcessTime();
+                    tile.energy.ifPresent(e -> {
                         e.consumeEnergy(recipe.getEnergy());
                     });
                     for (int i = 0; i < TOTAL_CRAFTING_SLOTS; i++) {
                         int finalI = i;
-                        items.ifPresent(h -> {
+                        tile.items.ifPresent(h -> {
                             h.extractItem(finalI, 1, false);
                         });
                     }
-                    currentRecipe = recipe;
-                    markDirty();
+                    tile.currentRecipe = recipe;
+                    tile.setChanged();
                 }
             }
             else {
-                timer--;
-                if (timer <= 0 && currentRecipe != null) {
-                    items.ifPresent(h -> {
-                        h.insertItemNoCheck(OUTPUT_SLOT_INDEX, currentRecipe.getRecipeOutput().copy(), false);
+                tile.timer--;
+                if (tile.timer <= 0 && tile.currentRecipe != null) {
+                    tile.items.ifPresent(h -> {
+                        h.insertItemNoCheck(OUTPUT_SLOT_INDEX, tile.currentRecipe.getResultItem().copy(), false);
                     });
-                    currentRecipe = null;
-                    markDirty();
+                    tile.currentRecipe = null;
+                    tile.setChanged();
                 }
             }
 
-       }
+        }
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent(getType().getRegistryName().getPath());
+    public Component getDisplayName() {
+        return new TextComponent(getType().getRegistryName().getPath());
     }
 
     @Nullable
     @Override
-    public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int i, Inventory playerInventory, Player playerEntity) {
         return new InfuserContainer(i, playerInventory, this, infuserData);
     }
 
     /* MARK IInventory */
 
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
+    public boolean canPlaceItem(int index, ItemStack stack) {
         return index != OUTPUT_SLOT_INDEX;
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return items.map(ItemStackHandler::getSlots).orElse(0);
     }
 
@@ -247,17 +249,17 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int index) {
         return items.map(h -> h.getStackInSlot(index)).orElse(ItemStack.EMPTY);
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count) {
+    public ItemStack removeItem(int index, int count) {
         return items.map(h -> h.extractItem(index, count, false)).orElse(ItemStack.EMPTY);
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
+    public ItemStack removeItemNoUpdate(int index) { // TODO: removeStackFromSlot?
         return items.map(h -> {
             ItemStack stackInSlot = h.getStackInSlot(index);
             h.setStackInSlot(index, ItemStack.EMPTY);
@@ -266,25 +268,29 @@ public class InfuserTile extends TileEntity implements ITickableTileEntity, INam
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setItem(int index, ItemStack stack) {
         items.ifPresent(h -> {
             h.setStackInSlot(index, stack);
         });
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 
+    /* MARK Clearable */
+
     @Override
-    public void clear() {
+    public void clearContent() {
         items.ifPresent(h -> {
             for (int i = 0; i < h.getSlots(); i++) {
                 h.setStackInSlot(i, ItemStack.EMPTY);
             }
         });
     }
+
+    /* End Clearable */
 
     /* end IInventory */
 

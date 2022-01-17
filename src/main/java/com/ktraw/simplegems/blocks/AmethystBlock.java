@@ -1,21 +1,17 @@
 package com.ktraw.simplegems.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
 
 public class AmethystBlock extends Block {
     public AmethystBlock() {
-        super(Properties.create(Material.IRON)
+        super(Properties.of(Material.METAL)
                 .sound(SoundType.METAL)
-                .hardnessAndResistance(6f, 40f)
-                .setRequiresTool()
+                .strength(6f, 40f)
+                .requiresCorrectToolForDrops()/*
                 .harvestTool(ToolType.PICKAXE)
-                .harvestLevel(3));
+                .harvestLevel(3)*/);
 
         setRegistryName("amethyst_block");
     }

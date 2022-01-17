@@ -1,22 +1,17 @@
 package com.ktraw.simplegems.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
 
 public class RubyBlock extends Block {
     public RubyBlock() {
-        super(Properties.create(Material.IRON)
+        super(Properties.of(Material.STONE)
                 .sound(SoundType.METAL)
-                .hardnessAndResistance(5f, 30f)
-                .setRequiresTool()
+                .strength(5f, 30f)
+                .requiresCorrectToolForDrops()/*
                 .harvestTool(ToolType.PICKAXE)
-                .harvestLevel(2)
-                .setRequiresTool());
+                .harvestLevel(2)*/);
 
         setRegistryName("ruby_block");
     }

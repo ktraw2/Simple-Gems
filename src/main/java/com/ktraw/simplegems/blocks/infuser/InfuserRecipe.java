@@ -5,22 +5,28 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.ktraw.simplegems.SimpleGems;
 import com.ktraw.simplegems.blocks.ModBlocks;
+import com.mojang.realmsclient.util.JsonUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.Arrays;
+import java.util.List;
 
-public class InfuserRecipe implements IRecipe<InfuserTile> {
+public class InfuserRecipe implements Recipe<InfuserTile> {
 
-    private final IRecipeType<InfuserRecipe> type = ModBlocks.INFUSER_RECIPE_TYPE;
-    private final IRecipeSerializer<InfuserRecipe> serializer = ModBlocks.INFUSER_SERIALIZER;
+    private final RecipeType<InfuserRecipe> type = ModBlocks.INFUSER_RECIPE_TYPE;
+    private final RecipeSerializer<InfuserRecipe> serializer = ModBlocks.INFUSER_SERIALIZER;
 
     private final ResourceLocation id;
     private final String group;
@@ -42,18 +48,22 @@ public class InfuserRecipe implements IRecipe<InfuserTile> {
     }
 
     @Override
-    public boolean matches(InfuserTile inv, World worldIn) {
-        RecipeItemHelper recipeitemhelper = new RecipeItemHelper();
-        java.util.List<ItemStack> inputs = new java.util.ArrayList<>();
+    public boolean matches(InfuserTile inv, Level worldIn) {
+
+        StackedContents recipeitemhelper = new StackedContents();
+        List<ItemStack> inputs = new java.util.ArrayList<>();
         int i = 0;
 
         for(int j = 0; j < InfuserTile.TOTAL_CRAFTING_SLOTS; ++j) {
-            ItemStack itemstack = inv.getStackInSlot(j);
+            ItemStack itemstack = inv.getItem(j);
             if (!itemstack.isEmpty()) {
                 ++i;
-                if (isSimple)
-                    recipeitemhelper.func_221264_a(itemstack, 1);
-                else inputs.add(itemstack);
+                if (isSimple) {
+                    recipeitemhelper.accountStack(itemstack, 1);
+                }
+                else {
+                    inputs.add(itemstack);
+                }
             }
         }
 
@@ -62,12 +72,12 @@ public class InfuserRecipe implements IRecipe<InfuserTile> {
     }
 
     @Override
-    public ItemStack getCraftingResult(InfuserTile inv) {
+    public ItemStack assemble(InfuserTile inv) {
         return recipeOutput.copy();
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return ingredients.size() <= width * height;
     }
 
@@ -77,7 +87,7 @@ public class InfuserRecipe implements IRecipe<InfuserTile> {
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         return recipeOutput;
     }
 
@@ -87,12 +97,12 @@ public class InfuserRecipe implements IRecipe<InfuserTile> {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return serializer;
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return type;
     }
 
@@ -118,7 +128,7 @@ public class InfuserRecipe implements IRecipe<InfuserTile> {
         sb.append(", ingredients=[");
         if (ingredients.size() > 0) {
             for (Ingredient ingredient : ingredients) {
-                sb.append(Arrays.toString(ingredient.getMatchingStacks())).append(", ");
+                sb.append(Arrays.toString(ingredient.getItems())).append(", ");
             }
             sb.delete(sb.length() - 2, sb.length());
         }
@@ -129,7 +139,7 @@ public class InfuserRecipe implements IRecipe<InfuserTile> {
         return sb.toString();
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<InfuserRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<InfuserRecipe> {
         private static final ResourceLocation NAME = new ResourceLocation(SimpleGems.MODID, "infuser");
 
         public Serializer() {
@@ -137,16 +147,17 @@ public class InfuserRecipe implements IRecipe<InfuserTile> {
         }
 
         @Override
-        public InfuserRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public InfuserRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             // get the group
-            String group = JSONUtils.getString(json, "group", "");
+            String group = JsonUtils.getStringOr("group", json, "");
+            //String group = JSONUtils.getString(json, "group", "");
 
             // built the ingredients list
             NonNullList<Ingredient> ingredients = NonNullList.create();
-            JsonArray jsonIngredients = JSONUtils.getJsonArray(json, "ingredients");
+            JsonArray jsonIngredients = json.get("ingredients").getAsJsonArray();//JSONUtils.getJsonArray(json, "ingredients");
             for (int i = 0; i < jsonIngredients.size(); i++) {
-                Ingredient ingredient = Ingredient.deserialize(jsonIngredients.get(i));
-                if (!ingredient.hasNoMatchingItems()) {
+                Ingredient ingredient = Ingredient.fromJson(jsonIngredients.get(i));
+                if (!ingredient.isEmpty()) {
                     ingredients.add(ingredient);
                 }
             }
@@ -159,57 +170,59 @@ public class InfuserRecipe implements IRecipe<InfuserTile> {
                 throw new JsonParseException("Too many ingredients");
             }
 
-            int energy = JSONUtils.getInt(json, "energy", 0);
+            //int energy = JSONUtils.getInt(json, "energy", 0);
+            int energy = JsonUtils.getIntOr("energy", json, 0);
 
-            int processTime = JSONUtils.getInt(json, "processTime", 0);
+            //int processTime = JSONUtils.getInt(json, "processTime", 0);
+            int processTime = JsonUtils.getIntOr("processTime", json, 0);
 
             // get the output
-            ItemStack recipeOutput = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
+            ItemStack recipeOutput = ShapedRecipe.itemStackFromJson(json.get("result").getAsJsonObject()/* JSONUtils.getJsonObject(json, "result")*/);
 
             // return a Java object with the parsed data
             return new InfuserRecipe(recipeId, group, recipeOutput, ingredients, energy, processTime);
         }
 
         @Override
-        public InfuserRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-            String group = buffer.readString(0x7FFF);
+        public InfuserRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+            String group = buffer.readUtf(0x7FFF);
 
             int sizeOfIngredients = buffer.readVarInt();
             NonNullList<Ingredient> ingredients = NonNullList.withSize(sizeOfIngredients, Ingredient.EMPTY);
 
             for (int i = 0; i < ingredients.size(); i++) {
-                ingredients.set(i, Ingredient.read(buffer));
+                ingredients.set(i, Ingredient.fromNetwork(buffer));
             }
 
             int energy = buffer.readVarInt();
 
             int processTime = buffer.readVarInt();
 
-            ItemStack recipeOutput = buffer.readItemStack();
+            ItemStack recipeOutput = buffer.readItem();
 
             return new InfuserRecipe(recipeId, group, recipeOutput, ingredients, energy, processTime);
         }
 
         @Override
-        public void write(PacketBuffer buffer, InfuserRecipe recipe) {
-            buffer.writeString(recipe.group, 0x7FFF);
+        public void toNetwork(FriendlyByteBuf buffer, InfuserRecipe recipe) {
+            buffer.writeUtf(recipe.group, 0x7FFF);
 
             buffer.writeVarInt(recipe.ingredients.size());
 
             for (Ingredient ingredient : recipe.ingredients) {
-                ingredient.write(buffer);
+                ingredient.toNetwork(buffer);
             }
 
             buffer.writeVarInt(recipe.energy);
 
             buffer.writeVarInt(recipe.processTime);
 
-            buffer.writeItemStack(recipe.recipeOutput);
+            buffer.writeItemStack(recipe.recipeOutput, false); // TODO: should be false?
         }
     }
 
     @Override
-    public ItemStack getIcon() {
+    public ItemStack getToastSymbol() {
         return new ItemStack(ModBlocks.INFUSER);
     }
 }

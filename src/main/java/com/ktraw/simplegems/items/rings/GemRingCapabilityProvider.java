@@ -1,9 +1,8 @@
 package com.ktraw.simplegems.items.rings;
 
-import com.ktraw.simplegems.tools.SimpleGemsEnergyStorage;
 import com.ktraw.simplegems.tools.SimpleGemsItemEnergyStorage;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;

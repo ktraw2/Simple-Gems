@@ -1,6 +1,6 @@
 package com.ktraw.simplegems.blocks.infuser;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -27,6 +27,6 @@ public class InfuserItemStackHandler extends ItemStackHandler {
 
     @Override
     protected void onContentsChanged(int slot) {
-        tile.markDirty();
+        tile.setChanged();
     }
 }

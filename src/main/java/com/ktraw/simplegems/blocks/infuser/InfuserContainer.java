@@ -2,11 +2,11 @@ package com.ktraw.simplegems.blocks.infuser;
 
 import com.ktraw.simplegems.blocks.ModBlocks;
 import com.ktraw.simplegems.tools.SimpleGemsContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIntArray;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 
 public class InfuserContainer extends SimpleGemsContainer<InfuserContainer> {
@@ -16,7 +16,7 @@ public class InfuserContainer extends SimpleGemsContainer<InfuserContainer> {
      * @param windowId the ID of the window
      * @param playerInventory the inventory of the player
      */
-    public InfuserContainer(int windowId, PlayerInventory playerInventory) {
+    public InfuserContainer(int windowId, Inventory playerInventory) {
         super(ModBlocks.INFUSER_CONTAINER, windowId, playerInventory, InfuserTile.TOTAL_SLOTS, InfuserTile.DATA_SIZE);
     }
 
@@ -27,7 +27,7 @@ public class InfuserContainer extends SimpleGemsContainer<InfuserContainer> {
      * @param inventory the inventory of the container
      * @param dataIn the serverside tile entity data
      */
-    public InfuserContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray dataIn) {
+    public InfuserContainer(int windowId, Inventory playerInventory, Container inventory, ContainerData dataIn) {
         super(ModBlocks.INFUSER_CONTAINER, windowId, playerInventory, inventory, dataIn);
     }
 
@@ -42,7 +42,7 @@ public class InfuserContainer extends SimpleGemsContainer<InfuserContainer> {
              * @return false, don't allow insertion into this slot
              */
             @Override
-            public boolean isItemValid(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });

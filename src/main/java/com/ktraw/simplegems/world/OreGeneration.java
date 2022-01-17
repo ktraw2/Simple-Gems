@@ -1,24 +1,8 @@
 package com.ktraw.simplegems.world;
 
-import com.ktraw.simplegems.blocks.ModBlocks;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.pattern.BlockMatcher;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.Placement;
-import net.minecraftforge.registries.ForgeRegistries;
-import sun.reflect.ConstructorAccessor;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 public class OreGeneration {
     public static void setupOreGeneration() {
-        for (Biome biome : ForgeRegistries.BIOMES) {
+        /*for (Biome biome : ForgeRegistries.BIOMES) {
             CountRangeConfig rubyOrePlacement = new CountRangeConfig(10, 8, 0, 30);
             biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ModBlocks.RUBY_ORE.getDefaultState(), 3)).withPlacement(Placement.COUNT_RANGE.configure(rubyOrePlacement)));
 
@@ -51,6 +35,6 @@ public class OreGeneration {
                 System.err.println("Error in reflecting OreFeatureConfig.FillerBlockType, Amethyst Ore will not generate.");
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 }

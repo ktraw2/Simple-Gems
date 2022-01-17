@@ -3,21 +3,25 @@ package com.ktraw.simplegems.items.rings;
 import com.google.common.collect.Multimap;
 import com.ktraw.simplegems.SimpleGems;
 import com.ktraw.simplegems.tools.IEffectProvider;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 
@@ -26,17 +30,17 @@ import java.util.List;
 
 public class GemRing extends Item {
     private static final int ENERGY_PER_TICK = 10;
-    private static final Style GREEN_STYLE = Style.EMPTY.setColor(Color.func_240744_a_(TextFormatting.GREEN));
-    private static final Style HINT_STYLE = Style.EMPTY.setItalic(true).setColor(Color.func_240744_a_(TextFormatting.GRAY));
+    private static final Style GREEN_STYLE = Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN));
+    private static final Style HINT_STYLE = Style.EMPTY.withItalic(true).withColor(TextColor.fromLegacyFormat(ChatFormatting.GRAY));
 
-    private static final ITextComponent BLANK_LINE = new StringTextComponent("");
-    private static final ITextComponent PRESS_CTRL = new StringTextComponent("Press <Shift>").func_230530_a_(HINT_STYLE);
+    private static final Component BLANK_LINE = new TextComponent("");
+    private static final Component PRESS_CTRL = new TextComponent("Press <Shift>").setStyle(HINT_STYLE);
 
     private IEffectProvider ringEffect;
-    private ITextComponent firstLineOfTooltip;
+    private Component firstLineOfTooltip;
     private Multimap<Attribute, AttributeModifier> attributeModifierMultimap;
 
-    public GemRing(String registryName, @Nullable IEffectProvider ringEffect, @Nullable Multimap<Attribute, AttributeModifier> attributeModifierMultimap, @Nullable ITextComponent firstLineOfTooltip) {
+    public GemRing(String registryName, @Nullable IEffectProvider ringEffect, @Nullable Multimap<Attribute, AttributeModifier> attributeModifierMultimap, @Nullable Component firstLineOfTooltip) {
         this(registryName, ringEffect);
         this.attributeModifierMultimap = attributeModifierMultimap;
         this.firstLineOfTooltip = firstLineOfTooltip;
@@ -44,8 +48,8 @@ public class GemRing extends Item {
 
     public GemRing(String registryName, @Nullable IEffectProvider ringEffect) {
         super(new Properties()
-                .group(SimpleGems.setup.getCreativeTab())
-                .maxStackSize(1));
+                .tab(SimpleGems.setup.getCreativeTab())
+                .stacksTo(1));
 
         this.ringEffect = ringEffect;
         setRegistryName(registryName);
@@ -53,13 +57,13 @@ public class GemRing extends Item {
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 
         return (ringEffect != null) ? new GemRingCapabilityProvider(stack) : null;
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return (ringEffect != null) && (stack.getOrCreateTag().getBoolean("active"));
     }
 
@@ -74,34 +78,46 @@ public class GemRing extends Item {
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
         return ringEffect != null;
     }
 
+
+//    @Override
+//    public double getDurabilityForDisplay(ItemStack stack) {
+//        if (ringEffect == null) {
+//            return 0.0;
+//        }
+//
+//        return stack.getCapability(CapabilityEnergy.ENERGY).map(e -> {
+//            double stored = e.getEnergyStored();
+//            double max = e.getMaxEnergyStored();
+//            return (max - stored) / max;
+//        }).orElse(1.0);
+//    }
+
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
+    public int getBarWidth(ItemStack stack) {
         if (ringEffect == null) {
-            return 0.0;
+            return 0;
         }
 
-        return stack.getCapability(CapabilityEnergy.ENERGY).map(e -> {
-            double stored = e.getEnergyStored();
-            double max = e.getMaxEnergyStored();
-            return (max - stored) / max;
-        }).orElse(1.0);
+        return stack.getCapability(CapabilityEnergy.ENERGY)
+                .map(e -> Math.min(13 * e.getEnergyStored() / e.getMaxEnergyStored(), 13))
+                .orElse(0);
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
         if (attributeModifierMultimap == null) {
             return multimap;
         }
 
-        if (slot == EquipmentSlotType.MAINHAND || slot == EquipmentSlotType.OFFHAND) {
+        if (slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND) {
             stack.getCapability(CapabilityEnergy.ENERGY).ifPresent(e -> {
-                CompoundNBT tag = stack.getOrCreateTag();
+                CompoundTag tag = stack.getOrCreateTag();
                 if (e.getEnergyStored() > 0 && tag.getBoolean("active")) {
                     multimap.putAll(attributeModifierMultimap);
                 }
@@ -111,12 +127,12 @@ public class GemRing extends Item {
     }
 
     @Override
-    public int getRGBDurabilityForDisplay(ItemStack stack) {
+    public int getBarColor(ItemStack stack) {
         return 0x00FF00;
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if (ringEffect == null) {
             return;
         }
@@ -126,7 +142,7 @@ public class GemRing extends Item {
         }
 
         if (Screen.hasShiftDown()) {
-            tooltip.add(new StringTextComponent("Energy: " + stack.getOrCreateTag().getInt("energy") + " FE").func_230530_a_(GREEN_STYLE));
+            tooltip.add(new TextComponent("Energy: " + stack.getOrCreateTag().getInt("energy") + " FE").setStyle(GREEN_STYLE));
             tooltip.add(BLANK_LINE);
             ringEffect.addInformation(stack, worldIn, tooltip, flagIn);
         }
@@ -136,7 +152,7 @@ public class GemRing extends Item {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if (ringEffect == null) {
             return;
         }
@@ -147,26 +163,37 @@ public class GemRing extends Item {
 
             // get energy capability
             stack.getCapability(CapabilityEnergy.ENERGY).ifPresent(e -> {
-                CompoundNBT tag = stack.getOrCreateTag();
-                    if (tag.getBoolean("active")) {
-                        if ((isSelected || casted.getHeldItemOffhand().equals(stack)) && (e.getEnergyStored() >= ENERGY_PER_TICK || entityIsCreative(casted))) {
-                            // add potion effects only if conditions are met
-                            ringEffect.doEffect(casted);
+                CompoundTag tag = stack.getOrCreateTag();
+                final boolean isCreative = entityIsCreative(casted);
+                final int energyStored = e.getEnergyStored();
+                if (tag.getBoolean("active")) {
+                    if ((isSelected || casted.getOffhandItem().equals(stack)) && (energyStored >= ENERGY_PER_TICK || isCreative)) {
+                        // add potion effects only if conditions are met
+                        ringEffect.doEffect(casted);
 
-                            if (!entityIsCreative(casted)) {
-                                // subtract energy from survival players
-                                e.extractEnergy(ENERGY_PER_TICK, false);
+                        if (!isCreative) {
+                            // subtract energy from survival players
+                            e.extractEnergy(ENERGY_PER_TICK, false);
+
+                            // check if we hit 0
+                            if (e.getEnergyStored() < ENERGY_PER_TICK) {
+                                // set to inactive so glow goes away
+                                stack.getOrCreateTag().putBoolean("active", false);
                             }
                         }
                     }
-
+                    else if (energyStored < ENERGY_PER_TICK && !isCreative) {
+                        // set to inactive so glow goes away
+                        stack.getOrCreateTag().putBoolean("active", false);
+                    }
+                }
             });
         }
     }
 
     private boolean entityIsCreative(Entity entity) {
-        if (entity instanceof PlayerEntity) {
-            PlayerEntity casted = (PlayerEntity)entity;
+        if (entity instanceof Player) {
+            Player casted = (Player)entity;
             return casted.isCreative();
         }
         else {
@@ -175,17 +202,18 @@ public class GemRing extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         if (ringEffect == null) {
-            return super.onItemRightClick(worldIn, playerIn, handIn);
+            return super.use(worldIn, playerIn, handIn);
         }
 
-        ItemStack currentStack = playerIn.getHeldItem(handIn);
-        CompoundNBT tag = currentStack.getOrCreateTag();
+        ItemStack currentStack = playerIn.getItemInHand(handIn);
+        CompoundTag tag = currentStack.getOrCreateTag();
 
         tag.putBoolean("active", !tag.getBoolean("active"));
         tag.putInt("energy", tag.getInt("energy"));
 
-        return super.onItemRightClick(worldIn, playerIn, handIn);
+        return super.use(worldIn, playerIn, handIn);
     }
+
 }

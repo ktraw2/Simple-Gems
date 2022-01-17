@@ -2,33 +2,33 @@ package com.ktraw.simplegems.functions;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.ktraw.simplegems.SimpleGems;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 
-public class CopyNbt extends LootFunction {
+public class CopyNbt extends LootItemConditionalFunction {
 
-    public CopyNbt(ILootCondition[] conditionsIn) {
+    public CopyNbt(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
     }
 
     @Override
-    protected ItemStack doApply(ItemStack stack, LootContext context) {
-        CompoundNBT compoundNBT = context.get(LootParameters.BLOCK_ENTITY).serializeNBT();
+    protected ItemStack run(ItemStack stack, LootContext context) {
+        CompoundTag compoundNBT = context.getParam(LootContextParams.BLOCK_ENTITY).serializeNBT();
         if (compoundNBT != null) {
-            CompoundNBT stackTag = null;
+            CompoundTag stackTag = null;
 
             boolean processing = compoundNBT.getBoolean("processing");
             if (processing) {
                 if (stackTag == null) {
-                    stackTag = stack.getOrCreateChildTag("BlockEntityTag");
+                    stackTag = stack.getOrCreateTagElement("BlockEntityTag");
                 }
                 stackTag.putBoolean("processing", processing);
             }
@@ -36,25 +36,26 @@ public class CopyNbt extends LootFunction {
             int counter = compoundNBT.getInt("counter");
             if (counter != 0) {
                 if (stackTag == null) {
-                    stackTag = stack.getOrCreateChildTag("BlockEntityTag");
+                    stackTag = stack.getOrCreateTagElement("BlockEntityTag");
                 }
                 stackTag.putInt("counter", counter);
             }
 
-            CompoundNBT energy = compoundNBT.getCompound("energy");
+            CompoundTag energy = compoundNBT.getCompound("energy");
             int energyValue = energy.getInt("energy");
             if (energyValue != 0) {
                 if (stackTag == null) {
-                    stackTag = stack.getOrCreateChildTag("BlockEntityTag");
+                    stackTag = stack.getOrCreateTagElement("BlockEntityTag");
                 }
                 stackTag.put("energy", energy);
             }
 
-            CompoundNBT inventory = compoundNBT.getCompound("inventory");
-            ListNBT inventoryItems = inventory.getList("Items", Constants.NBT.TAG_COMPOUND);
+            CompoundTag inventory = compoundNBT.getCompound("inventory");
+
+            ListTag inventoryItems = inventory.getList("Items", Tag.TAG_COMPOUND);
             if (!inventoryItems.isEmpty()) {
                 if (stackTag == null) {
-                    stackTag = stack.getOrCreateChildTag("BlockEntityTag");
+                    stackTag = stack.getOrCreateTagElement("BlockEntityTag");
                 }
                 stackTag.put("inventory", inventory);
             }
@@ -64,18 +65,13 @@ public class CopyNbt extends LootFunction {
     }
 
     @Override
-    public LootFunctionType func_230425_b_() {
-        return new LootFunctionType(new Serializer());
+    public LootItemFunctionType getType() {
+        return new LootItemFunctionType(new Serializer());
     }
 
-    public static class Serializer extends LootFunction.Serializer<CopyNbt> {
-
+    public static class Serializer extends LootItemConditionalFunction.Serializer<CopyNbt> {
         @Override
-        public void func_230424_a_(JsonObject object, CopyNbt functionClazz, JsonSerializationContext serializationContext) {
-            super.func_230424_a_(object, functionClazz, serializationContext);
-        }
-
-        public CopyNbt deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
+        public CopyNbt deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditionsIn) {
             return new CopyNbt(conditionsIn);
         }
     }

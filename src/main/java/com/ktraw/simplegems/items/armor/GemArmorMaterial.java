@@ -2,13 +2,13 @@ package com.ktraw.simplegems.items.armor;
 
 import com.ktraw.simplegems.SimpleGems;
 import com.ktraw.simplegems.items.ModItems;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.crafting.Ingredient;
 
-public class GemArmorMaterial implements IArmorMaterial {
+public class GemArmorMaterial implements ArmorMaterial {
     private static final int[] DURABILITY = new int[]{13 * 40, 15 * 40, 16 * 40, 11 * 40};
     private static final int[] DAMAGE_REDUCTION = new int[]{4, 7, 9, 4};
     private static final GemArmorMaterial material = new GemArmorMaterial();
@@ -16,28 +16,28 @@ public class GemArmorMaterial implements IArmorMaterial {
     private GemArmorMaterial() {}
 
     @Override
-    public int getDurability(EquipmentSlotType slotIn) {
+    public int getDurabilityForSlot(EquipmentSlot slotIn) {
         return DURABILITY[slotIn.getIndex()];
     }
 
     @Override
-    public int getDamageReductionAmount(EquipmentSlotType slotIn) {
+    public int getDefenseForSlot(EquipmentSlot slotIn) {
         return DAMAGE_REDUCTION[slotIn.getIndex()];
     }
 
     @Override
-    public int getEnchantability() {
+    public int getEnchantmentValue() {
         return 25;
     }
 
     @Override
-    public SoundEvent getSoundEvent() {
-        return SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND;
+    public SoundEvent getEquipSound() {
+        return SoundEvents.ARMOR_EQUIP_DIAMOND;
     }
 
     @Override
-    public Ingredient getRepairMaterial() {
-        return Ingredient.fromItems(ModItems.GEM);
+    public Ingredient getRepairIngredient() {
+        return Ingredient.of(ModItems.GEM);
     }
 
     @Override
@@ -50,12 +50,8 @@ public class GemArmorMaterial implements IArmorMaterial {
         return 3f;
     }
 
-    /**
-     *
-     * @return The knockback resistance
-     */
     @Override
-    public float func_230304_f_() {
+    public float getKnockbackResistance() {
         return 0;
     }
 

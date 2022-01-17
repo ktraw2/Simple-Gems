@@ -3,12 +3,12 @@ package com.ktraw.simplegems.blocks.generator;
 import com.ktraw.simplegems.blocks.ModBlocks;
 import com.ktraw.simplegems.items.ModItems;
 import com.ktraw.simplegems.tools.SimpleGemsContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIntArray;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.energy.CapabilityEnergy;
 
 import java.util.Arrays;
@@ -23,7 +23,7 @@ public class GeneratorContainer extends SimpleGemsContainer<GeneratorContainer> 
      * @param windowId the ID of the window
      * @param playerInventory the inventory of the player
      */
-    public GeneratorContainer(int windowId, PlayerInventory playerInventory) {
+    public GeneratorContainer(int windowId, Inventory playerInventory) {
         super(ModBlocks.GENERATOR_CONTAINER, windowId, playerInventory, GeneratorTile.TOTAL_SLOTS, GeneratorTile.DATA_SIZE);
     }
 
@@ -34,7 +34,7 @@ public class GeneratorContainer extends SimpleGemsContainer<GeneratorContainer> 
      * @param inventory the inventory of the container
      * @param dataIn the serverside tile entity data
      */
-    public GeneratorContainer(int windowId, PlayerInventory playerInventory, IInventory inventory, IIntArray dataIn) {
+    public GeneratorContainer(int windowId, Inventory playerInventory, Container inventory, ContainerData dataIn) {
         super(ModBlocks.GENERATOR_CONTAINER, windowId, playerInventory, inventory, dataIn);
     }
 
@@ -43,13 +43,13 @@ public class GeneratorContainer extends SimpleGemsContainer<GeneratorContainer> 
     protected void initContainerSlots() {
         addSlot(new Slot(inventory, GeneratorTile.FUEL_SLOT, 80, 31){
             @Override
-            public boolean isItemValid(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return stack.getItem().equals(ModItems.CHARGED_EMERALD_DUST);
             }
         });
         addSlot(new Slot(inventory, GeneratorTile.CHARGE_SLOT, 134, 49){
             @Override
-            public boolean isItemValid(ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return stack.getCapability(CapabilityEnergy.ENERGY).isPresent();
             }
         });

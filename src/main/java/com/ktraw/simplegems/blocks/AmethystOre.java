@@ -1,28 +1,27 @@
 package com.ktraw.simplegems.blocks;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.OreBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IWorldReader;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.OreBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
 public class AmethystOre extends OreBlock {
     public AmethystOre() {
-        super(Properties.create(Material.ROCK)
+        super(Properties.of(Material.STONE)
                 .sound(SoundType.STONE)
-                .hardnessAndResistance(4f, 20f)
-                .setRequiresTool()
+                .strength(4f, 20f)
+                .requiresCorrectToolForDrops()/*
                 .harvestTool(ToolType.PICKAXE)
-                .harvestLevel(3));
+                .harvestLevel(3)*/);
 
         setRegistryName("amethyst_ore");
     }
 
     @Override
-    public int getExpDrop(BlockState state, IWorldReader reader, BlockPos pos, int fortune, int silktouch) {
-        return (silktouch == 0) ? (MathHelper.nextInt(RANDOM, 4, 8)) : 0;
+    public int getExpDrop(BlockState state, LevelReader reader, BlockPos pos, int fortune, int silktouch) {
+        return (silktouch == 0) ? (Mth.nextInt(RANDOM, 4, 8)) : 0;
     }
 }

@@ -1,26 +1,25 @@
 package com.ktraw.simplegems.tools;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public interface IEffectProvider {
-    static ITextComponent EFFECTS = new StringTextComponent("Effects:").func_230530_a_(Style.EMPTY.setUnderlined(true));
+    static Component EFFECTS = new TextComponent("Effects:").setStyle(Style.EMPTY.setUnderlined(true));
 
     public void doEffect(LivingEntity entity);
 
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn);
+    public void addInformation(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn);
 
-    static ITextComponent getComponentFromEffect(EffectInstanceWrapper effect) {
-        return new TranslationTextComponent("tooltip.simplegems.effect", new TranslationTextComponent(effect.getEffect().getName()), new StringTextComponent(String.valueOf(effect.getAmplifier() + 1)));
+    static Component getComponentFromEffect(EffectInstanceWrapper effect) {
+        return new TranslatableComponent("tooltip.simplegems.effect", new TranslatableComponent(effect.getEffect().getDescriptionId()), new TextComponent(String.valueOf(effect.getAmplifier() + 1)));
     }
 }

@@ -13,12 +13,9 @@
       <env name="MC_VERSION" value="1.14.4" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="net.minecraftforge.userdev.LaunchTesting" />
-    <module name="Simple-Gems.main" />
     <option name="VM_PARAMETERS" value="-Dforge.logging.console.level=debug -Dforge.logging.markers=SCAN,REGISTRIES,REGISTRYDUMP -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump &quot;-Dos.name=Windows 10&quot; -Dos.version=10.0" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run" />
-    <RunnerSettings RunnerId="Debug with VisualVM">
-      <option name="visualVMId" value="19639957224100" />
-    </RunnerSettings>
+    <RunnerSettings RunnerId="Debug with VisualVM" />
     <method v="2">
       <option name="Make" enabled="true" />
       <option name="Gradle.BeforeRunTask" enabled="true" tasks=":prepareRunClient" externalProjectPath="$PROJECT_DIR$" />

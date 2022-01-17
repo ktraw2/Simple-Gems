@@ -7,10 +7,10 @@ import com.ktraw.simplegems.blocks.infuser.Infuser;
 import com.ktraw.simplegems.blocks.infuser.InfuserContainer;
 import com.ktraw.simplegems.blocks.infuser.InfuserRecipe;
 import com.ktraw.simplegems.blocks.infuser.InfuserTile;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.ObjectHolder;
 
 public class ModBlocks {
@@ -18,8 +18,14 @@ public class ModBlocks {
     @ObjectHolder("simplegems:emerald_lamp")
     public static EmeraldLamp EMERALD_LAMP;
 
+    @ObjectHolder("simplegems:inverted_emerald_lamp")
+    public static EmeraldLamp INVERTED_EMERALD_LAMP;
+
     @ObjectHolder("simplegems:ruby_ore")
     public static RubyOre RUBY_ORE;
+
+    @ObjectHolder("simplegems:deepslate_ruby_ore")
+    public static RubyOre DEEPSLATE_RUBY_ORE;
 
     @ObjectHolder("simplegems:ruby_block")
     public static RubyBlock RUBY_BLOCK;
@@ -37,22 +43,22 @@ public class ModBlocks {
     public static Generator GENERATOR;
 
     @ObjectHolder("simplegems:generator")
-    public static TileEntityType<GeneratorTile> GENERATOR_TILE;
+    public static BlockEntityType<GeneratorTile> GENERATOR_TILE;
 
     @ObjectHolder("simplegems:generator")
-    public static ContainerType<GeneratorContainer> GENERATOR_CONTAINER;
+    public static MenuType<GeneratorContainer> GENERATOR_CONTAINER;
 
     @ObjectHolder("simplegems:infuser")
     public static Infuser INFUSER;
 
     @ObjectHolder("simplegems:infuser")
-    public static TileEntityType<InfuserTile> INFUSER_TILE;
+    public static BlockEntityType<InfuserTile> INFUSER_TILE;
 
     @ObjectHolder("simplegems:infuser")
-    public static ContainerType<InfuserContainer> INFUSER_CONTAINER;
+    public static MenuType<InfuserContainer> INFUSER_CONTAINER;
 
     @ObjectHolder("simplegems:infuser")
-    public static IRecipeSerializer<InfuserRecipe> INFUSER_SERIALIZER;
+    public static RecipeSerializer<InfuserRecipe> INFUSER_SERIALIZER;
 
-    public static IRecipeType<InfuserRecipe> INFUSER_RECIPE_TYPE;
+    public static RecipeType<InfuserRecipe> INFUSER_RECIPE_TYPE;
 }

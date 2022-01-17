@@ -2,33 +2,30 @@ package com.ktraw.simplegems.setup;
 
 import com.ktraw.simplegems.SimpleGems;
 import com.ktraw.simplegems.blocks.ModBlocks;
-import com.ktraw.simplegems.blocks.infuser.InfuserRecipe;
 import com.ktraw.simplegems.functions.CopyNbt;
 import com.ktraw.simplegems.functions.Lore;
 import com.ktraw.simplegems.items.ModItems;
 import com.ktraw.simplegems.world.OreGeneration;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.loot.LootFunctionType;
-import net.minecraft.potion.*;
-import net.minecraft.loot.functions.LootFunctionManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionBrewing;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
 import java.lang.reflect.Method;
 
 public final class ModSetup {
     private static ModSetup setup = new ModSetup();
-    private ItemGroup creativeTab;
+    private CreativeModeTab creativeTab;
 
     private ModSetup() {
-        creativeTab = new ItemGroup("simplegems") {
+        creativeTab = new CreativeModeTab("simplegems") {
             @Override
-            public ItemStack createIcon() {
+            public ItemStack makeIcon() {
                 return new ItemStack(ModBlocks.EMERALD_LAMP);
             }
         };
@@ -38,15 +35,15 @@ public final class ModSetup {
         return setup;
     }
 
-    public ItemGroup getCreativeTab() {
+    public CreativeModeTab getCreativeTab() {
         return creativeTab;
     }
 
     public void init() {
         OreGeneration.setupOreGeneration();
 
-        Registry.register(Registry.field_239694_aZ_, new ResourceLocation(SimpleGems.MODID,"lore"), new LootFunctionType(new Lore.Serializer()));
-        Registry.register(Registry.field_239694_aZ_, new ResourceLocation(SimpleGems.MODID, "copy_nbt"), new LootFunctionType(new CopyNbt.Serializer()));
+        Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(SimpleGems.MODID,"lore"), new LootItemFunctionType(new Lore.Serializer()));
+        Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(SimpleGems.MODID, "copy_nbt"), new LootItemFunctionType(new CopyNbt.Serializer()));
 
         try {
             Method addMix = PotionBrewing.class.getDeclaredMethod("addMix", Potion.class, Item.class, Potion.class);

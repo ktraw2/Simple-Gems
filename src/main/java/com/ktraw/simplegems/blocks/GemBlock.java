@@ -1,21 +1,17 @@
 package com.ktraw.simplegems.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
 
 public class GemBlock extends Block {
     public GemBlock() {
-        super(Properties.create(Material.IRON)
+        super(Properties.of(Material.METAL)
                 .sound(SoundType.METAL)
-                .hardnessAndResistance(7f, 45f)
-                .setRequiresTool()
+                .strength(7f, 45f)
+                .requiresCorrectToolForDrops()/*
                 .harvestTool(ToolType.PICKAXE)
-                .harvestLevel(4));
+                .harvestLevel(4)*/);
 
         setRegistryName("gem_block");
     }

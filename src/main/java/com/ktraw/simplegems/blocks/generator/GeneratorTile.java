@@ -3,20 +3,21 @@ package com.ktraw.simplegems.blocks.generator;
 import com.ktraw.simplegems.blocks.ModBlocks;
 import com.ktraw.simplegems.items.ModItems;
 import com.ktraw.simplegems.tools.SimpleGemsEnergyStorage;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -28,7 +29,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class GeneratorTile extends TileEntity implements ITickableTileEntity, INamedContainerProvider, IInventory {
+public class GeneratorTile extends BlockEntity implements MenuProvider, Container {
     public static final int PROCESS_TICKS = 80;
     public static final int FUEL_SLOT = 0;
     public static final int CHARGE_SLOT = 1;
@@ -40,7 +41,7 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
     public static final int INT_TIMER = 0;
     public static final int INT_ENERGY = 1;
     public static final int DATA_SIZE = 2;
-    private IIntArray data = new IIntArray() {
+    private ContainerData data = new ContainerData() {
         @Override
         public int get(int index) {
             switch (index) {
@@ -67,7 +68,7 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return DATA_SIZE;
         }
     } ;
@@ -75,22 +76,22 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
     private int timer;
     private boolean processing;
 
-    public GeneratorTile() {
-        super(ModBlocks.GENERATOR_TILE);
+    public GeneratorTile(BlockPos pos, BlockState state) {
+        super(ModBlocks.GENERATOR_TILE, pos, state);
     }
 
     @Override
-    public void read(BlockState stateIn, CompoundNBT compound) {
+    public void load(CompoundTag compound) { // TODO: read(BlockState stateIn, CompoundTag compound)?
         items.ifPresent(h -> h.deserializeNBT(compound.getCompound("inventory")));
         energy.ifPresent(h -> h.deserializeNBT(compound.getCompound("energy")));
         timer = compound.getInt("counter");
         processing = compound.getBoolean("processing");
-        super.read(stateIn, compound);
+        super.load(compound);
     }
 
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         items.ifPresent(h -> {
             compound.put("inventory", h.serializeNBT());
         });
@@ -99,14 +100,14 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
         });
         compound.putInt("counter", timer);
         compound.putBoolean("processing", processing);
-        return super.write(compound);
+        return super.save(compound);
     }
 
     private ItemStackHandler createHandler() {
         return new ItemStackHandler(TOTAL_SLOTS) {
             @Override
             protected void onContentsChanged(int slot) {
-                markDirty();
+                setChanged();
             }
 
             @Override
@@ -141,49 +142,51 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
         return super.getCapability(cap, side);
     }
 
-    @Override
-    public void tick() {
-        if (!world.isRemote) {
-            if (timer > 0) {
-                timer--;
-                if (timer <= 0) {
-                    energy.ifPresent(e -> {
+    public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T be) {
+        GeneratorTile tile = (GeneratorTile) be;
+
+        // your code here
+        if (!level.isClientSide) {
+            if (tile.timer > 0) {
+                tile.timer--;
+                if (tile.timer <= 0) {
+                    tile.energy.ifPresent(e -> {
                         if (e.getEnergyStored() < e.getMaxEnergyStored()) {
                             e.addEnergy(1000);
                         }
                     });
-                    processing = false;
+                    tile.processing = false;
                 }
-                markDirty();
+                tile.setChanged();
             } else {
-                items.ifPresent(h -> {
+                tile.items.ifPresent(h -> {
                     ItemStack stack = h.getStackInSlot(FUEL_SLOT);
                     if (stack.getItem() == ModItems.CHARGED_EMERALD_DUST) {
-                        energy.ifPresent(e -> {
+                        tile.energy.ifPresent(e -> {
                             if (e.getEnergyStored() < e.getMaxEnergyStored()) {
                                 h.extractItem(FUEL_SLOT, 1, false);
-                                timer = PROCESS_TICKS;
-                                processing = true;
-                                markDirty();
+                                tile.timer = PROCESS_TICKS;
+                                tile.processing = true;
+                                tile.setChanged();
                             }
                         });
                     }
                 });
             }
 
-            boolean sendPowerToBlocks = items.map(h -> {
+            boolean sendPowerToBlocks = tile.items.map(h -> {
                 ItemStack stack = h.getStackInSlot(CHARGE_SLOT);
                 if (stack.isEmpty()) {
                     return true;
                 }
                 else {
-                    energizeItem(stack);
+                    tile.energizeItem(stack);
                     return false;
                 }
             }).orElse(true);
 
             if (sendPowerToBlocks) {
-                sendOutPower();
+                tile.sendOutPower();
             }
         }
     }
@@ -196,7 +199,7 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
                     int received = e.receiveEnergy(Math.min(storedEnergy.get(), 100), false);
                     storedEnergy.addAndGet(-received);
                     energy.consumeEnergy(received);
-                    markDirty();
+                    setChanged();
                 });
             }
         });
@@ -207,14 +210,14 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
             AtomicInteger storedEnergy = new AtomicInteger(energy.getEnergyStored());
             if (storedEnergy.get() > 0) {
                 for (Direction direction : Direction.values()) {
-                    TileEntity te = world.getTileEntity(pos.offset(direction));
+                    BlockEntity te = level.getBlockEntity(worldPosition.offset(direction.getNormal()));
                     if (te != null) {
                         boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction).map(handler -> {
                             if (handler.canReceive()) {
                                 int received = handler.receiveEnergy(Math.min(storedEnergy.get(), 100), false);
                                 storedEnergy.addAndGet(-received);
                                 energy.consumeEnergy(received);
-                                markDirty();
+                                setChanged();
                                 return storedEnergy.get() > 0;
                             }
                             else {
@@ -231,25 +234,25 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new StringTextComponent(getType().getRegistryName().getPath());
+    public Component getDisplayName() {
+        return new TextComponent(getType().getRegistryName().getPath());
     }
 
     @Nullable
     @Override
-    public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int i, Inventory playerInventory, Player playerEntity) {
         return new GeneratorContainer(i, playerInventory, this, data);
     }
 
     /* MARK IInventory */
 
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
+    public boolean canPlaceItem(int index, ItemStack stack) {
         return items.map(h -> h.isItemValid(index, stack)).orElse(false);
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return items.map(ItemStackHandler::getSlots).orElse(0);
     }
 
@@ -269,17 +272,17 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int index) {
         return items.map(h -> h.getStackInSlot(index)).orElse(ItemStack.EMPTY);
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count) {
+    public ItemStack removeItem(int index, int count) {
         return items.map(h -> h.extractItem(index, count, false)).orElse(ItemStack.EMPTY);
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
+    public ItemStack removeItemNoUpdate(int index) { // TODO: removeStackFromSlot?
         return items.map(h -> {
             ItemStack stackInSlot = h.getStackInSlot(index);
             h.setStackInSlot(index, ItemStack.EMPTY);
@@ -288,25 +291,29 @@ public class GeneratorTile extends TileEntity implements ITickableTileEntity, IN
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setItem(int index, ItemStack stack) {
         items.ifPresent(h -> {
             h.setStackInSlot(index, stack);
         });
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 
+    /* MARK Clearable */
+
     @Override
-    public void clear() {
+    public void clearContent() {
         items.ifPresent(h -> {
             for (int i = 0; i < h.getSlots(); i++) {
                 h.setStackInSlot(i, ItemStack.EMPTY);
             }
         });
     }
+
+    /* End Clearable */
 
     /* End IInventory */
 

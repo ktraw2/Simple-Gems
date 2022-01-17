@@ -1,10 +1,11 @@
 package com.ktraw.simplegems.tools;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.EnergyStorage;
 
-public class SimpleGemsEnergyStorage extends EnergyStorage implements INBTSerializable<CompoundNBT> {
+public class SimpleGemsEnergyStorage extends EnergyStorage implements INBTSerializable<Tag> { // TODO: we want this to be compoundTag
     public SimpleGemsEnergyStorage(int capacity, int maxTransfer) {
         super(capacity, maxTransfer);
     }
@@ -32,14 +33,16 @@ public class SimpleGemsEnergyStorage extends EnergyStorage implements INBTSerial
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT tag = new CompoundNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag tag = new CompoundTag();
         tag.putInt("energy", getEnergyStored());
         return tag;
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
-        setEnergy(nbt.getInt("energy"));
+    public void deserializeNBT(Tag nbt) {
+        if (nbt instanceof CompoundTag) {
+            setEnergy(((CompoundTag)nbt).getInt("energy"));
+        }
     }
 }
