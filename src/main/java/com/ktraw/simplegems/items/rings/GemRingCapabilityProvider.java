@@ -1,6 +1,7 @@
 package com.ktraw.simplegems.items.rings;
 
-import com.ktraw.simplegems.tools.SimpleGemsItemEnergyStorage;
+import com.ktraw.simplegems.util.energy.SimpleGemsItemEnergyStorage;
+import lombok.RequiredArgsConstructor;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
@@ -11,13 +12,10 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@RequiredArgsConstructor
 public class GemRingCapabilityProvider implements ICapabilityProvider {
-    LazyOptional<SimpleGemsItemEnergyStorage> energy = LazyOptional.of(this::createEnergyStorage);
-    ItemStack stack;
-
-    public GemRingCapabilityProvider(ItemStack stack) {
-        this.stack = stack;
-    }
+    private final LazyOptional<SimpleGemsItemEnergyStorage> energy = LazyOptional.of(this::createEnergyStorage);
+    private final ItemStack stack;
 
     private SimpleGemsItemEnergyStorage createEnergyStorage() {
         return new SimpleGemsItemEnergyStorage(100000, 100, stack);

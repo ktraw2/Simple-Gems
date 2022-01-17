@@ -1,12 +1,11 @@
 package com.ktraw.simplegems.blocks;
 
-import com.ktraw.simplegems.blocks.generator.Generator;
-import com.ktraw.simplegems.blocks.generator.GeneratorContainer;
-import com.ktraw.simplegems.blocks.generator.GeneratorTile;
-import com.ktraw.simplegems.blocks.infuser.Infuser;
-import com.ktraw.simplegems.blocks.infuser.InfuserContainer;
+import com.ktraw.simplegems.blocks.generator.GeneratorBlockEntity;
+import com.ktraw.simplegems.blocks.generator.GeneratorContainerMenu;
+import com.ktraw.simplegems.blocks.infuser.InfuserBlockEntity;
+import com.ktraw.simplegems.blocks.infuser.InfuserContainerMenu;
 import com.ktraw.simplegems.blocks.infuser.InfuserRecipe;
-import com.ktraw.simplegems.blocks.infuser.InfuserTile;
+import lombok.Getter;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -40,22 +39,24 @@ public class ModBlocks {
     public static GemBlock GEM_BLOCK;
 
     @ObjectHolder("simplegems:generator")
-    public static Generator GENERATOR;
+    public static SimpleGemsContainerBlock GENERATOR;
 
     @ObjectHolder("simplegems:generator")
-    public static BlockEntityType<GeneratorTile> GENERATOR_TILE;
+    @Getter
+    public static BlockEntityType<GeneratorBlockEntity> GENERATOR_TILE;
 
     @ObjectHolder("simplegems:generator")
-    public static MenuType<GeneratorContainer> GENERATOR_CONTAINER;
+    public static MenuType<GeneratorContainerMenu> GENERATOR_CONTAINER;
 
     @ObjectHolder("simplegems:infuser")
-    public static Infuser INFUSER;
+    public static SimpleGemsContainerBlock INFUSER;
 
     @ObjectHolder("simplegems:infuser")
-    public static BlockEntityType<InfuserTile> INFUSER_TILE;
+    @Getter
+    public static BlockEntityType<InfuserBlockEntity> INFUSER_TILE;
 
     @ObjectHolder("simplegems:infuser")
-    public static MenuType<InfuserContainer> INFUSER_CONTAINER;
+    public static MenuType<InfuserContainerMenu> INFUSER_CONTAINER;
 
     @ObjectHolder("simplegems:infuser")
     public static RecipeSerializer<InfuserRecipe> INFUSER_SERIALIZER;

@@ -1,7 +1,7 @@
 package com.ktraw.simplegems.blocks.infuser;
 
 import com.ktraw.simplegems.blocks.ModBlocks;
-import com.ktraw.simplegems.tools.SimpleGemsEnergyStorage;
+import com.ktraw.simplegems.util.energy.SimpleGemsEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -27,7 +27,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class InfuserTile extends BlockEntity implements MenuProvider, Container {
+public class InfuserBlockEntity extends BlockEntity implements MenuProvider, Container {
     public static final int TOTAL_SLOTS = 5;
     public static final int TOTAL_CRAFTING_SLOTS = TOTAL_SLOTS - 1;
     public static final int OUTPUT_SLOT_INDEX = TOTAL_SLOTS - 1;
@@ -86,7 +86,7 @@ public class InfuserTile extends BlockEntity implements MenuProvider, Container 
     private int timer = 0;
     InfuserRecipe currentRecipe;
 
-    public InfuserTile(BlockPos pos, BlockState state) {
+    public InfuserBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.INFUSER_TILE, pos, state);
     }
 
@@ -175,7 +175,7 @@ public class InfuserTile extends BlockEntity implements MenuProvider, Container 
     }
 
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T be) {
-        InfuserTile tile = (InfuserTile) be;
+        InfuserBlockEntity tile = (InfuserBlockEntity) be;
 
         // your code here
         if (!level.isClientSide) {
@@ -218,7 +218,7 @@ public class InfuserTile extends BlockEntity implements MenuProvider, Container 
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int i, Inventory playerInventory, Player playerEntity) {
-        return new InfuserContainer(i, playerInventory, this, infuserData);
+        return new InfuserContainerMenu(i, playerInventory, this, infuserData);
     }
 
     /* MARK IInventory */

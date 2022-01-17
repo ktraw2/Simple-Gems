@@ -7,6 +7,9 @@ import com.ktraw.simplegems.SimpleGems;
 import com.ktraw.simplegems.blocks.ModBlocks;
 import com.mojang.realmsclient.util.JsonUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.ToString;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -20,27 +23,29 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-import java.util.Arrays;
 import java.util.List;
 
-public class InfuserRecipe implements Recipe<InfuserTile> {
+@Getter
+@ToString
+public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
 
     private final RecipeType<InfuserRecipe> type = ModBlocks.INFUSER_RECIPE_TYPE;
     private final RecipeSerializer<InfuserRecipe> serializer = ModBlocks.INFUSER_SERIALIZER;
 
     private final ResourceLocation id;
     private final String group;
-    private final ItemStack recipeOutput;
+    private final ItemStack resultItem;
     private final NonNullList<Ingredient> ingredients;
     private final int energy;
     private final int processTime;
 
+    @Getter(AccessLevel.NONE)
     private final boolean isSimple;
 
-    public InfuserRecipe(ResourceLocation id, String group, ItemStack recipeOutput, NonNullList<Ingredient> ingredients, int energy, int processTime) {
+    public InfuserRecipe(ResourceLocation id, String group, ItemStack resultItem, NonNullList<Ingredient> ingredients, int energy, int processTime) {
         this.id = id;
         this.group = group;
-        this.recipeOutput = recipeOutput;
+        this.resultItem = resultItem;
         this.ingredients = ingredients;
         this.energy = energy;
         this.processTime = processTime;
@@ -48,13 +53,13 @@ public class InfuserRecipe implements Recipe<InfuserTile> {
     }
 
     @Override
-    public boolean matches(InfuserTile inv, Level worldIn) {
+    public boolean matches(InfuserBlockEntity inv, Level worldIn) {
 
         StackedContents recipeitemhelper = new StackedContents();
         List<ItemStack> inputs = new java.util.ArrayList<>();
         int i = 0;
 
-        for(int j = 0; j < InfuserTile.TOTAL_CRAFTING_SLOTS; ++j) {
+        for(int j = 0; j < InfuserBlockEntity.TOTAL_CRAFTING_SLOTS; ++j) {
             ItemStack itemstack = inv.getItem(j);
             if (!itemstack.isEmpty()) {
                 ++i;
@@ -72,71 +77,13 @@ public class InfuserRecipe implements Recipe<InfuserTile> {
     }
 
     @Override
-    public ItemStack assemble(InfuserTile inv) {
-        return recipeOutput.copy();
+    public ItemStack assemble(InfuserBlockEntity inv) {
+        return resultItem.copy();
     }
 
     @Override
     public boolean canCraftInDimensions(int width, int height) {
         return ingredients.size() <= width * height;
-    }
-
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        return ingredients;
-    }
-
-    @Override
-    public ItemStack getResultItem() {
-        return recipeOutput;
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return id;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return serializer;
-    }
-
-    @Override
-    public RecipeType<?> getType() {
-        return type;
-    }
-
-    @Override
-    public String getGroup() {
-        return group;
-    }
-
-    public int getEnergy() {
-        return energy;
-    }
-
-    public int getProcessTime() {
-        return processTime;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("InfuserRecipe{");
-        sb.append("id=").append(id);
-        sb.append(", group='").append(group).append('\'');
-        sb.append(", recipeOutput=").append(recipeOutput);
-        sb.append(", ingredients=[");
-        if (ingredients.size() > 0) {
-            for (Ingredient ingredient : ingredients) {
-                sb.append(Arrays.toString(ingredient.getItems())).append(", ");
-            }
-            sb.delete(sb.length() - 2, sb.length());
-        }
-        sb.append("], energy=").append(energy);
-        sb.append(", processTime=").append(processTime);
-        sb.append(", isSimple=").append(isSimple);
-        sb.append('}');
-        return sb.toString();
     }
 
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<InfuserRecipe> {
@@ -217,7 +164,7 @@ public class InfuserRecipe implements Recipe<InfuserTile> {
 
             buffer.writeVarInt(recipe.processTime);
 
-            buffer.writeItemStack(recipe.recipeOutput, false); // TODO: should be false?
+            buffer.writeItemStack(recipe.resultItem, false); // TODO: should be false?
         }
     }
 

@@ -1,10 +1,10 @@
-package com.ktraw.simplegems.tools;
+package com.ktraw.simplegems.util.energy;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.energy.EnergyStorage;
 
 public class SimpleGemsItemEnergyStorage extends EnergyStorage {
-    private ItemStack stack;
+    private final ItemStack stack;
 
     public SimpleGemsItemEnergyStorage(int capacity, ItemStack stack) {
         super(capacity);

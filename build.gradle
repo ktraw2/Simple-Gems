@@ -100,6 +100,14 @@ repositories {
 }
 
 dependencies {
+    def lombok = 'org.projectlombok:lombok:1.18.22'
+
+    compileOnly lombok
+    annotationProcessor lombok
+
+    testCompileOnly lombok
+    testAnnotationProcessor lombok
+
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.

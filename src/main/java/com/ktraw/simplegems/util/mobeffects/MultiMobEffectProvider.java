@@ -1,4 +1,4 @@
-package com.ktraw.simplegems.tools;
+package com.ktraw.simplegems.util.mobeffects;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
@@ -9,25 +9,19 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class MultiEffectProvider implements IEffectProvider {
-    private List<EffectInstanceWrapper> effects;
-
-    public MultiEffectProvider(List<EffectInstanceWrapper> effects) {
-        this.effects = effects;
-    }
-
+public record MultiMobEffectProvider(List<MobEffectInstanceWrapper> effects) implements IMobEffectProvider {
     @Override
     public void doEffect(LivingEntity entity) {
-        for (EffectInstanceWrapper effect : effects) {
+        for (MobEffectInstanceWrapper effect : effects) {
             entity.addEffect(effect.getNewEffectInstance());
         }
     }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(IEffectProvider.EFFECTS);
-        for (EffectInstanceWrapper effect : effects) {
-            tooltip.add(IEffectProvider.getComponentFromEffect(effect));
+        tooltip.add(IMobEffectProvider.EFFECTS);
+        for (MobEffectInstanceWrapper effect : effects) {
+            tooltip.add(IMobEffectProvider.getComponentFromEffect(effect));
         }
     }
 }

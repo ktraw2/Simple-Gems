@@ -9,13 +9,12 @@ import com.ktraw.simplegems.blocks.GemBlock;
 import com.ktraw.simplegems.blocks.ModBlocks;
 import com.ktraw.simplegems.blocks.RubyBlock;
 import com.ktraw.simplegems.blocks.RubyOre;
-import com.ktraw.simplegems.blocks.generator.Generator;
-import com.ktraw.simplegems.blocks.generator.GeneratorContainer;
-import com.ktraw.simplegems.blocks.generator.GeneratorTile;
-import com.ktraw.simplegems.blocks.infuser.Infuser;
-import com.ktraw.simplegems.blocks.infuser.InfuserContainer;
+import com.ktraw.simplegems.blocks.SimpleGemsContainerBlock;
+import com.ktraw.simplegems.blocks.generator.GeneratorBlockEntity;
+import com.ktraw.simplegems.blocks.generator.GeneratorContainerMenu;
+import com.ktraw.simplegems.blocks.infuser.InfuserBlockEntity;
+import com.ktraw.simplegems.blocks.infuser.InfuserContainerMenu;
 import com.ktraw.simplegems.blocks.infuser.InfuserRecipe;
-import com.ktraw.simplegems.blocks.infuser.InfuserTile;
 import com.ktraw.simplegems.events.PlayerEvents;
 import com.ktraw.simplegems.items.Amethyst;
 import com.ktraw.simplegems.items.ChargedEmeraldDust;
@@ -37,9 +36,9 @@ import com.ktraw.simplegems.setup.ClientProxy;
 import com.ktraw.simplegems.setup.IProxy;
 import com.ktraw.simplegems.setup.ModSetup;
 import com.ktraw.simplegems.setup.ServerProxy;
-import com.ktraw.simplegems.tools.EffectInstanceWrapper;
-import com.ktraw.simplegems.tools.MultiEffectProvider;
-import com.ktraw.simplegems.tools.SingleEffectProvider;
+import com.ktraw.simplegems.util.mobeffects.MobEffectInstanceWrapper;
+import com.ktraw.simplegems.util.mobeffects.MultiMobEffectProvider;
+import com.ktraw.simplegems.util.mobeffects.SingleMobEffectProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -131,8 +130,8 @@ public class SimpleGems
             registry.register(new AmethystOre());
             registry.register(new AmethystBlock());
             registry.register(new GemBlock());
-            registry.register(new Generator());
-            registry.register(new Infuser());
+            registry.register(new SimpleGemsContainerBlock("generator", ModBlocks::getGENERATOR_TILE, GeneratorBlockEntity::tick, GeneratorBlockEntity::new));
+            registry.register(new SimpleGemsContainerBlock("infuser", ModBlocks::getINFUSER_TILE, InfuserBlockEntity::tick, InfuserBlockEntity::new));
         }
 
         @SubscribeEvent
@@ -159,10 +158,10 @@ public class SimpleGems
             registry.register(new EnderApple());
             registry.register(new GoldRing());
             registry.register(new GemRing("gem_ring", null));
-            registry.register(new GemRing("ring_of_haste", new SingleEffectProvider(new EffectInstanceWrapper(MobEffects.DIG_SPEED, POTION_TICKS, 1))));
-            registry.register(new GemRing("ring_of_levitation", new SingleEffectProvider(new EffectInstanceWrapper(MobEffects.LEVITATION, POTION_TICKS))));
-            registry.register(new GemRing("ring_of_vulnerable_strength", new MultiEffectProvider(Arrays.asList(new EffectInstanceWrapper(MobEffects.DAMAGE_BOOST, POTION_TICKS, 1), new EffectInstanceWrapper(MobEffects.DAMAGE_RESISTANCE, POTION_TICKS, -5)))));
-            registry.register(new GemRing("ring_of_heavy", new SingleEffectProvider(new EffectInstanceWrapper(MobEffects.MOVEMENT_SLOWDOWN, POTION_TICKS, 3)), heavyRingAttributes, new TranslatableComponent("tooltip.simplegems.heavy").setStyle( Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)))));
+            registry.register(new GemRing("ring_of_haste", new SingleMobEffectProvider(new MobEffectInstanceWrapper(MobEffects.DIG_SPEED, POTION_TICKS, 1))));
+            registry.register(new GemRing("ring_of_levitation", new SingleMobEffectProvider(new MobEffectInstanceWrapper(MobEffects.LEVITATION, POTION_TICKS))));
+            registry.register(new GemRing("ring_of_vulnerable_strength", new MultiMobEffectProvider(Arrays.asList(new MobEffectInstanceWrapper(MobEffects.DAMAGE_BOOST, POTION_TICKS, 1), new MobEffectInstanceWrapper(MobEffects.DAMAGE_RESISTANCE, POTION_TICKS, -5)))));
+            registry.register(new GemRing("ring_of_heavy", new SingleMobEffectProvider(new MobEffectInstanceWrapper(MobEffects.MOVEMENT_SLOWDOWN, POTION_TICKS, 3)), heavyRingAttributes, new TranslatableComponent("tooltip.simplegems.heavy").setStyle( Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)))));
             registry.register(new GemPickaxe());
             registry.register(new GemSword());
             registry.register(new GemAxe());
@@ -179,17 +178,17 @@ public class SimpleGems
         public static void onBlockEntityRegistry(final RegistryEvent.Register<BlockEntityType<?>> event) {
             IForgeRegistry<BlockEntityType<?>> registry = event.getRegistry();
 
-            registry.register(BlockEntityType.Builder.of(GeneratorTile::new, ModBlocks.GENERATOR).build(null).setRegistryName("generator"));
-            registry.register(BlockEntityType.Builder.of(InfuserTile::new, ModBlocks.INFUSER).build(null).setRegistryName("infuser"));
+            registry.register(BlockEntityType.Builder.of(GeneratorBlockEntity::new, ModBlocks.GENERATOR).build(null).setRegistryName("generator"));
+            registry.register(BlockEntityType.Builder.of(InfuserBlockEntity::new, ModBlocks.INFUSER).build(null).setRegistryName("infuser"));
         }
 
         @SubscribeEvent
         public static void onMenuRegistry(final RegistryEvent.Register<MenuType<?>> event) {
             IForgeRegistry<MenuType<?>> registry = event.getRegistry();
 
-            registry.register(IForgeMenuType.create((windowId, inv, data) -> new GeneratorContainer(windowId, inv)).setRegistryName("generator"));
+            registry.register(IForgeMenuType.create((windowId, inv, data) -> new GeneratorContainerMenu(windowId, inv)).setRegistryName("generator"));
 
-            registry.register(IForgeMenuType.create(((windowId, inv, data) -> new InfuserContainer(windowId, inv))).setRegistryName("infuser"));
+            registry.register(IForgeMenuType.create(((windowId, inv, data) -> new InfuserContainerMenu(windowId, inv))).setRegistryName("infuser"));
         }
 
         @SubscribeEvent

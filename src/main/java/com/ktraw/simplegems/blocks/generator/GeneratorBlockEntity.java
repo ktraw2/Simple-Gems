@@ -2,7 +2,7 @@ package com.ktraw.simplegems.blocks.generator;
 
 import com.ktraw.simplegems.blocks.ModBlocks;
 import com.ktraw.simplegems.items.ModItems;
-import com.ktraw.simplegems.tools.SimpleGemsEnergyStorage;
+import com.ktraw.simplegems.util.energy.SimpleGemsEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class GeneratorTile extends BlockEntity implements MenuProvider, Container {
+public class GeneratorBlockEntity extends BlockEntity implements MenuProvider, Container {
     public static final int PROCESS_TICKS = 80;
     public static final int FUEL_SLOT = 0;
     public static final int CHARGE_SLOT = 1;
@@ -76,7 +76,7 @@ public class GeneratorTile extends BlockEntity implements MenuProvider, Containe
     private int timer;
     private boolean processing;
 
-    public GeneratorTile(BlockPos pos, BlockState state) {
+    public GeneratorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlocks.GENERATOR_TILE, pos, state);
     }
 
@@ -143,7 +143,7 @@ public class GeneratorTile extends BlockEntity implements MenuProvider, Containe
     }
 
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T be) {
-        GeneratorTile tile = (GeneratorTile) be;
+        GeneratorBlockEntity tile = (GeneratorBlockEntity) be;
 
         // your code here
         if (!level.isClientSide) {
@@ -241,7 +241,7 @@ public class GeneratorTile extends BlockEntity implements MenuProvider, Containe
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int i, Inventory playerInventory, Player playerEntity) {
-        return new GeneratorContainer(i, playerInventory, this, data);
+        return new GeneratorContainerMenu(i, playerInventory, this, data);
     }
 
     /* MARK IInventory */

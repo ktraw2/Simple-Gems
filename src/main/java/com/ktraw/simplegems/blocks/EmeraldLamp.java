@@ -18,7 +18,7 @@ public class EmeraldLamp extends Block {
     public static final IntegerProperty LIGHT_LEVEL = BlockStateProperties.LEVEL;
     public static final int MAX_LEVEL = BlockStateProperties.MAX_LEVEL_15;
 
-    private boolean inverted;
+    private final boolean inverted;
 
     public EmeraldLamp(boolean inverted) {
         super(Properties.of(Material.BUILDABLE_GLASS)

@@ -1,4 +1,4 @@
-package com.ktraw.simplegems.tools;
+package com.ktraw.simplegems.util.energy;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;

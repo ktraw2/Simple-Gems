@@ -6,9 +6,9 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 
 public class InfuserItemStackHandler extends ItemStackHandler {
-    private InfuserTile tile;
+    private InfuserBlockEntity tile;
 
-    public InfuserItemStackHandler(int size, InfuserTile tile) {
+    public InfuserItemStackHandler(int size, InfuserBlockEntity tile) {
         super(size);
         this.tile = tile;
     }
@@ -17,7 +17,7 @@ public class InfuserItemStackHandler extends ItemStackHandler {
     @Nonnull
     @Override
     public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-        return (slot == InfuserTile.OUTPUT_SLOT_INDEX) ? stack : super.insertItem(slot, stack, simulate);
+        return (slot == InfuserBlockEntity.OUTPUT_SLOT_INDEX) ? stack : super.insertItem(slot, stack, simulate);
     }
 
     @Nonnull

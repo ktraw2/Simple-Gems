@@ -1,7 +1,6 @@
-package com.ktraw.simplegems.blocks.infuser;
+package com.ktraw.simplegems.blocks;
 
 import com.ktraw.simplegems.SimpleGems;
-import com.ktraw.simplegems.blocks.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,39 +20,43 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
-public class Infuser extends Block implements EntityBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+public class SimpleGemsContainerBlock extends Block implements EntityBlock {
 
-    public Infuser() {
+    private final Supplier<BlockEntityType<? extends BlockEntity>> blockEntityTypeWrapper;
+    private final BlockEntityTicker<? extends BlockEntity> blockEntityTicker;
+    private final BiFunction<BlockPos, BlockState, ? extends BlockEntity> blockEntityFactory;
+
+    public SimpleGemsContainerBlock(String registryName, Supplier<BlockEntityType<? extends BlockEntity>> blockEntityTypeWrapper, BlockEntityTicker<? extends BlockEntity> blockEntityTicker, BiFunction<BlockPos, BlockState, ? extends BlockEntity> blockEntityFactory) {
         super(Properties.of(Material.METAL)
-                        .sound(SoundType.METAL)
-                    .strength(5f, 15f)/*
-                    .harvestTool(ToolType.PICKAXE)
-                    .harvestLevel(1)*/);
+                .sound(SoundType.METAL)
+                .strength(5f, 15f));
+        setRegistryName(registryName);
+        registerDefaultState(defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
 
-        setRegistryName("infuser");
-
-        registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
+        this.blockEntityTypeWrapper = blockEntityTypeWrapper;
+        this.blockEntityTicker = blockEntityTicker;
+        this.blockEntityFactory = blockEntityFactory;
     }
 
     @Override
-    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) { // TODO: onBlockPlacedBy?
         if (placer != null) {
-            worldIn.setBlock(pos, state.setValue(FACING, SimpleGems.getFacingFromEntity(pos, placer, true)), 2);
+            worldIn.setBlock(pos, state.setValue(BlockStateProperties.HORIZONTAL_FACING, SimpleGems.getFacingFromEntity(pos, placer, true)), 2);
         }
     }
 
-//    @Override
-//    public boolean hasTileEntity(BlockState state) {
-//        return true;
-//    }
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(BlockStateProperties.HORIZONTAL_FACING);
+    }
 
     @Override
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
@@ -70,20 +73,15 @@ public class Infuser extends Block implements EntityBlock {
         }
     }
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
-    }
-
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new InfuserTile(pos, state);
+        return blockEntityFactory.apply(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-        return type == ModBlocks.INFUSER_TILE ? InfuserTile::tick : null;
+        return type == blockEntityTypeWrapper.get() ? ((BlockEntityTicker<T>) blockEntityTicker) : null; // evil cast
     }
 }

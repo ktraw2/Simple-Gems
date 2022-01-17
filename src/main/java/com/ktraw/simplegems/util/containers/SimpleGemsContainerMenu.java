@@ -1,6 +1,6 @@
-package com.ktraw.simplegems.tools;
+package com.ktraw.simplegems.util.containers;
 
-import com.ktraw.simplegems.blocks.infuser.InfuserTile;
+import com.ktraw.simplegems.blocks.infuser.InfuserBlockEntity;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -14,14 +14,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.PlayerInvWrapper;
 
 import java.util.List;
 import java.util.Optional;
 
 
-public abstract class SimpleGemsContainer<T extends AbstractContainerMenu> extends AbstractContainerMenu {
+public abstract class SimpleGemsContainerMenu<T extends AbstractContainerMenu> extends AbstractContainerMenu {
     protected IItemHandler playerInventory;
     protected Container inventory;
     protected final int slots;
@@ -33,7 +32,7 @@ public abstract class SimpleGemsContainer<T extends AbstractContainerMenu> exten
      * @param windowId
      * @param playerInventory
      */
-    protected SimpleGemsContainer(MenuType type, int windowId, Inventory playerInventory, int inventorySize, int dataSize) {
+    protected SimpleGemsContainerMenu(MenuType type, int windowId, Inventory playerInventory, int inventorySize, int dataSize) {
         this(type, windowId, playerInventory, new SimpleContainer(inventorySize), new SimpleContainerData(dataSize));
     }
 
@@ -45,7 +44,7 @@ public abstract class SimpleGemsContainer<T extends AbstractContainerMenu> exten
      * @param inventory the inventory container
      * @param data the serverside tile entity data
      */
-    protected SimpleGemsContainer(MenuType<T> type, int windowId, Inventory playerInventory, Container inventory, ContainerData data) {
+    protected SimpleGemsContainerMenu(MenuType<T> type, int windowId, Inventory playerInventory, Container inventory, ContainerData data) {
         super(type, windowId);
         this.playerInventory = new PlayerInvWrapper(playerInventory);
         this.inventory = inventory;
@@ -128,7 +127,7 @@ public abstract class SimpleGemsContainer<T extends AbstractContainerMenu> exten
     }
 
     public int getEnergy() {
-        return data.get(InfuserTile.INT_ENERGY);
+        return data.get(InfuserBlockEntity.INT_ENERGY);
     }
 
     protected int addSlotRow(IItemHandler handler, int index, int x, int y, int width, int dx) {

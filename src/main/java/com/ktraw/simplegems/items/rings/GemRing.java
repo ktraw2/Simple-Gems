@@ -2,7 +2,7 @@ package com.ktraw.simplegems.items.rings;
 
 import com.google.common.collect.Multimap;
 import com.ktraw.simplegems.SimpleGems;
-import com.ktraw.simplegems.tools.IEffectProvider;
+import com.ktraw.simplegems.util.mobeffects.IMobEffectProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
@@ -36,17 +36,17 @@ public class GemRing extends Item {
     private static final Component BLANK_LINE = new TextComponent("");
     private static final Component PRESS_CTRL = new TextComponent("Press <Shift>").setStyle(HINT_STYLE);
 
-    private IEffectProvider ringEffect;
+    private IMobEffectProvider ringEffect;
     private Component firstLineOfTooltip;
     private Multimap<Attribute, AttributeModifier> attributeModifierMultimap;
 
-    public GemRing(String registryName, @Nullable IEffectProvider ringEffect, @Nullable Multimap<Attribute, AttributeModifier> attributeModifierMultimap, @Nullable Component firstLineOfTooltip) {
+    public GemRing(String registryName, @Nullable IMobEffectProvider ringEffect, @Nullable Multimap<Attribute, AttributeModifier> attributeModifierMultimap, @Nullable Component firstLineOfTooltip) {
         this(registryName, ringEffect);
         this.attributeModifierMultimap = attributeModifierMultimap;
         this.firstLineOfTooltip = firstLineOfTooltip;
     }
 
-    public GemRing(String registryName, @Nullable IEffectProvider ringEffect) {
+    public GemRing(String registryName, @Nullable IMobEffectProvider ringEffect) {
         super(new Properties()
                 .tab(SimpleGems.setup.getCreativeTab())
                 .stacksTo(1));
@@ -58,7 +58,6 @@ public class GemRing extends Item {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-
         return (ringEffect != null) ? new GemRingCapabilityProvider(stack) : null;
     }
 

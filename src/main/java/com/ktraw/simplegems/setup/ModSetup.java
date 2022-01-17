@@ -6,6 +6,7 @@ import com.ktraw.simplegems.functions.CopyNbt;
 import com.ktraw.simplegems.functions.Lore;
 import com.ktraw.simplegems.items.ModItems;
 import com.ktraw.simplegems.world.OreGeneration;
+import lombok.Getter;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -18,7 +19,9 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
 import java.lang.reflect.Method;
 
+@Getter
 public final class ModSetup {
+    @Getter
     private static ModSetup setup = new ModSetup();
     private CreativeModeTab creativeTab;
 
@@ -29,14 +32,6 @@ public final class ModSetup {
                 return new ItemStack(ModBlocks.EMERALD_LAMP);
             }
         };
-    }
-
-    public static ModSetup getSetup() {
-        return setup;
-    }
-
-    public CreativeModeTab getCreativeTab() {
-        return creativeTab;
     }
 
     public void init() {
