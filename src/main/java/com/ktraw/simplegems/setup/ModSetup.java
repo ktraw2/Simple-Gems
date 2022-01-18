@@ -35,8 +35,6 @@ public final class ModSetup {
     }
 
     public void init() {
-        OreGeneration.setupOreGeneration();
-
         Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(SimpleGems.MODID,"lore"), new LootItemFunctionType(new Lore.Serializer()));
         Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(SimpleGems.MODID, "copy_nbt"), new LootItemFunctionType(new CopyNbt.Serializer()));
 

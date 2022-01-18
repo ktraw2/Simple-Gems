@@ -1,40 +1,56 @@
 package com.ktraw.simplegems.world;
 
+import com.ktraw.simplegems.blocks.ModBlocks;
+import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
+import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+import java.util.List;
+
+import static net.minecraft.data.worldgen.features.OreFeatures.DEEPSLATE_ORE_REPLACEABLES;
+import static net.minecraft.data.worldgen.features.OreFeatures.STONE_ORE_REPLACEABLES;
+
+@Mod.EventBusSubscriber
 public class OreGeneration {
-    public static void setupOreGeneration() {
-        /*for (Biome biome : ForgeRegistries.BIOMES) {
-            CountRangeConfig rubyOrePlacement = new CountRangeConfig(10, 8, 0, 30);
-            biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ModBlocks.RUBY_ORE.getDefaultState(), 3)).withPlacement(Placement.COUNT_RANGE.configure(rubyOrePlacement)));
 
-            try {
-                CountRangeConfig amethystOrePlacement = new CountRangeConfig(12, 0, 0, 45);
+    private static List<PlacementModifier> orePlacement(PlacementModifier p_195347_, PlacementModifier p_195348_) {
+        return List.of(p_195347_, InSquarePlacement.spread(), p_195348_, BiomeFilter.biome());
+    }
 
-                // Thanks Java for letting me do this
-                Class<OreFeatureConfig.FillerBlockType> fillerBlockTypeClass = OreFeatureConfig.FillerBlockType.class;
-                Constructor<?> constructor = fillerBlockTypeClass.getDeclaredConstructors()[0];
-                constructor.setAccessible(true);
+    private static List<PlacementModifier> commonOrePlacement(int p_195344_, PlacementModifier p_195345_) {
+        return orePlacement(CountPlacement.of(p_195344_), p_195345_);
+    }
 
-                Field constructorAccessorField = Constructor.class.getDeclaredField("constructorAccessor");
-                constructorAccessorField.setAccessible(true);
-                ConstructorAccessor ca = (ConstructorAccessor) constructorAccessorField.get(constructor);
-                if (ca == null) {
-                    Method acquireConstructorAccessorMethod = Constructor.class.getDeclaredMethod("acquireConstructorAccessor");
-                    acquireConstructorAccessorMethod.setAccessible(true);
-                    ca = (ConstructorAccessor) acquireConstructorAccessorMethod.invoke(constructor);
-                }
+    @SubscribeEvent
+    public static void generateOres(BiomeLoadingEvent event) {
+        final ConfiguredFeature<?, ?> ORE_RUBY_REPLACEMENTS = FeatureUtils.register("ore_ruby", Feature.ORE.configured(new OreConfiguration(List.of(OreConfiguration.target(STONE_ORE_REPLACEABLES, ModBlocks.RUBY_ORE.defaultBlockState()), OreConfiguration.target(DEEPSLATE_ORE_REPLACEABLES, ModBlocks.DEEPSLATE_RUBY_ORE.defaultBlockState())), 3)));
+        final PlacedFeature ORE_RUBY_PLACEMENTS = PlacementUtils.register("ore_ruby", ORE_RUBY_REPLACEMENTS.placed(commonOrePlacement(10, HeightRangePlacement.uniform(VerticalAnchor.absolute(-32), VerticalAnchor.absolute(32)))));
 
-                Object[] oArg = new Object[4];
-                oArg[0] = "END_STONE";
-                oArg[1] = 4;
-                oArg[2] = "end_stone";
-                oArg[3] = new BlockMatcher(Blocks.END_STONE);
-                OreFeatureConfig.FillerBlockType end_stone = (OreFeatureConfig.FillerBlockType) ca.newInstance(oArg);
+        final ConfiguredFeature<?, ?> ORE_AMETHYST_REPLACEMENTS = FeatureUtils.register("ore_amethyst", Feature.ORE.configured(new OreConfiguration(List.of(OreConfiguration.target(new BlockMatchTest(Blocks.END_STONE), ModBlocks.AMETHYST_ORE.defaultBlockState())), 3)));
+        final PlacedFeature ORE_AMETHYST_PLACEMENTS = PlacementUtils.register("ore_amethyst", ORE_AMETHYST_REPLACEMENTS.placed(commonOrePlacement(12, HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(45)))));
 
-                biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(end_stone, ModBlocks.AMETHYST_ORE.getDefaultState(), 3)).withPlacement(Placement.COUNT_RANGE.configure(amethystOrePlacement)));
-            } catch (Exception e) {
-                System.err.println("Error in reflecting OreFeatureConfig.FillerBlockType, Amethyst Ore will not generate.");
-                e.printStackTrace();
-            }
-        }*/
+        BiomeGenerationSettingsBuilder generation = event.getGeneration();
+
+        if (event.getCategory().equals(Biome.BiomeCategory.THEEND)) {
+            generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ORE_AMETHYST_PLACEMENTS);
+        }
+        generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ORE_RUBY_PLACEMENTS);
     }
 }
