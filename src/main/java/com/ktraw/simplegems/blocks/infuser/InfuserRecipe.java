@@ -3,6 +3,7 @@ package com.ktraw.simplegems.blocks.infuser;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.ktraw.simplegems.SimpleGems;
 import com.ktraw.simplegems.blocks.ModBlocks;
 import com.mojang.realmsclient.util.JsonUtils;
@@ -11,6 +12,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.StackedContents;
@@ -28,6 +33,8 @@ import java.util.List;
 @Getter
 @ToString
 public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
+
+    private static final ResourceLocation.Serializer resourceLocationSerializer = new ResourceLocation.Serializer();
 
     private final RecipeType<InfuserRecipe> type = ModBlocks.INFUSER_RECIPE_TYPE;
     private final RecipeSerializer<InfuserRecipe> serializer = ModBlocks.INFUSER_SERIALIZER;
@@ -50,6 +57,46 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
         this.energy = energy;
         this.processTime = processTime;
         isSimple = ingredients.stream().allMatch(Ingredient::isSimple);
+    }
+
+    public InfuserRecipe(CompoundTag nbt) {
+        this.id = resourceLocationSerializer.deserialize(JsonParser.parseString(nbt.getString("id")), null, null);
+        this.group = nbt.getString("group");
+        this.resultItem = ItemStack.of(nbt.getCompound("resultItem"));
+
+        NonNullList<Ingredient> ingredients = NonNullList.create();
+        ListTag ingredientsListTag = nbt.getList("ingredients", Tag.TAG_STRING);
+
+        final int size = ingredientsListTag.size();
+        for (int i = 0; i < size; i++) {
+            ingredients.add(Ingredient.fromJson(JsonParser.parseString(ingredientsListTag.getString(i))));
+        }
+
+        this.ingredients = ingredients;
+
+        this.energy = nbt.getInt("energy");
+        this.processTime = nbt.getInt("processTime");
+        this.isSimple = nbt.getBoolean("isSimple");
+    }
+
+    public CompoundTag serializeNBT() {
+        CompoundTag nbt = new CompoundTag();
+        nbt.putString("id", resourceLocationSerializer.serialize(id, null, null).toString());
+        nbt.putString("group", group);
+        nbt.put("resultItem", resultItem.serializeNBT());
+
+        ListTag ingredientsListTag = new ListTag();
+        for (Ingredient i : ingredients) {
+            ingredientsListTag.add(StringTag.valueOf(i.toJson().toString()));
+        }
+
+        nbt.put("ingredients", ingredientsListTag);
+
+        nbt.putInt("energy", energy);
+        nbt.putInt("processTime", processTime);
+        nbt.putBoolean("isSimple", isSimple);
+
+        return nbt;
     }
 
     @Override
@@ -97,11 +144,10 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
         public InfuserRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             // get the group
             String group = JsonUtils.getStringOr("group", json, "");
-            //String group = JSONUtils.getString(json, "group", "");
 
             // built the ingredients list
             NonNullList<Ingredient> ingredients = NonNullList.create();
-            JsonArray jsonIngredients = json.get("ingredients").getAsJsonArray();//JSONUtils.getJsonArray(json, "ingredients");
+            JsonArray jsonIngredients = json.get("ingredients").getAsJsonArray();
             for (int i = 0; i < jsonIngredients.size(); i++) {
                 Ingredient ingredient = Ingredient.fromJson(jsonIngredients.get(i));
                 if (!ingredient.isEmpty()) {
@@ -113,14 +159,12 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
             if (ingredients.isEmpty()) {
                 throw new JsonParseException("No ingredients specified");
             }
-            else if (ingredients.size() > 4) {
+            else if (ingredients.size() > InfuserBlockEntity.TOTAL_CRAFTING_SLOTS) {
                 throw new JsonParseException("Too many ingredients");
             }
 
-            //int energy = JSONUtils.getInt(json, "energy", 0);
             int energy = JsonUtils.getIntOr("energy", json, 0);
 
-            //int processTime = JSONUtils.getInt(json, "processTime", 0);
             int processTime = JsonUtils.getIntOr("processTime", json, 0);
 
             // get the output

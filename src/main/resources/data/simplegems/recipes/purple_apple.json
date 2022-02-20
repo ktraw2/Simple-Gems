@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ARA",
+    "DGD",
+    "ARA"
+  ],
+  "key": {
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "R": {
+      "item": "simplegems:ruby"
+    },
+    "A": {
+      "item": "simplegems:amethyst"
+    },
+    "G": {
+      "item": "minecraft:golden_apple"
+    }
+  },
+  "result": {
+    "item": "simplegems:purple_apple"
+  }
+}

@@ -1,5 +1,6 @@
 package com.ktraw.simplegems.items.rings;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.ktraw.simplegems.SimpleGems;
 import com.ktraw.simplegems.util.mobeffects.IMobEffectProvider;
@@ -81,20 +82,6 @@ public class GemRing extends Item {
         return ringEffect != null;
     }
 
-
-//    @Override
-//    public double getDurabilityForDisplay(ItemStack stack) {
-//        if (ringEffect == null) {
-//            return 0.0;
-//        }
-//
-//        return stack.getCapability(CapabilityEnergy.ENERGY).map(e -> {
-//            double stored = e.getEnergyStored();
-//            double max = e.getMaxEnergyStored();
-//            return (max - stored) / max;
-//        }).orElse(1.0);
-//    }
-
     @Override
     public int getBarWidth(ItemStack stack) {
         if (ringEffect == null) {
@@ -108,7 +95,7 @@ public class GemRing extends Item {
 
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
+        Multimap<Attribute, AttributeModifier> multimap = ArrayListMultimap.create();
 
         if (attributeModifierMultimap == null) {
             return multimap;

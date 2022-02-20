@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "simplegems:item/ender_apple"
+    "layer0": "simplegems:item/purple_apple"
   }
 }

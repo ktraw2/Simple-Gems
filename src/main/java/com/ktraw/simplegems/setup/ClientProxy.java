@@ -11,14 +11,4 @@ public class ClientProxy implements IProxy {
         MenuScreens.register(ModBlocks.GENERATOR_CONTAINER, GeneratorScreen::new);
         MenuScreens.register(ModBlocks.INFUSER_CONTAINER, InfuserScreen::new);
     }
-
-//    @Override
-//    public World getClientWorld() {
-//        return Minecraft.getInstance().world;
-//    }
-//
-//    @Override
-//    public PlayerEntity getClientPlayer() {
-//        return Minecraft.getInstance().player;
-//    }
 }

@@ -2,12 +2,9 @@ package com.ktraw.simplegems;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.ktraw.simplegems.blocks.AmethystBlock;
-import com.ktraw.simplegems.blocks.AmethystOre;
+import com.ktraw.simplegems.blocks.BaseGemBlock;
 import com.ktraw.simplegems.blocks.EmeraldLamp;
-import com.ktraw.simplegems.blocks.GemBlock;
 import com.ktraw.simplegems.blocks.ModBlocks;
-import com.ktraw.simplegems.blocks.RubyBlock;
 import com.ktraw.simplegems.blocks.RubyOre;
 import com.ktraw.simplegems.blocks.SimpleGemsContainerBlock;
 import com.ktraw.simplegems.blocks.generator.GeneratorBlockEntity;
@@ -16,17 +13,11 @@ import com.ktraw.simplegems.blocks.infuser.InfuserBlockEntity;
 import com.ktraw.simplegems.blocks.infuser.InfuserContainerMenu;
 import com.ktraw.simplegems.blocks.infuser.InfuserRecipe;
 import com.ktraw.simplegems.events.PlayerEvents;
-import com.ktraw.simplegems.items.Amethyst;
+import com.ktraw.simplegems.items.BaseItem;
 import com.ktraw.simplegems.items.ChargedEmeraldDust;
-import com.ktraw.simplegems.items.EnderApple;
-import com.ktraw.simplegems.items.Gem;
-import com.ktraw.simplegems.items.Ruby;
-import com.ktraw.simplegems.items.armor.GemBoots;
-import com.ktraw.simplegems.items.armor.GemChestplate;
-import com.ktraw.simplegems.items.armor.GemHelmet;
-import com.ktraw.simplegems.items.armor.GemLeggings;
+import com.ktraw.simplegems.items.PurpleApple;
+import com.ktraw.simplegems.items.armor.BaseGemArmorItem;
 import com.ktraw.simplegems.items.rings.GemRing;
-import com.ktraw.simplegems.items.rings.GoldRing;
 import com.ktraw.simplegems.items.tools.GemAxe;
 import com.ktraw.simplegems.items.tools.GemHoe;
 import com.ktraw.simplegems.items.tools.GemPickaxe;
@@ -46,6 +37,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -58,6 +50,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.RegistryEvent;
@@ -126,10 +119,9 @@ public class SimpleGems
             registry.register(new EmeraldLamp(true));
             registry.register(new RubyOre(false));
             registry.register(new RubyOre(true));
-            registry.register(new RubyBlock());
-            registry.register(new AmethystOre());
-            registry.register(new AmethystBlock());
-            registry.register(new GemBlock());
+            registry.register(new BaseGemBlock("ruby_block"));
+            registry.register(new BaseGemBlock("amethyst_block"));
+            registry.register(new BaseGemBlock("gem_block", Material.METAL, 7f, 45f));
             registry.register(new SimpleGemsContainerBlock("generator", ModBlocks::getGENERATOR_TILE, GeneratorBlockEntity::tick, GeneratorBlockEntity::new));
             registry.register(new SimpleGemsContainerBlock("infuser", ModBlocks::getINFUSER_TILE, InfuserBlockEntity::tick, InfuserBlockEntity::new));
         }
@@ -144,19 +136,18 @@ public class SimpleGems
             registry.register(new BlockItem(ModBlocks.RUBY_ORE, new Item.Properties().tab(setup.getCreativeTab())).setRegistryName("ruby_ore"));
             registry.register(new BlockItem(ModBlocks.DEEPSLATE_RUBY_ORE, new Item.Properties().tab(setup.getCreativeTab())).setRegistryName("deepslate_ruby_ore"));
             registry.register(new BlockItem(ModBlocks.RUBY_BLOCK, new Item.Properties().tab(setup.getCreativeTab())).setRegistryName("ruby_block"));
-            registry.register(new BlockItem(ModBlocks.AMETHYST_ORE, new Item.Properties().tab(setup.getCreativeTab())).setRegistryName("amethyst_ore"));
             registry.register(new BlockItem(ModBlocks.AMETHYST_BLOCK, new Item.Properties().tab(setup.getCreativeTab())).setRegistryName("amethyst_block"));
             registry.register(new BlockItem(ModBlocks.GEM_BLOCK, new Item.Properties().tab(setup.getCreativeTab())).setRegistryName("gem_block"));
             registry.register(new BlockItem(ModBlocks.GENERATOR, new Item.Properties().tab(setup.getCreativeTab()).rarity(Rarity.RARE)).setRegistryName("generator"));
             registry.register(new BlockItem(ModBlocks.INFUSER, new Item.Properties().tab(setup.getCreativeTab())).setRegistryName("infuser"));
 
             // Regular items
-            registry.register(new Ruby());
-            registry.register(new Amethyst());
-            registry.register(new Gem());
+            registry.register(new BaseItem("ruby"));
+            registry.register(new BaseItem("amethyst"));
+            registry.register(new BaseItem("gem", Rarity.RARE));
             registry.register(new ChargedEmeraldDust());
-            registry.register(new EnderApple());
-            registry.register(new GoldRing());
+            registry.register(new PurpleApple());
+            registry.register(new BaseItem("gold_ring", 1));
             registry.register(new GemRing("gem_ring", null));
             registry.register(new GemRing("ring_of_haste", new SingleMobEffectProvider(new MobEffectInstanceWrapper(MobEffects.DIG_SPEED, POTION_TICKS, 1))));
             registry.register(new GemRing("ring_of_levitation", new SingleMobEffectProvider(new MobEffectInstanceWrapper(MobEffects.LEVITATION, POTION_TICKS))));
@@ -167,10 +158,10 @@ public class SimpleGems
             registry.register(new GemAxe());
             registry.register(new GemShovel());
             registry.register(new GemHoe());
-            registry.register(new GemHelmet());
-            registry.register(new GemChestplate());
-            registry.register(new GemLeggings());
-            registry.register(new GemBoots());
+            registry.register(new BaseGemArmorItem("gem_helmet", EquipmentSlot.HEAD));
+            registry.register(new BaseGemArmorItem("gem_chestplate", EquipmentSlot.CHEST));
+            registry.register(new BaseGemArmorItem("gem_leggings", EquipmentSlot.LEGS));
+            registry.register(new BaseGemArmorItem("gem_boots", EquipmentSlot.FEET));
 
         }
 

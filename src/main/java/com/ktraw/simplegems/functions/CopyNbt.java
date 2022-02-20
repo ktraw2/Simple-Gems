@@ -33,12 +33,12 @@ public class CopyNbt extends LootItemConditionalFunction {
                 stackTag.putBoolean("processing", processing);
             }
 
-            int counter = compoundNBT.getInt("counter");
-            if (counter != 0) {
+            int timer = compoundNBT.getInt("timer");
+            if (timer != 0) {
                 if (stackTag == null) {
                     stackTag = stack.getOrCreateTagElement("BlockEntityTag");
                 }
-                stackTag.putInt("counter", counter);
+                stackTag.putInt("timer", timer);
             }
 
             CompoundTag energy = compoundNBT.getCompound("energy");
@@ -58,6 +58,14 @@ public class CopyNbt extends LootItemConditionalFunction {
                     stackTag = stack.getOrCreateTagElement("BlockEntityTag");
                 }
                 stackTag.put("inventory", inventory);
+            }
+
+            CompoundTag currentRecipe = compoundNBT.getCompound("currentRecipe");
+            if (!currentRecipe.isEmpty()) {
+                if (stackTag == null) {
+                    stackTag = stack.getOrCreateTagElement("BlockEntityTag");
+                }
+                stackTag.put("currentRecipe", currentRecipe);
             }
         }
 

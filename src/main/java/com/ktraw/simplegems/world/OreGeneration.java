@@ -3,8 +3,6 @@ package com.ktraw.simplegems.world;
 import com.ktraw.simplegems.blocks.ModBlocks;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -16,7 +14,6 @@ import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -43,14 +40,7 @@ public class OreGeneration {
         final ConfiguredFeature<?, ?> ORE_RUBY_REPLACEMENTS = FeatureUtils.register("ore_ruby", Feature.ORE.configured(new OreConfiguration(List.of(OreConfiguration.target(STONE_ORE_REPLACEABLES, ModBlocks.RUBY_ORE.defaultBlockState()), OreConfiguration.target(DEEPSLATE_ORE_REPLACEABLES, ModBlocks.DEEPSLATE_RUBY_ORE.defaultBlockState())), 3)));
         final PlacedFeature ORE_RUBY_PLACEMENTS = PlacementUtils.register("ore_ruby", ORE_RUBY_REPLACEMENTS.placed(commonOrePlacement(10, HeightRangePlacement.uniform(VerticalAnchor.absolute(-32), VerticalAnchor.absolute(32)))));
 
-        final ConfiguredFeature<?, ?> ORE_AMETHYST_REPLACEMENTS = FeatureUtils.register("ore_amethyst", Feature.ORE.configured(new OreConfiguration(List.of(OreConfiguration.target(new BlockMatchTest(Blocks.END_STONE), ModBlocks.AMETHYST_ORE.defaultBlockState())), 3)));
-        final PlacedFeature ORE_AMETHYST_PLACEMENTS = PlacementUtils.register("ore_amethyst", ORE_AMETHYST_REPLACEMENTS.placed(commonOrePlacement(12, HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(45)))));
-
         BiomeGenerationSettingsBuilder generation = event.getGeneration();
-
-        if (event.getCategory().equals(Biome.BiomeCategory.THEEND)) {
-            generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ORE_AMETHYST_PLACEMENTS);
-        }
         generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ORE_RUBY_PLACEMENTS);
     }
 }

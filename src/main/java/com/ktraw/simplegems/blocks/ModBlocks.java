@@ -27,16 +27,13 @@ public class ModBlocks {
     public static RubyOre DEEPSLATE_RUBY_ORE;
 
     @ObjectHolder("simplegems:ruby_block")
-    public static RubyBlock RUBY_BLOCK;
-
-    @ObjectHolder("simplegems:amethyst_ore")
-    public static AmethystOre AMETHYST_ORE;
+    public static BaseGemBlock RUBY_BLOCK;
 
     @ObjectHolder("simplegems:amethyst_block")
-    public static AmethystBlock AMETHYST_BLOCK;
+    public static BaseGemBlock AMETHYST_BLOCK;
 
     @ObjectHolder("simplegems:gem_block")
-    public static GemBlock GEM_BLOCK;
+    public static BaseGemBlock GEM_BLOCK;
 
     @ObjectHolder("simplegems:generator")
     public static SimpleGemsContainerBlock GENERATOR;

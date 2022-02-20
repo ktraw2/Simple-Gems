@@ -3,9 +3,8 @@
   "values": [
     "simplegems:generator",
     "simplegems:infuser",
-    "simplegems:amethyst_block",
-    "simplegems:amethyst_ore",
     "simplegems:gem_block",
+    "simplegems:amethyst_block",
     "simplegems:ruby_block",
     "simplegems:ruby_ore",
     "simplegems:deepslate_ruby_ore"

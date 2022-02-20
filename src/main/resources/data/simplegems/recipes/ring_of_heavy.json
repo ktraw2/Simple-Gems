@@ -1,0 +1,23 @@
+{
+  "type": "simplegems:infuser",
+  "ingredients": [
+    {
+      "item": "simplegems:gem_ring"
+    },
+    {
+      "item": "simplegems:gem_chestplate"
+    },
+    {
+      "item": "minecraft:anvil"
+    },
+    {
+      "item": "simplegems:purple_apple"
+    }
+  ],
+  "energy": 500,
+  "processTime": 300,
+  "result": {
+    "item": "simplegems:ring_of_heavy",
+    "count": 1
+  }
+}

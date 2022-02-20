@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "simplegems:amethyst_block",
     "simplegems:gem_block",
-    "simplegems:ruby_block"
+    "simplegems:ruby_block",
+    "simplegems:amethyst_block"
   ]
 }

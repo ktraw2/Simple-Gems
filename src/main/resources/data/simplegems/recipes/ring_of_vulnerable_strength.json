@@ -1,0 +1,23 @@
+{
+  "type": "simplegems:infuser",
+  "ingredients": [
+    {
+      "item": "simplegems:gem_ring"
+    },
+    {
+      "item": "simplegems:gem_sword"
+    },
+    {
+      "item": "minecraft:glass"
+    },
+    {
+      "item": "minecraft:paper"
+    }
+  ],
+  "energy": 500,
+  "processTime": 300,
+  "result": {
+    "item": "simplegems:ring_of_vulnerable_strength",
+    "count": 1
+  }
+}
