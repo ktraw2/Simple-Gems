@@ -31,8 +31,14 @@
   "item.simplegems.ring_of_vulnerable_strength": "Ring of Vulnerable Strength",
   "item.simplegems.ring_of_heavy": "Ring of Heavy",
 
+  "item.simplegems.charged_emerald_dust.jei_description": "This curious dust can be used to power a Generator or craft a fun lamp. Legends say Villagers and Wandering Traders go crazy for the stuff as well...",
+
   "tooltip.simplegems.effect": "%1$s %2$s",
   "tooltip.simplegems.heavy": "Да",
+
+  "gui.simplegems.jei.generator_fuel": "Generator Fuel",
+  "gui.simplegems.jei.energy": "%s FE",
+  "gui.simplegems.jei.time": "%ss",
 
   "advancements.simplegems.root.title": "Simple Gems",
   "advancements.simplegems.root.description": "Advancements for the mod!",

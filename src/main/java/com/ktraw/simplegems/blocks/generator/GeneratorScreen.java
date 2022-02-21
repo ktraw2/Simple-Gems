@@ -7,11 +7,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
 public class GeneratorScreen extends SimpleGemsContainerScreen<GeneratorContainerMenu> {
+    public static final String textureLocation = "textures/gui/generator_gui.png";
 
-    private static final int FLAME_SIDE = 13;
+    public static final int FLAME_SIDE = 14;
 
     public GeneratorScreen(GeneratorContainerMenu screenContainer, Inventory inv, Component titleIn) {
-        super(screenContainer, inv, titleIn, "Generator", "textures/gui/generator_gui.png");
+        super(screenContainer, inv, titleIn, "Generator", textureLocation);
     }
 
     @Override

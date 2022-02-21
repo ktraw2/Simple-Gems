@@ -34,6 +34,7 @@ import java.util.List;
 @ToString
 public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
 
+    public static final ResourceLocation NAME = new ResourceLocation(SimpleGems.MODID, "infuser");
     private static final ResourceLocation.Serializer resourceLocationSerializer = new ResourceLocation.Serializer();
 
     private final RecipeType<InfuserRecipe> type = ModBlocks.INFUSER_RECIPE_TYPE;
@@ -134,7 +135,6 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
     }
 
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<InfuserRecipe> {
-        private static final ResourceLocation NAME = new ResourceLocation(SimpleGems.MODID, "infuser");
 
         public Serializer() {
             setRegistryName("infuser");

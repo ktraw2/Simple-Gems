@@ -16,6 +16,20 @@ import java.util.List;
 import java.util.Optional;
 
 public class GeneratorContainerMenu extends SimpleGemsContainerMenu<GeneratorContainerMenu> {
+    public static final class Slots {
+        public static final int width = 18;
+
+        public static final class Fuel {
+            public static final int start_x = 80;
+            public static final int start_y = 31;
+        }
+
+        public static final class Charge {
+            public static final int start_x = 134;
+            public static final int start_y = 49;
+        }
+    }
+
     private List<Item> validMergeItems = Arrays.asList(new Item[]{ModItems.CHARGED_EMERALD_DUST});
 
     /**
@@ -41,13 +55,13 @@ public class GeneratorContainerMenu extends SimpleGemsContainerMenu<GeneratorCon
 
     @Override
     protected void initContainerSlots() {
-        addSlot(new Slot(inventory, GeneratorBlockEntity.FUEL_SLOT, 80, 31){
+        addSlot(new Slot(inventory, GeneratorBlockEntity.FUEL_SLOT, Slots.Fuel.start_x, Slots.Fuel.start_y){
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return stack.getItem().equals(ModItems.CHARGED_EMERALD_DUST);
             }
         });
-        addSlot(new Slot(inventory, GeneratorBlockEntity.CHARGE_SLOT, 134, 49){
+        addSlot(new Slot(inventory, GeneratorBlockEntity.CHARGE_SLOT, Slots.Charge.start_x, Slots.Charge.start_y){
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return stack.getCapability(CapabilityEnergy.ENERGY).isPresent();

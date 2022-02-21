@@ -7,11 +7,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
 public class InfuserScreen extends SimpleGemsContainerScreen<InfuserContainerMenu> {
-    private static final int ARROW_WIDTH = 22;
-    private static final int ARROW_HEIGHT = 17;
+    public static final String textureLocation = "textures/gui/infuser_gui.png";
+
+    public static final int ARROW_WIDTH = 22;
+    public static final int ARROW_HEIGHT = 17;
 
     public InfuserScreen(InfuserContainerMenu screenContainer, Inventory inv, Component titleIn) {
-        super(screenContainer, inv, titleIn, "Infuser", "textures/gui/infuser_gui.png");
+        super(screenContainer, inv, titleIn, "Infuser", textureLocation);
     }
 
     @Override
