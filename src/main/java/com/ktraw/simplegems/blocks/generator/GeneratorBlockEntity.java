@@ -24,6 +24,9 @@ import static com.ktraw.simplegems.util.containers.SimpleGemsContainerMenuFactor
 
 public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemStackHandler> {
     public static final int PROCESS_TICKS = 80;
+    public static final int ENERGY_PER_DUST = 10000;
+    public static final int ENERGY_TRANSFER_RATE = 1000;
+
     public static final int FUEL_SLOT = 0;
     public static final int CHARGE_SLOT = 1;
     public static final int TOTAL_SLOTS = 2;
@@ -103,7 +106,7 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
     }
 
     private SimpleGemsEnergyStorage createEnergy() {
-        return new SimpleGemsEnergyStorage(100000, 100);
+        return new SimpleGemsEnergyStorage(1000000, ENERGY_TRANSFER_RATE);
     }
 
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T be) {
@@ -116,7 +119,7 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
                 if (tile.timer <= 0) {
                     tile.energy.ifPresent(e -> {
                         if (e.getEnergyStored() < e.getMaxEnergyStored()) {
-                            e.addEnergy(1000);
+                            e.addEnergy(ENERGY_PER_DUST);
                         }
                     });
                     tile.processing = false;
@@ -160,7 +163,7 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
             AtomicInteger storedEnergy = new AtomicInteger(energy.getEnergyStored());
             if (storedEnergy.get() > 0) {
                 stack.getCapability(CapabilityEnergy.ENERGY).ifPresent(e -> {
-                    int received = e.receiveEnergy(Math.min(storedEnergy.get(), 100), false);
+                    int received = e.receiveEnergy(Math.min(storedEnergy.get(), ENERGY_TRANSFER_RATE), false);
                     storedEnergy.addAndGet(-received);
                     energy.consumeEnergy(received);
                     setChanged();
@@ -178,7 +181,7 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
                     if (te != null) {
                         boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction).map(handler -> {
                             if (handler.canReceive()) {
-                                int received = handler.receiveEnergy(Math.min(storedEnergy.get(), 100), false);
+                                int received = handler.receiveEnergy(Math.min(storedEnergy.get(), ENERGY_TRANSFER_RATE), false);
                                 storedEnergy.addAndGet(-received);
                                 energy.consumeEnergy(received);
                                 setChanged();

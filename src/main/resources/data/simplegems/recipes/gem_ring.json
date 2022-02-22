@@ -8,7 +8,7 @@
       "item": "simplegems:gold_ring"
     }
   ],
-  "energy": 500,
+  "energy": 50000,
   "processTime": 300,
   "result": {
     "item": "simplegems:gem_ring",

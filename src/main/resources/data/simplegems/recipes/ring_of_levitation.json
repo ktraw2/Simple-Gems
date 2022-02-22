@@ -14,8 +14,8 @@
       "item": "minecraft:phantom_membrane"
     }
   ],
-  "energy": 500,
-  "processTime": 300,
+  "energy": 120000,
+  "processTime": 600,
   "result": {
     "item": "simplegems:ring_of_levitation",
     "count": 1

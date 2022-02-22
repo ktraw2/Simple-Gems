@@ -81,7 +81,7 @@ public class InfuserBlockEntity extends SimpleGemsContainerBlockEntity<InfuserIt
     }
 
     private SimpleGemsEnergyStorage createEnergyStorage() {
-        return new SimpleGemsEnergyStorage(10000, 100);
+        return new SimpleGemsEnergyStorage(200000, 1000);
     }
 
     @Override

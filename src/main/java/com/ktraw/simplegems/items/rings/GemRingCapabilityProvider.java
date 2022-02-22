@@ -18,7 +18,7 @@ public class GemRingCapabilityProvider implements ICapabilityProvider {
     private final ItemStack stack;
 
     private SimpleGemsItemEnergyStorage createEnergyStorage() {
-        return new SimpleGemsItemEnergyStorage(100000, 100, stack);
+        return new SimpleGemsItemEnergyStorage(1000000, 1000, stack);
     }
 
     @Nonnull

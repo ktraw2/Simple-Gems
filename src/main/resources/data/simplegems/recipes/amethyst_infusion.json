@@ -14,7 +14,7 @@
       "item": "minecraft:amethyst_shard"
     }
   ],
-  "energy": 1000,
+  "energy": 50000,
   "processTime": 300,
   "result": {
     "item": "simplegems:amethyst",

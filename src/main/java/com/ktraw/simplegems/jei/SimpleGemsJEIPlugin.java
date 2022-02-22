@@ -73,7 +73,7 @@ public class SimpleGemsJEIPlugin implements IModPlugin {
         final ItemStack chargedEmeraldDust = new ItemStack(ModItems.CHARGED_EMERALD_DUST);
 
         registration.addRecipes(Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(ModBlocks.INFUSER_RECIPE_TYPE), InfuserRecipe.NAME);
-        registration.addRecipes(List.of(new GeneratorFuelRecipe(chargedEmeraldDust, 80, 1000)), generatorFuelCategory.getUid());
+        registration.addRecipes(List.of(new GeneratorFuelRecipe(chargedEmeraldDust, GeneratorBlockEntity.PROCESS_TICKS, GeneratorBlockEntity.ENERGY_PER_DUST)), generatorFuelCategory.getUid());
 
         registration.addIngredientInfo(chargedEmeraldDust, VanillaTypes.ITEM, new TranslatableComponent("item.simplegems.charged_emerald_dust.jei_description"));
     }

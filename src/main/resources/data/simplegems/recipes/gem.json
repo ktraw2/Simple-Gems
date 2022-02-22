@@ -14,7 +14,7 @@
       "item": "simplegems:amethyst"
     }
   ],
-  "energy": 1000,
+  "energy": 180000,
   "processTime": 600,
   "result": {
     "item": "simplegems:gem",

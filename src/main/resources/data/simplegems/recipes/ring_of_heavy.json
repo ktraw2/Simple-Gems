@@ -14,8 +14,8 @@
       "item": "simplegems:purple_apple"
     }
   ],
-  "energy": 500,
-  "processTime": 300,
+  "energy": 120000,
+  "processTime": 600,
   "result": {
     "item": "simplegems:ring_of_heavy",
     "count": 1

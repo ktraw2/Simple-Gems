@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class GemRing extends Item {
-    private static final int ENERGY_PER_TICK = 10;
+    private static final int ENERGY_PER_TICK = 100;
     private static final Style GREEN_STYLE = Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN));
     private static final Style HINT_STYLE = Style.EMPTY.withItalic(true).withColor(TextColor.fromLegacyFormat(ChatFormatting.GRAY));
 
