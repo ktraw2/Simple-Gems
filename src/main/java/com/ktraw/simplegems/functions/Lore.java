@@ -4,7 +4,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.ktraw.simplegems.items.ModItems;
-import com.mojang.realmsclient.util.JsonUtils;
+import com.ktraw.simplegems.util.JSONHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -106,8 +106,7 @@ public class Lore extends SetLoreFunction {
 
         @Override
         public Lore deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditionsIn) {
-            //boolean flag = JSONUtils.getBoolean(object, "replace", false);
-            boolean flag = JsonUtils.getBooleanOr("replace", object, false);
+            boolean flag = JSONHelper.getBooleanOrDefault("replace", object, false);
             return new Lore(conditionsIn, flag);
         }
     }

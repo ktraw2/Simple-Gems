@@ -6,7 +6,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.ktraw.simplegems.SimpleGems;
 import com.ktraw.simplegems.blocks.ModBlocks;
-import com.mojang.realmsclient.util.JsonUtils;
+import com.ktraw.simplegems.util.JSONHelper;
 import it.unimi.dsi.fastutil.ints.IntList;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -143,7 +143,7 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
         @Override
         public InfuserRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             // get the group
-            String group = JsonUtils.getStringOr("group", json, "");
+            String group = JSONHelper.getStringOrDefault("group", json, "");
 
             // built the ingredients list
             NonNullList<Ingredient> ingredients = NonNullList.create();
@@ -163,12 +163,12 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
                 throw new JsonParseException("Too many ingredients");
             }
 
-            int energy = JsonUtils.getIntOr("energy", json, 0);
+            int energy = JSONHelper.getIntOrDefault("energy", json, 0);
 
-            int processTime = JsonUtils.getIntOr("processTime", json, 0);
+            int processTime = JSONHelper.getIntOrDefault("processTime", json, 0);
 
             // get the output
-            ItemStack recipeOutput = ShapedRecipe.itemStackFromJson(json.get("result").getAsJsonObject()/* JSONUtils.getJsonObject(json, "result")*/);
+            ItemStack recipeOutput = ShapedRecipe.itemStackFromJson(json.get("result").getAsJsonObject());
 
             // return a Java object with the parsed data
             return new InfuserRecipe(recipeId, group, recipeOutput, ingredients, energy, processTime);
