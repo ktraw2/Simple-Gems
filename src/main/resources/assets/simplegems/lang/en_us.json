@@ -41,11 +41,15 @@
   "gui.simplegems.jei.time": "%ss",
 
   "advancements.simplegems.root.title": "Simple Gems",
-  "advancements.simplegems.root.description": "Advancements for the mod!",
+  "advancements.simplegems.root.description": "Advancements for the mod",
   "advancements.simplegems.rubies.title": "Rubies!",
   "advancements.simplegems.rubies.description": "Obtain a ruby",
   "advancements.simplegems.amethysts.title": "Amethysts!",
   "advancements.simplegems.amethysts.description": "Obtain an amethyst",
+  "advancements.simplegems.purple_apple.title": "A Regal Apple",
+  "advancements.simplegems.purple_apple.description": "Eat a purple apple",
+  "advancements.simplegems.a_curious_dust.title": "A Curious Dust",
+  "advancements.simplegems.a_curious_dust.description": "Legends say Villagers and Wandering Traders go crazy for the stuff",
 
   "_comment": "Creative Tabs",
   "itemGroup.simplegems": "Simple Gems"

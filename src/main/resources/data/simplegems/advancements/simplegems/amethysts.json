@@ -21,7 +21,7 @@
       "conditions": {
         "items": [
           {
-            "item": "simplegems:amethyst"
+            "items": ["simplegems:amethyst"]
           }
         ]
       }

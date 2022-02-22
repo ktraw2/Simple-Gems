@@ -1,0 +1,54 @@
+{
+  "parent": "simplegems:simplegems/root",
+  "display": {
+    "icon": {
+      "item": "simplegems:charged_emerald_dust"
+    },
+    "title": {
+      "translate": "advancements.simplegems.a_curious_dust.title"
+    },
+    "description": {
+      "translate": "advancements.simplegems.a_curious_dust.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "a_curious_dust": {
+      "trigger": "minecraft:player_interacted_with_entity",
+      "conditions": {
+        "item": {
+          "items": ["simplegems:charged_emerald_dust"]
+        },
+        "entity": [
+          {
+            "condition": "minecraft:alternative",
+            "terms": [
+              {
+                "condition": "minecraft:entity_properties",
+                "entity": "this",
+                "predicate": {
+                  "type": "minecraft:villager"
+                }
+              },
+              {
+                "condition": "minecraft:entity_properties",
+                "entity": "this",
+                "predicate": {
+                  "type": "minecraft:wandering_trader"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "a_curious_dust"
+    ]
+  ]
+}

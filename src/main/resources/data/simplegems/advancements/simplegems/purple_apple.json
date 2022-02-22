@@ -1,0 +1,33 @@
+{
+  "parent": "simplegems:simplegems/amethysts",
+  "display": {
+    "icon": {
+      "item": "simplegems:purple_apple"
+    },
+    "title": {
+      "translate": "advancements.simplegems.purple_apple.title"
+    },
+    "description": {
+      "translate": "advancements.simplegems.purple_apple.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "purple_apple": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": ["simplegems:purple_apple"]
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "purple_apple"
+    ]
+  ]
+}
