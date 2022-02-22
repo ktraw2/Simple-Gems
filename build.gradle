@@ -13,9 +13,9 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
+archivesBaseName = 'simplegems'
 version = '1.1.0'
 group = 'com.ktraw2.simplegems' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'simplegems'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
@@ -161,6 +161,13 @@ jar {
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
+}
+
+task buildNamed (dependsOn: build, type: Copy) {
+    from("${buildDir}/reobfJar/")
+    include "output.jar"
+    into "${buildDir}/outputJar/"
+    rename 'output.jar', "${archivesBaseName}-${version}.jar"
 }
 
 // Example configuration to allow publishing using the maven-publish task
