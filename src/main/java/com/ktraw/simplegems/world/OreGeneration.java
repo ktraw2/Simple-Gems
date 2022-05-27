@@ -1,6 +1,7 @@
 package com.ktraw.simplegems.world;
 
 import com.ktraw.simplegems.blocks.ModBlocks;
+import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -37,8 +38,8 @@ public class OreGeneration {
 
     @SubscribeEvent
     public static void generateOres(BiomeLoadingEvent event) {
-        final ConfiguredFeature<?, ?> ORE_RUBY_REPLACEMENTS = FeatureUtils.register("ore_ruby", Feature.ORE.configured(new OreConfiguration(List.of(OreConfiguration.target(STONE_ORE_REPLACEABLES, ModBlocks.RUBY_ORE.defaultBlockState()), OreConfiguration.target(DEEPSLATE_ORE_REPLACEABLES, ModBlocks.DEEPSLATE_RUBY_ORE.defaultBlockState())), 3)));
-        final PlacedFeature ORE_RUBY_PLACEMENTS = PlacementUtils.register("ore_ruby", ORE_RUBY_REPLACEMENTS.placed(commonOrePlacement(10, HeightRangePlacement.uniform(VerticalAnchor.absolute(-32), VerticalAnchor.absolute(32)))));
+        final Holder<ConfiguredFeature<OreConfiguration, ?>> ORE_RUBY_REPLACEMENTS = FeatureUtils.register("ore_ruby", Feature.ORE, new OreConfiguration(List.of(OreConfiguration.target(STONE_ORE_REPLACEABLES, ModBlocks.RUBY_ORE.defaultBlockState()), OreConfiguration.target(DEEPSLATE_ORE_REPLACEABLES, ModBlocks.DEEPSLATE_RUBY_ORE.defaultBlockState())), 3));
+        final Holder<PlacedFeature> ORE_RUBY_PLACEMENTS = PlacementUtils.register("ore_ruby", ORE_RUBY_REPLACEMENTS, commonOrePlacement(10, HeightRangePlacement.uniform(VerticalAnchor.absolute(-32), VerticalAnchor.absolute(32))));
 
         BiomeGenerationSettingsBuilder generation = event.getGeneration();
         generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ORE_RUBY_PLACEMENTS);

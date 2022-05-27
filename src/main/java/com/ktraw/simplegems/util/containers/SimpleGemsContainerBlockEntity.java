@@ -69,7 +69,7 @@ public abstract class SimpleGemsContainerBlockEntity<I extends ItemStackHandler>
 
     @Override
     public CompoundTag serializeNBT() {
-        CompoundTag compound = save(new CompoundTag());
+        CompoundTag compound = saveWithFullMetadata();
         saveAdditional(compound);
         return compound;
     }
