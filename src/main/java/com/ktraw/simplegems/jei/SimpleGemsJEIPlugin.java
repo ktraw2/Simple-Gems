@@ -52,29 +52,29 @@ public class SimpleGemsJEIPlugin implements IModPlugin {
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        registration.addRecipeClickArea(InfuserScreen.class, 80, 32, 28, 23, InfuserRecipe.NAME);
-        registration.addRecipeClickArea(GeneratorScreen.class, 80, 50, FLAME_SIDE, FLAME_SIDE, generatorFuelCategory.getUid());
+        registration.addRecipeClickArea(InfuserScreen.class, 80, 32, 28, 23, infuserCategory.getRecipeType());
+        registration.addRecipeClickArea(GeneratorScreen.class, 80, 50, FLAME_SIDE, FLAME_SIDE, generatorFuelCategory.getRecipeType());
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.INFUSER), InfuserRecipe.NAME);
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.GENERATOR), generatorFuelCategory.getUid());
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.INFUSER), infuserCategory.getRecipeType());
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.GENERATOR), generatorFuelCategory.getRecipeType());
     }
 
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
-        registration.addRecipeTransferHandler(InfuserContainerMenu.class, InfuserRecipe.NAME, 0, InfuserBlockEntity.TOTAL_CRAFTING_SLOTS, InfuserBlockEntity.TOTAL_SLOTS, 36);
-        registration.addRecipeTransferHandler(GeneratorContainerMenu.class, generatorFuelCategory.getUid(), 0, 1, GeneratorBlockEntity.TOTAL_SLOTS, 36);
+        registration.addRecipeTransferHandler(InfuserContainerMenu.class, infuserCategory.getRecipeType(), 0, InfuserBlockEntity.TOTAL_CRAFTING_SLOTS, InfuserBlockEntity.TOTAL_SLOTS, 36);
+        registration.addRecipeTransferHandler(GeneratorContainerMenu.class, generatorFuelCategory.getRecipeType(), 0, 1, GeneratorBlockEntity.TOTAL_SLOTS, 36);
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         final ItemStack chargedEmeraldDust = new ItemStack(ModItems.CHARGED_EMERALD_DUST);
 
-        registration.addRecipes(Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(ModBlocks.INFUSER_RECIPE_TYPE), InfuserRecipe.NAME);
-        registration.addRecipes(List.of(new GeneratorFuelRecipe(chargedEmeraldDust, GeneratorBlockEntity.PROCESS_TICKS, GeneratorBlockEntity.ENERGY_PER_DUST)), generatorFuelCategory.getUid());
+        registration.addRecipes(infuserCategory.getRecipeType(), Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(ModBlocks.INFUSER_RECIPE_TYPE));
+        registration.addRecipes(generatorFuelCategory.getRecipeType(), List.of(new GeneratorFuelRecipe(chargedEmeraldDust, GeneratorBlockEntity.PROCESS_TICKS, GeneratorBlockEntity.ENERGY_PER_DUST)));
 
-        registration.addIngredientInfo(chargedEmeraldDust, VanillaTypes.ITEM, new TranslatableComponent("item.simplegems.charged_emerald_dust.jei_description"));
+        registration.addIngredientInfo(chargedEmeraldDust, VanillaTypes.ITEM_STACK, new TranslatableComponent("item.simplegems.charged_emerald_dust.jei_description"));
     }
 }

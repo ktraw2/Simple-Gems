@@ -17,12 +17,14 @@ import com.ktraw.simplegems.items.BaseItem;
 import com.ktraw.simplegems.items.ChargedEmeraldDust;
 import com.ktraw.simplegems.items.PurpleApple;
 import com.ktraw.simplegems.items.armor.BaseGemArmorItem;
+import com.ktraw.simplegems.items.armor.GemArmorMaterials;
 import com.ktraw.simplegems.items.rings.GemRing;
-import com.ktraw.simplegems.items.tools.GemAxe;
-import com.ktraw.simplegems.items.tools.GemHoe;
-import com.ktraw.simplegems.items.tools.GemPickaxe;
-import com.ktraw.simplegems.items.tools.GemShovel;
-import com.ktraw.simplegems.items.tools.GemSword;
+import com.ktraw.simplegems.items.tools.BaseGemAxe;
+import com.ktraw.simplegems.items.tools.BaseGemHoe;
+import com.ktraw.simplegems.items.tools.GemItemTiers;
+import com.ktraw.simplegems.items.tools.BaseGemPickaxe;
+import com.ktraw.simplegems.items.tools.BaseGemShovel;
+import com.ktraw.simplegems.items.tools.BaseGemSword;
 import com.ktraw.simplegems.setup.ClientProxy;
 import com.ktraw.simplegems.setup.IProxy;
 import com.ktraw.simplegems.setup.ModSetup;
@@ -130,7 +132,7 @@ public class SimpleGems
         public static void onItemsRegistry(final RegistryEvent.Register<Item> event) {
             IForgeRegistry<Item> registry = event.getRegistry();
 
-            // Blocks as items
+            /* Blocks as items */
             registry.register(new BlockItem(ModBlocks.EMERALD_LAMP, new Item.Properties().tab(setup.getCreativeTab())).setRegistryName("emerald_lamp"));
             registry.register(new BlockItem(ModBlocks.INVERTED_EMERALD_LAMP, new Item.Properties().tab(setup.getCreativeTab())).setRegistryName("inverted_emerald_lamp"));
             registry.register(new BlockItem(ModBlocks.RUBY_ORE, new Item.Properties().tab(setup.getCreativeTab())).setRegistryName("ruby_ore"));
@@ -141,28 +143,43 @@ public class SimpleGems
             registry.register(new BlockItem(ModBlocks.GENERATOR, new Item.Properties().tab(setup.getCreativeTab()).rarity(Rarity.RARE)).setRegistryName("generator"));
             registry.register(new BlockItem(ModBlocks.INFUSER, new Item.Properties().tab(setup.getCreativeTab())).setRegistryName("infuser"));
 
-            // Regular items
+            /* Regular items */
             registry.register(new BaseItem("ruby"));
             registry.register(new BaseItem("amethyst"));
             registry.register(new BaseItem("gem", Rarity.RARE));
             registry.register(new ChargedEmeraldDust());
             registry.register(new PurpleApple());
+            // Rings
             registry.register(new BaseItem("gold_ring", 1));
             registry.register(new GemRing("gem_ring", null));
             registry.register(new GemRing("ring_of_haste", new SingleMobEffectProvider(new MobEffectInstanceWrapper(MobEffects.DIG_SPEED, POTION_TICKS, 1))));
             registry.register(new GemRing("ring_of_levitation", new SingleMobEffectProvider(new MobEffectInstanceWrapper(MobEffects.LEVITATION, POTION_TICKS))));
             registry.register(new GemRing("ring_of_vulnerable_strength", new MultiMobEffectProvider(Arrays.asList(new MobEffectInstanceWrapper(MobEffects.DAMAGE_BOOST, POTION_TICKS, 1), new MobEffectInstanceWrapper(MobEffects.DAMAGE_RESISTANCE, POTION_TICKS, -5)))));
             registry.register(new GemRing("ring_of_heavy", new SingleMobEffectProvider(new MobEffectInstanceWrapper(MobEffects.MOVEMENT_SLOWDOWN, POTION_TICKS, 3)), heavyRingAttributes, new TranslatableComponent("tooltip.simplegems.heavy").setStyle( Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)))));
-            registry.register(new GemPickaxe());
-            registry.register(new GemSword());
-            registry.register(new GemAxe());
-            registry.register(new GemShovel());
-            registry.register(new GemHoe());
-            registry.register(new BaseGemArmorItem("gem_helmet", EquipmentSlot.HEAD));
-            registry.register(new BaseGemArmorItem("gem_chestplate", EquipmentSlot.CHEST));
-            registry.register(new BaseGemArmorItem("gem_leggings", EquipmentSlot.LEGS));
-            registry.register(new BaseGemArmorItem("gem_boots", EquipmentSlot.FEET));
-
+            // Tools/Weapons
+            // Gem
+            registry.register(new BaseGemPickaxe(GemItemTiers.getGemItemTier(), Rarity.RARE));
+            registry.register(new BaseGemSword(GemItemTiers.getGemItemTier(), Rarity.RARE));
+            registry.register(new BaseGemAxe(GemItemTiers.getGemItemTier(), Rarity.RARE));
+            registry.register(new BaseGemShovel(GemItemTiers.getGemItemTier(), Rarity.RARE));
+            registry.register(new BaseGemHoe(GemItemTiers.getGemItemTier(), Rarity.RARE));
+            // Nethergem
+            registry.register(new BaseGemPickaxe(GemItemTiers.getNetherGemItemTier(), Rarity.EPIC, "nether"));
+            registry.register(new BaseGemSword(GemItemTiers.getNetherGemItemTier(), Rarity.EPIC, "nether"));
+            registry.register(new BaseGemAxe(GemItemTiers.getNetherGemItemTier(), Rarity.EPIC, "nether"));
+            registry.register(new BaseGemShovel(GemItemTiers.getNetherGemItemTier(), Rarity.EPIC, "nether"));
+            registry.register(new BaseGemHoe(GemItemTiers.getNetherGemItemTier(), Rarity.EPIC, "nether"));
+            // Armor
+            // Gem
+            registry.register(new BaseGemArmorItem(GemArmorMaterials.getGemArmorMaterial(), EquipmentSlot.HEAD, Rarity.RARE));
+            registry.register(new BaseGemArmorItem(GemArmorMaterials.getGemArmorMaterial(), EquipmentSlot.CHEST, Rarity.RARE));
+            registry.register(new BaseGemArmorItem(GemArmorMaterials.getGemArmorMaterial(), EquipmentSlot.LEGS, Rarity.RARE));
+            registry.register(new BaseGemArmorItem(GemArmorMaterials.getGemArmorMaterial(), EquipmentSlot.FEET, Rarity.RARE));
+            // Nethergem
+            registry.register(new BaseGemArmorItem(GemArmorMaterials.getNethergemArmorMaterial(), EquipmentSlot.HEAD, Rarity.EPIC, "nether"));
+            registry.register(new BaseGemArmorItem(GemArmorMaterials.getNethergemArmorMaterial(), EquipmentSlot.CHEST, Rarity.EPIC, "nether"));
+            registry.register(new BaseGemArmorItem(GemArmorMaterials.getNethergemArmorMaterial(), EquipmentSlot.LEGS, Rarity.EPIC, "nether"));
+            registry.register(new BaseGemArmorItem(GemArmorMaterials.getNethergemArmorMaterial(), EquipmentSlot.FEET, Rarity.EPIC, "nether"));
         }
 
         @SubscribeEvent

@@ -63,6 +63,13 @@ public class GeneratorFuelCategory implements IRecipeCategory<GeneratorFuelRecip
                 });
     }
 
+    /*
+        Implement the following after removal of deprecated methods:
+        RecipeType<T> getRecipeType() {
+		    return new RecipeType<>(getUid(), getRecipeClass());
+	    }
+	*/
+
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, GeneratorFuelRecipe recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 1, 1)
@@ -80,8 +87,8 @@ public class GeneratorFuelCategory implements IRecipeCategory<GeneratorFuelRecip
 
         fill(stack, 54, 18, 72, 34, 0xFFC6C6C6);
 
-        font.draw(stack, energy, x, (background.getHeight() / 2) - font.lineHeight - 1, color);
-        font.draw(stack, time, x, (background.getHeight() / 2) + 1, color);
+        font.draw(stack, energy, x, (background.getHeight() / 2.0f) - font.lineHeight - 1, color);
+        font.draw(stack, time, x, (background.getHeight() / 2.0f) + 1, color);
 
         this.cachedFlames.getUnchecked(recipe.getProcessTime()).draw(stack, 1, GUI_HEIGHT - FLAME_SIDE);
     }

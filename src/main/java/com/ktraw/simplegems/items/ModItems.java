@@ -2,7 +2,11 @@ package com.ktraw.simplegems.items;
 
 import com.ktraw.simplegems.items.armor.BaseGemArmorItem;
 import com.ktraw.simplegems.items.rings.GemRing;
-import com.ktraw.simplegems.items.tools.*;
+import com.ktraw.simplegems.items.tools.BaseGemAxe;
+import com.ktraw.simplegems.items.tools.BaseGemHoe;
+import com.ktraw.simplegems.items.tools.BaseGemPickaxe;
+import com.ktraw.simplegems.items.tools.BaseGemShovel;
+import com.ktraw.simplegems.items.tools.BaseGemSword;
 import net.minecraftforge.registries.ObjectHolder;
 
 public class ModItems {
@@ -16,19 +20,19 @@ public class ModItems {
     public static BaseItem GEM;
 
     @ObjectHolder("simplegems:gem_pickaxe")
-    public static GemPickaxe GEM_PICKAXE;
+    public static BaseGemPickaxe GEM_PICKAXE;
 
     @ObjectHolder("simplegems:gem_sword")
-    public static GemSword GEM_SWORD;
+    public static BaseGemSword GEM_SWORD;
 
     @ObjectHolder("simplegems:gem_axe")
-    public static GemAxe GEM_AXE;
+    public static BaseGemAxe GEM_AXE;
 
     @ObjectHolder("simplegems:gem_shovel")
-    public static GemShovel GEM_SHOVEL;
+    public static BaseGemShovel GEM_SHOVEL;
 
     @ObjectHolder("simplegems:gem_hoe")
-    public static GemHoe GEM_HOE;
+    public static BaseGemHoe GEM_HOE;
 
     @ObjectHolder("simplegems:gem_helmet")
     public static BaseGemArmorItem GEM_HELMET;

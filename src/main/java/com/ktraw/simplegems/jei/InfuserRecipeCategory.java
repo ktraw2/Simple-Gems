@@ -51,7 +51,7 @@ public class InfuserRecipeCategory implements IRecipeCategory<InfuserRecipe> {
         this.recipeClass = InfuserRecipe.class;
         this.title = new TranslatableComponent("block.simplegems.infuser");
         this.background = guiHelper.createDrawable(GUI_LOCATION, Slots.Input.start_x - 1, Slots.Input.start_y - 1, GUI_WIDTH, GUI_HEIGHT);
-        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, new ItemStack(ModBlocks.INFUSER));
+        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.INFUSER));
 
         this.cachedArrows = CacheBuilder.newBuilder()
                 .maximumSize(25)
@@ -63,6 +63,13 @@ public class InfuserRecipeCategory implements IRecipeCategory<InfuserRecipe> {
                     }
                 });
     }
+
+    /*
+        Implement the following after removal of deprecated methods:
+        RecipeType<T> getRecipeType() {
+            return new RecipeType<>(getUid(), getRecipeClass());
+        }
+    */
 
     @Override
     public void draw(InfuserRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
