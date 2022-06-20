@@ -14,7 +14,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 archivesBaseName = 'simplegems'
-version = '1.1.1'
+version = '1.2.1'
 group = 'com.ktraw2.simplegems' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)

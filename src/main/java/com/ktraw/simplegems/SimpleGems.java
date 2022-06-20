@@ -32,6 +32,7 @@ import com.ktraw.simplegems.setup.ServerProxy;
 import com.ktraw.simplegems.util.mobeffects.MobEffectInstanceWrapper;
 import com.ktraw.simplegems.util.mobeffects.MultiMobEffectProvider;
 import com.ktraw.simplegems.util.mobeffects.SingleMobEffectProvider;
+import com.ktraw.simplegems.world.OreGeneration;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -56,6 +57,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -90,9 +92,13 @@ public class SimpleGems
     private static final Logger LOGGER = LogManager.getLogger();
 
     public SimpleGems() {
+        final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
         // Register the setup method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        eventBus.addListener(this::setup);
         MinecraftForge.EVENT_BUS.register(new PlayerEvents());
+
+        OreGeneration.register(eventBus);
     }
 
     private void setup(final FMLCommonSetupEvent event) {
