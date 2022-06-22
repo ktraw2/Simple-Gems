@@ -1,6 +1,7 @@
 package com.ktraw.simplegems.blocks.infuser;
 
-import com.ktraw.simplegems.blocks.ModBlocks;
+import com.ktraw.simplegems.registry.BlockEntities;
+import com.ktraw.simplegems.registry.RecipeTypes;
 import com.ktraw.simplegems.util.containers.SimpleGemsContainerBlockEntity;
 import com.ktraw.simplegems.util.energy.SimpleGemsEnergyStorage;
 import net.minecraft.core.BlockPos;
@@ -29,7 +30,7 @@ public class InfuserBlockEntity extends SimpleGemsContainerBlockEntity<InfuserIt
     private InfuserRecipe currentRecipe;
 
     public InfuserBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlocks.INFUSER_TILE, pos, state, INFUSER);
+        super(BlockEntities.INFUSER, pos, state, INFUSER);
 
         this.items = LazyOptional.of(this::createItemHandler);
         this.energy = LazyOptional.of(this::createEnergyStorage);
@@ -145,7 +146,7 @@ public class InfuserBlockEntity extends SimpleGemsContainerBlockEntity<InfuserIt
         // your code here
         if (!level.isClientSide) {
             if (tile.timer <= 0) {
-                InfuserRecipe recipe = level.getRecipeManager().getRecipeFor(ModBlocks.INFUSER_RECIPE_TYPE, tile, level).orElse(null);
+                InfuserRecipe recipe = level.getRecipeManager().getRecipeFor(RecipeTypes.INFUSER_RECIPE_TYPE.get(), tile, level).orElse(null);
                 if (recipe != null && tile.canInfuse(recipe)) {
                     tile.timer = recipe.getProcessTime();
                     tile.energy.ifPresent(e -> {

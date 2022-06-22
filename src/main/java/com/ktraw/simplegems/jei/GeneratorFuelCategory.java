@@ -16,12 +16,12 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 import static com.ktraw.simplegems.blocks.generator.GeneratorScreen.FLAME_SIDE;
@@ -48,7 +48,7 @@ public class GeneratorFuelCategory implements IRecipeCategory<GeneratorFuelRecip
 
         this.Uid = new ResourceLocation(SimpleGems.MODID, "jei_generator_fuel");
         this.recipeClass = GeneratorFuelRecipe.class;
-        this.title = new TranslatableComponent("gui.simplegems.jei.generator_fuel");
+        this.title = Component.translatable("gui.simplegems.jei.generator_fuel");
         this.background = guiHelper.createDrawable(GUI_LOCATION, Slots.Fuel.start_x - 1, Slots.Fuel.start_y - 1, GUI_WIDTH, GUI_HEIGHT);
         this.icon = guiHelper.createDrawable(GUI_LOCATION, 176, 0, FLAME_SIDE, FLAME_SIDE);
 
@@ -63,12 +63,10 @@ public class GeneratorFuelCategory implements IRecipeCategory<GeneratorFuelRecip
                 });
     }
 
-    /*
-        Implement the following after removal of deprecated methods:
-        RecipeType<T> getRecipeType() {
-		    return new RecipeType<>(getUid(), getRecipeClass());
-	    }
-	*/
+    @Override
+    public RecipeType<GeneratorFuelRecipe> getRecipeType() {
+        return new RecipeType<>(getUid(), getRecipeClass());
+    }
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, GeneratorFuelRecipe recipe, IFocusGroup focuses) {
@@ -79,8 +77,8 @@ public class GeneratorFuelCategory implements IRecipeCategory<GeneratorFuelRecip
     @Override
     public void draw(GeneratorFuelRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
         final Font font = Minecraft.getInstance().font;
-        final TranslatableComponent energy = new TranslatableComponent("gui.simplegems.jei.energy", recipe.getEnergy());
-        final TranslatableComponent time = new TranslatableComponent("gui.simplegems.jei.time", recipe.getProcessTime() / 20);
+        final MutableComponent energy = Component.translatable("gui.simplegems.jei.energy", recipe.getEnergy());
+        final MutableComponent time = Component.translatable("gui.simplegems.jei.time", recipe.getProcessTime() / 20);
         final int color = 0xFF808080;
         final int x = Slots.width + 3;
         final int y = background.getHeight() - font.lineHeight + 2;

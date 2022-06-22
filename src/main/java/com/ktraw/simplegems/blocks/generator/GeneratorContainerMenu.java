@@ -1,7 +1,7 @@
 package com.ktraw.simplegems.blocks.generator;
 
-import com.ktraw.simplegems.blocks.ModBlocks;
-import com.ktraw.simplegems.items.ModItems;
+import com.ktraw.simplegems.registry.Items;
+import com.ktraw.simplegems.registry.Menus;
 import com.ktraw.simplegems.util.containers.SimpleGemsContainerMenu;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -30,7 +30,7 @@ public class GeneratorContainerMenu extends SimpleGemsContainerMenu<GeneratorCon
         }
     }
 
-    private List<Item> validMergeItems = Arrays.asList(new Item[]{ModItems.CHARGED_EMERALD_DUST});
+    private final List<Item> validMergeItems = Arrays.asList(new Item[]{Items.CHARGED_EMERALD_DUST.get()});
 
     /**
      * Client side constructor
@@ -38,7 +38,7 @@ public class GeneratorContainerMenu extends SimpleGemsContainerMenu<GeneratorCon
      * @param playerInventory the inventory of the player
      */
     public GeneratorContainerMenu(int windowId, Inventory playerInventory) {
-        super(ModBlocks.GENERATOR_CONTAINER, windowId, playerInventory, GeneratorBlockEntity.TOTAL_SLOTS, GeneratorBlockEntity.DATA_SIZE);
+        super(Menus.GENERATOR, windowId, playerInventory, GeneratorBlockEntity.TOTAL_SLOTS, GeneratorBlockEntity.DATA_SIZE);
     }
 
     /**
@@ -49,7 +49,7 @@ public class GeneratorContainerMenu extends SimpleGemsContainerMenu<GeneratorCon
      * @param dataIn the serverside tile entity data
      */
     public GeneratorContainerMenu(int windowId, Inventory playerInventory, Container inventory, ContainerData dataIn) {
-        super(ModBlocks.GENERATOR_CONTAINER, windowId, playerInventory, inventory, dataIn);
+        super(Menus.GENERATOR, windowId, playerInventory, inventory, dataIn);
     }
 
 
@@ -58,7 +58,7 @@ public class GeneratorContainerMenu extends SimpleGemsContainerMenu<GeneratorCon
         addSlot(new Slot(inventory, GeneratorBlockEntity.FUEL_SLOT, Slots.Fuel.start_x, Slots.Fuel.start_y){
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.getItem().equals(ModItems.CHARGED_EMERALD_DUST);
+                return stack.getItem().equals(Items.CHARGED_EMERALD_DUST.get());
             }
         });
         addSlot(new Slot(inventory, GeneratorBlockEntity.CHARGE_SLOT, Slots.Charge.start_x, Slots.Charge.start_y){

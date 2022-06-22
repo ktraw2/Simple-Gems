@@ -1,7 +1,7 @@
 package com.ktraw.simplegems.blocks.generator;
 
-import com.ktraw.simplegems.blocks.ModBlocks;
-import com.ktraw.simplegems.items.ModItems;
+import com.ktraw.simplegems.registry.BlockEntities;
+import com.ktraw.simplegems.registry.Items;
 import com.ktraw.simplegems.util.containers.SimpleGemsContainerBlockEntity;
 import com.ktraw.simplegems.util.energy.SimpleGemsEnergyStorage;
 import net.minecraft.core.BlockPos;
@@ -36,7 +36,7 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
     private boolean processing;
 
     public GeneratorBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlocks.GENERATOR_TILE, pos, state, GENERATOR);
+        super(BlockEntities.GENERATOR, pos, state, GENERATOR);
 
         this.items = LazyOptional.of(this::createHandler);
         this.energy = LazyOptional.of(this::createEnergy);
@@ -91,16 +91,11 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
 
             @Override
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                switch (slot) {
-                    case FUEL_SLOT:
-                        return stack.getItem() == ModItems.CHARGED_EMERALD_DUST;
-
-                    case CHARGE_SLOT:
-                        return stack.getCapability(CapabilityEnergy.ENERGY).isPresent();
-
-                    default:
-                        return false;
-                }
+                return switch (slot) {
+                    case FUEL_SLOT -> stack.getItem().equals(Items.CHARGED_EMERALD_DUST.get());
+                    case CHARGE_SLOT -> stack.getCapability(CapabilityEnergy.ENERGY).isPresent();
+                    default -> false;
+                };
             }
         };
     }
@@ -116,19 +111,19 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
         if (!level.isClientSide) {
             if (tile.timer > 0) {
                 tile.timer--;
+                tile.energy.ifPresent(e -> {
+                    if (e.getEnergyStored() < e.getMaxEnergyStored()) {
+                        e.addEnergy(ENERGY_PER_DUST / PROCESS_TICKS);
+                    }
+                });
                 if (tile.timer <= 0) {
-                    tile.energy.ifPresent(e -> {
-                        if (e.getEnergyStored() < e.getMaxEnergyStored()) {
-                            e.addEnergy(ENERGY_PER_DUST);
-                        }
-                    });
                     tile.processing = false;
                 }
                 tile.setChanged();
             } else {
                 tile.items.ifPresent(h -> {
                     ItemStack stack = h.getStackInSlot(FUEL_SLOT);
-                    if (stack.getItem() == ModItems.CHARGED_EMERALD_DUST) {
+                    if (stack.getItem().equals(Items.CHARGED_EMERALD_DUST.get())) {
                         tile.energy.ifPresent(e -> {
                             if (e.getEnergyStored() < e.getMaxEnergyStored()) {
                                 h.extractItem(FUEL_SLOT, 1, false);

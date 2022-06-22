@@ -6,6 +6,8 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 public class BaseGemArmorItem extends ArmorItem {
     private static String getNameSuffix(EquipmentSlot equipmentSlot) {
@@ -19,16 +21,18 @@ public class BaseGemArmorItem extends ArmorItem {
         };
     }
 
-    public BaseGemArmorItem(ArmorMaterial armorMaterial, EquipmentSlot equipmentSlot, Rarity rarity, String registryNamePrefix) {
+    public static RegistryObject<BaseGemArmorItem> create(DeferredRegister<Item> registry, ArmorMaterial armorMaterial, EquipmentSlot equipmentSlot, Rarity rarity, String registryNamePrefix) {
+        return registry.register(registryNamePrefix + "gem_" + getNameSuffix(equipmentSlot), () -> new BaseGemArmorItem(armorMaterial, equipmentSlot, rarity));
+    }
+
+    public static RegistryObject<BaseGemArmorItem> create(DeferredRegister<Item> registry, ArmorMaterial armorMaterial, EquipmentSlot equipmentSlot, Rarity rarity) {
+        return create(registry, armorMaterial, equipmentSlot, rarity, "");
+    }
+
+    private BaseGemArmorItem(ArmorMaterial armorMaterial, EquipmentSlot equipmentSlot, Rarity rarity) {
         super(armorMaterial, equipmentSlot, new Item.Properties()
                 .stacksTo(1)
                 .tab(ModSetup.getSetup().getCreativeTab())
                 .rarity(rarity));
-
-        setRegistryName(registryNamePrefix + "gem_" + getNameSuffix(equipmentSlot));
-    }
-
-    public BaseGemArmorItem(ArmorMaterial armorMaterial, EquipmentSlot equipmentSlot, Rarity rarity) {
-        this(armorMaterial, equipmentSlot, rarity, "");
     }
 }

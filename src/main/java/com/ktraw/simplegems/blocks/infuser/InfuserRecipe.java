@@ -5,7 +5,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.ktraw.simplegems.SimpleGems;
-import com.ktraw.simplegems.blocks.ModBlocks;
+import com.ktraw.simplegems.registry.Blocks;
+import com.ktraw.simplegems.registry.RecipeSerializers;
+import com.ktraw.simplegems.registry.RecipeTypes;
 import com.ktraw.simplegems.util.JSONHelper;
 import it.unimi.dsi.fastutil.ints.IntList;
 import lombok.AccessLevel;
@@ -26,7 +28,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.List;
 
@@ -36,10 +37,8 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
 
     public static final ResourceLocation NAME = new ResourceLocation(SimpleGems.MODID, "infuser");
     private static final ResourceLocation.Serializer resourceLocationSerializer = new ResourceLocation.Serializer();
-
-    private final RecipeType<InfuserRecipe> type = ModBlocks.INFUSER_RECIPE_TYPE;
-    private final RecipeSerializer<InfuserRecipe> serializer = ModBlocks.INFUSER_SERIALIZER;
-
+    private final RecipeType<InfuserRecipe> type = RecipeTypes.INFUSER_RECIPE_TYPE.get();
+    private final RecipeSerializer<InfuserRecipe> serializer = RecipeSerializers.INFUSER_SERIALIZER.get();
     private final ResourceLocation id;
     private final String group;
     private final ItemStack resultItem;
@@ -134,12 +133,7 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
         return ingredients.size() <= width * height;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<InfuserRecipe> {
-
-        public Serializer() {
-            setRegistryName("infuser");
-        }
-
+    public static class Serializer implements RecipeSerializer<InfuserRecipe> {
         @Override
         public InfuserRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             // get the group
@@ -214,6 +208,6 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
 
     @Override
     public ItemStack getToastSymbol() {
-        return new ItemStack(ModBlocks.INFUSER);
+        return new ItemStack(Blocks.INFUSER.get());
     }
 }

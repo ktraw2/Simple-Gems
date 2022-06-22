@@ -1,8 +1,7 @@
 package com.ktraw.simplegems.items.tools;
 
-import com.ktraw.simplegems.items.ModItems;
+import com.ktraw.simplegems.registry.Items;
 import lombok.Getter;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.util.Lazy;
@@ -16,10 +15,10 @@ public class GemItemTiers {
     public static final int NETHERGEM_ENCHANTABILITY = 30;
 
     @Getter
-    private static final GemItemTier gemItemTier = new GemItemTier(4, 2137, 14.0F, 4.0F, GEM_ENCHANTABILITY, () -> Ingredient.of(ModItems.GEM));
+    private static final GemItemTier gemItemTier = new GemItemTier(4, 2137, 14.0F, 4.0F, GEM_ENCHANTABILITY, () -> Ingredient.of(Items.GEM.get()));
 
     @Getter
-    private static final GemItemTier netherGemItemTier = new GemItemTier(4, 3542, 20.0F, 5.0F, NETHERGEM_ENCHANTABILITY, () -> Ingredient.of(Items.NETHERITE_INGOT));
+    private static final GemItemTier netherGemItemTier = new GemItemTier(4, 3542, 20.0F, 5.0F, NETHERGEM_ENCHANTABILITY, () -> Ingredient.of(net.minecraft.world.item.Items.NETHERITE_INGOT));
 
     private GemItemTiers() {}
 

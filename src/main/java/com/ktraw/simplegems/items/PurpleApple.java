@@ -24,6 +24,5 @@ public class PurpleApple extends Item {
                     .rarity(Rarity.RARE)
                     .tab(ModSetup.getSetup().getCreativeTab())
                     .food(foodProperties));
-        setRegistryName("purple_apple");
     }
 }

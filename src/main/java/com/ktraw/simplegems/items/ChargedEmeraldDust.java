@@ -8,6 +8,5 @@ public class ChargedEmeraldDust extends Item {
         super(new Item.Properties()
                 .stacksTo(64)
                 .tab(ModSetup.getSetup().getCreativeTab()));
-        setRegistryName("charged_emerald_dust");
     }
 }

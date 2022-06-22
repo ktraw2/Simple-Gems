@@ -10,7 +10,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -34,26 +33,26 @@ public class GemRing extends Item {
     private static final Style GREEN_STYLE = Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN));
     private static final Style HINT_STYLE = Style.EMPTY.withItalic(true).withColor(TextColor.fromLegacyFormat(ChatFormatting.GRAY));
 
-    private static final Component BLANK_LINE = new TextComponent("");
-    private static final Component PRESS_CTRL = new TextComponent("Press <Shift>").setStyle(HINT_STYLE);
+    private static final Component BLANK_LINE = Component.literal("");
+    private static final Component PRESS_CTRL = Component.literal("Press <Shift>").setStyle(HINT_STYLE);
 
     private IMobEffectProvider ringEffect;
     private Component firstLineOfTooltip;
     private Multimap<Attribute, AttributeModifier> attributeModifierMultimap;
 
-    public GemRing(String registryName, @Nullable IMobEffectProvider ringEffect, @Nullable Multimap<Attribute, AttributeModifier> attributeModifierMultimap, @Nullable Component firstLineOfTooltip) {
-        this(registryName, ringEffect);
+    public GemRing(@Nullable IMobEffectProvider ringEffect, @Nullable Multimap<Attribute, AttributeModifier> attributeModifierMultimap, @Nullable Component firstLineOfTooltip) {
+        this(ringEffect);
         this.attributeModifierMultimap = attributeModifierMultimap;
         this.firstLineOfTooltip = firstLineOfTooltip;
     }
 
-    public GemRing(String registryName, @Nullable IMobEffectProvider ringEffect) {
+    public GemRing(@Nullable IMobEffectProvider ringEffect) {
         super(new Properties()
                 .tab(SimpleGems.setup.getCreativeTab())
                 .stacksTo(1));
 
         this.ringEffect = ringEffect;
-        setRegistryName(registryName);
+//        setRegistryName(registryName);
     }
 
     @Nullable
@@ -128,7 +127,7 @@ public class GemRing extends Item {
         }
 
         if (Screen.hasShiftDown()) {
-            tooltip.add(new TextComponent("Energy: " + stack.getOrCreateTag().getInt("energy") + " FE").setStyle(GREEN_STYLE));
+            tooltip.add(Component.literal("Energy: " + stack.getOrCreateTag().getInt("energy") + " FE").setStyle(GREEN_STYLE));
             tooltip.add(BLANK_LINE);
             ringEffect.addInformation(stack, worldIn, tooltip, flagIn);
         }

@@ -1,7 +1,7 @@
 package com.ktraw.simplegems.jei;
 
 import com.ktraw.simplegems.SimpleGems;
-import com.ktraw.simplegems.blocks.ModBlocks;
+import com.ktraw.simplegems.registry.Blocks;
 import com.ktraw.simplegems.blocks.generator.GeneratorBlockEntity;
 import com.ktraw.simplegems.blocks.generator.GeneratorContainerMenu;
 import com.ktraw.simplegems.blocks.generator.GeneratorFuelRecipe;
@@ -10,7 +10,9 @@ import com.ktraw.simplegems.blocks.infuser.InfuserBlockEntity;
 import com.ktraw.simplegems.blocks.infuser.InfuserContainerMenu;
 import com.ktraw.simplegems.blocks.infuser.InfuserRecipe;
 import com.ktraw.simplegems.blocks.infuser.InfuserScreen;
-import com.ktraw.simplegems.items.ModItems;
+import com.ktraw.simplegems.registry.Items;
+import com.ktraw.simplegems.registry.Menus;
+import com.ktraw.simplegems.registry.RecipeTypes;
 import lombok.Getter;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -23,7 +25,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -58,23 +60,23 @@ public class SimpleGemsJEIPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.INFUSER), infuserCategory.getRecipeType());
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.GENERATOR), generatorFuelCategory.getRecipeType());
+        registration.addRecipeCatalyst(new ItemStack(Blocks.INFUSER.get()), infuserCategory.getRecipeType());
+        registration.addRecipeCatalyst(new ItemStack(Blocks.GENERATOR.get()), generatorFuelCategory.getRecipeType());
     }
 
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
-        registration.addRecipeTransferHandler(InfuserContainerMenu.class, infuserCategory.getRecipeType(), 0, InfuserBlockEntity.TOTAL_CRAFTING_SLOTS, InfuserBlockEntity.TOTAL_SLOTS, 36);
-        registration.addRecipeTransferHandler(GeneratorContainerMenu.class, generatorFuelCategory.getRecipeType(), 0, 1, GeneratorBlockEntity.TOTAL_SLOTS, 36);
+        registration.addRecipeTransferHandler(InfuserContainerMenu.class, Menus.INFUSER.get(), infuserCategory.getRecipeType(), 0, InfuserBlockEntity.TOTAL_CRAFTING_SLOTS, InfuserBlockEntity.TOTAL_SLOTS, 36);
+        registration.addRecipeTransferHandler(GeneratorContainerMenu.class, Menus.GENERATOR.get(), generatorFuelCategory.getRecipeType(), 0, 1, GeneratorBlockEntity.TOTAL_SLOTS, 36);
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        final ItemStack chargedEmeraldDust = new ItemStack(ModItems.CHARGED_EMERALD_DUST);
+        final ItemStack chargedEmeraldDust = new ItemStack(Items.CHARGED_EMERALD_DUST.get());
 
-        registration.addRecipes(infuserCategory.getRecipeType(), Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(ModBlocks.INFUSER_RECIPE_TYPE));
+        registration.addRecipes(infuserCategory.getRecipeType(), Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeTypes.INFUSER_RECIPE_TYPE.get()));
         registration.addRecipes(generatorFuelCategory.getRecipeType(), List.of(new GeneratorFuelRecipe(chargedEmeraldDust, GeneratorBlockEntity.PROCESS_TICKS, GeneratorBlockEntity.ENERGY_PER_DUST)));
 
-        registration.addIngredientInfo(chargedEmeraldDust, VanillaTypes.ITEM_STACK, new TranslatableComponent("item.simplegems.charged_emerald_dust.jei_description"));
+        registration.addIngredientInfo(chargedEmeraldDust, VanillaTypes.ITEM_STACK, Component.translatable("item.simplegems.charged_emerald_dust.jei_description"));
     }
 }

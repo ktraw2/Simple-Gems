@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.PlayerInvWrapper;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +33,7 @@ public abstract class SimpleGemsContainerMenu<T extends AbstractContainerMenu> e
      * @param windowId
      * @param playerInventory
      */
-    protected SimpleGemsContainerMenu(MenuType type, int windowId, Inventory playerInventory, int inventorySize, int dataSize) {
+    protected SimpleGemsContainerMenu(RegistryObject<MenuType<T>> type, int windowId, Inventory playerInventory, int inventorySize, int dataSize) {
         this(type, windowId, playerInventory, new SimpleContainer(inventorySize), new SimpleContainerData(dataSize));
     }
 
@@ -44,8 +45,8 @@ public abstract class SimpleGemsContainerMenu<T extends AbstractContainerMenu> e
      * @param inventory the inventory container
      * @param data the serverside tile entity data
      */
-    protected SimpleGemsContainerMenu(MenuType<T> type, int windowId, Inventory playerInventory, Container inventory, ContainerData data) {
-        super(type, windowId);
+    protected SimpleGemsContainerMenu(RegistryObject<MenuType<T>> type, int windowId, Inventory playerInventory, Container inventory, ContainerData data) {
+        super(type.get(), windowId);
         this.playerInventory = new PlayerInvWrapper(playerInventory);
         this.inventory = inventory;
         this.slots = inventory.getContainerSize();

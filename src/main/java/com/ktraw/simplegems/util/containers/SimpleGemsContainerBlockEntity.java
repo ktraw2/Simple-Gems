@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -23,6 +22,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,12 +42,12 @@ public abstract class SimpleGemsContainerBlockEntity<I extends ItemStackHandler>
     private SimpleGemsContainerMenuType menuType;
 
     public SimpleGemsContainerBlockEntity(
-            BlockEntityType<?> type,
+            RegistryObject<BlockEntityType<?>> type,
             BlockPos pos,
             BlockState state,
             SimpleGemsContainerMenuType menuType
     ) {
-        super(type, pos, state);
+        super(type.get(), pos, state);
         this.menuType = menuType;
         this.timer = 0;
     }
@@ -88,7 +89,7 @@ public abstract class SimpleGemsContainerBlockEntity<I extends ItemStackHandler>
 
     @Override
     public Component getDisplayName() {
-        return new TextComponent(getType().getRegistryName().getPath());
+        return Component.literal(ForgeRegistries.BLOCK_ENTITIES.getKey(getType()).getPath());
     }
 
     @Nullable

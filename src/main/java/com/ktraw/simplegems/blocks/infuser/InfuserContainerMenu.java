@@ -1,6 +1,7 @@
 package com.ktraw.simplegems.blocks.infuser;
 
-import com.ktraw.simplegems.blocks.ModBlocks;
+import com.ktraw.simplegems.registry.Blocks;
+import com.ktraw.simplegems.registry.Menus;
 import com.ktraw.simplegems.util.containers.SimpleGemsContainerMenu;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -33,7 +34,7 @@ public class InfuserContainerMenu extends SimpleGemsContainerMenu<InfuserContain
      * @param playerInventory the inventory of the player
      */
     public InfuserContainerMenu(int windowId, Inventory playerInventory) {
-        super(ModBlocks.INFUSER_CONTAINER, windowId, playerInventory, InfuserBlockEntity.TOTAL_SLOTS, InfuserBlockEntity.DATA_SIZE);
+        super(Menus.INFUSER, windowId, playerInventory, InfuserBlockEntity.TOTAL_SLOTS, InfuserBlockEntity.DATA_SIZE);
     }
 
     /**
@@ -44,7 +45,7 @@ public class InfuserContainerMenu extends SimpleGemsContainerMenu<InfuserContain
      * @param dataIn the serverside tile entity data
      */
     public InfuserContainerMenu(int windowId, Inventory playerInventory, Container inventory, ContainerData dataIn) {
-        super(ModBlocks.INFUSER_CONTAINER, windowId, playerInventory, inventory, dataIn);
+        super(Menus.INFUSER, windowId, playerInventory, inventory, dataIn);
     }
 
     @Override

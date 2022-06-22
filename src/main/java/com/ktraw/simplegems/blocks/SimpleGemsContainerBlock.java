@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
 import java.util.function.BiFunction;
@@ -30,15 +31,14 @@ import java.util.function.Supplier;
 
 public class SimpleGemsContainerBlock extends Block implements EntityBlock {
 
-    private final Supplier<BlockEntityType<? extends BlockEntity>> blockEntityTypeWrapper;
+    private final Supplier<RegistryObject<BlockEntityType<? extends BlockEntity>>> blockEntityTypeWrapper;
     private final BlockEntityTicker<? extends BlockEntity> blockEntityTicker;
     private final BiFunction<BlockPos, BlockState, ? extends BlockEntity> blockEntityFactory;
 
-    public SimpleGemsContainerBlock(String registryName, Supplier<BlockEntityType<? extends BlockEntity>> blockEntityTypeWrapper, BlockEntityTicker<? extends BlockEntity> blockEntityTicker, BiFunction<BlockPos, BlockState, ? extends BlockEntity> blockEntityFactory) {
+    public SimpleGemsContainerBlock(Supplier<RegistryObject<BlockEntityType<? extends BlockEntity>>> blockEntityTypeWrapper, BlockEntityTicker<? extends BlockEntity> blockEntityTicker, BiFunction<BlockPos, BlockState, ? extends BlockEntity> blockEntityFactory) {
         super(Properties.of(Material.METAL)
                 .sound(SoundType.METAL)
                 .strength(5f, 15f));
-        setRegistryName(registryName);
         registerDefaultState(defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
 
         this.blockEntityTypeWrapper = blockEntityTypeWrapper;
@@ -82,6 +82,6 @@ public class SimpleGemsContainerBlock extends Block implements EntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-        return type == blockEntityTypeWrapper.get() ? ((BlockEntityTicker<T>) blockEntityTicker) : null; // evil cast
+        return type == blockEntityTypeWrapper.get().get() ? ((BlockEntityTicker<T>) blockEntityTicker) : null; // evil cast
     }
 }

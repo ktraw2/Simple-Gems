@@ -4,7 +4,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.ktraw.simplegems.SimpleGems;
-import com.ktraw.simplegems.blocks.ModBlocks;
+import com.ktraw.simplegems.registry.Blocks;
 import com.ktraw.simplegems.blocks.infuser.InfuserContainerMenu.Slots;
 import com.ktraw.simplegems.blocks.infuser.InfuserRecipe;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -18,12 +18,13 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -49,9 +50,9 @@ public class InfuserRecipeCategory implements IRecipeCategory<InfuserRecipe> {
 
         this.Uid = InfuserRecipe.NAME;
         this.recipeClass = InfuserRecipe.class;
-        this.title = new TranslatableComponent("block.simplegems.infuser");
+        this.title = Component.translatable("block.simplegems.infuser");
         this.background = guiHelper.createDrawable(GUI_LOCATION, Slots.Input.start_x - 1, Slots.Input.start_y - 1, GUI_WIDTH, GUI_HEIGHT);
-        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.INFUSER));
+        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Blocks.INFUSER.get()));
 
         this.cachedArrows = CacheBuilder.newBuilder()
                 .maximumSize(25)
@@ -63,19 +64,11 @@ public class InfuserRecipeCategory implements IRecipeCategory<InfuserRecipe> {
                     }
                 });
     }
-
-    /*
-        Implement the following after removal of deprecated methods:
-        RecipeType<T> getRecipeType() {
-            return new RecipeType<>(getUid(), getRecipeClass());
-        }
-    */
-
     @Override
     public void draw(InfuserRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
         final Font font = Minecraft.getInstance().font;
-        final TranslatableComponent energy = new TranslatableComponent("gui.simplegems.jei.energy", recipe.getEnergy());
-        final TranslatableComponent time = new TranslatableComponent("gui.simplegems.jei.time", recipe.getProcessTime() / 20);
+        final MutableComponent energy = Component.translatable("gui.simplegems.jei.energy", recipe.getEnergy());
+        final MutableComponent time = Component.translatable("gui.simplegems.jei.time", recipe.getProcessTime() / 20);
         final int color = 0xFF808080;
         final int y = background.getHeight() - font.lineHeight + 2;
 
@@ -83,6 +76,11 @@ public class InfuserRecipeCategory implements IRecipeCategory<InfuserRecipe> {
         font.draw(stack, time, background.getWidth() - font.width(time), y, color);
 
         this.cachedArrows.getUnchecked(recipe.getProcessTime()).draw(stack, 81 - Slots.Input.start_x + 2, 35 - Slots.Input.start_y);
+    }
+
+    @Override
+    public RecipeType<InfuserRecipe> getRecipeType() {
+        return new RecipeType<>(getUid(), getRecipeClass());
     }
 
     @Override

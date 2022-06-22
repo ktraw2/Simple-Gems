@@ -13,7 +13,6 @@ public class InfuserItemStackHandler extends ItemStackHandler {
         this.tile = tile;
     }
 
-
     @Nonnull
     @Override
     public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {

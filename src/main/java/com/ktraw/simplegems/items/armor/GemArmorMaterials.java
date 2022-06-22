@@ -1,15 +1,15 @@
 package com.ktraw.simplegems.items.armor;
 
 import com.ktraw.simplegems.SimpleGems;
-import com.ktraw.simplegems.items.ModItems;
+import com.ktraw.simplegems.registry.Items;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.common.util.Lazy;
 
 import static com.ktraw.simplegems.items.tools.GemItemTiers.GEM_ENCHANTABILITY;
 import static com.ktraw.simplegems.items.tools.GemItemTiers.NETHERGEM_ENCHANTABILITY;
@@ -21,7 +21,7 @@ public class GemArmorMaterials {
             new int[]{4, 7, 9, 4},
             GEM_ENCHANTABILITY,
             SoundEvents.ARMOR_EQUIP_DIAMOND,
-            Ingredient.of(ModItems.GEM),
+            () -> Ingredient.of(Items.GEM.get()),
             3.0f,
             "gem",
             0.0f
@@ -33,7 +33,7 @@ public class GemArmorMaterials {
             new int[]{5, 9, 10, 5},
             NETHERGEM_ENCHANTABILITY,
             SoundEvents.ARMOR_EQUIP_NETHERITE,
-            Ingredient.of(Items.NETHERITE_INGOT),
+            () -> Ingredient.of(net.minecraft.world.item.Items.NETHERITE_INGOT),
             4.5f,
             "nethergem",
             0.15f
@@ -49,7 +49,7 @@ public class GemArmorMaterials {
         private final int[] defenseForSlot;
         private final int enchantmentValue;
         private final SoundEvent equipSound;
-        private final Ingredient repairIngredient;
+        private final Lazy<Ingredient> repairIngredient;
         private final float toughness;
         private final String name;
         private final float knockbackResistance;
@@ -69,5 +69,9 @@ public class GemArmorMaterials {
             return SimpleGems.MODID + ":" + name;
         }
 
+        @Override
+        public Ingredient getRepairIngredient() {
+            return this.repairIngredient.get();
+        }
     }
 }

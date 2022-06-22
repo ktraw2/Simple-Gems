@@ -1,11 +1,10 @@
 package com.ktraw.simplegems.setup;
 
 import com.ktraw.simplegems.SimpleGems;
-import com.ktraw.simplegems.blocks.ModBlocks;
+import com.ktraw.simplegems.registry.Blocks;
 import com.ktraw.simplegems.functions.CopyNbt;
 import com.ktraw.simplegems.functions.Lore;
-import com.ktraw.simplegems.items.ModItems;
-import com.ktraw.simplegems.world.OreGeneration;
+import com.ktraw.simplegems.registry.Items;
 import lombok.Getter;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -29,7 +28,7 @@ public final class ModSetup {
         creativeTab = new CreativeModeTab("simplegems") {
             @Override
             public ItemStack makeIcon() {
-                return new ItemStack(ModBlocks.EMERALD_LAMP);
+                return new ItemStack(Blocks.EMERALD_LAMP.get());
             }
         };
     }
@@ -41,7 +40,7 @@ public final class ModSetup {
         try {
             Method addMix = PotionBrewing.class.getDeclaredMethod("addMix", Potion.class, Item.class, Potion.class);
             addMix.setAccessible(true);
-            addMix.invoke(null, Potions.AWKWARD, ModItems.RUBY, Potions.LUCK);
+            addMix.invoke(null, Potions.AWKWARD, Items.RUBY.get(), Potions.LUCK);
         }
         catch (Exception e) {
             System.err.println("Error adding custom potions.");
