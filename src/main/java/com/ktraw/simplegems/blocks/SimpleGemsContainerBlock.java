@@ -29,6 +29,8 @@ import javax.annotation.Nullable;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class SimpleGemsContainerBlock extends Block implements EntityBlock {
 
     private final Supplier<RegistryObject<BlockEntityType<? extends BlockEntity>>> blockEntityTypeWrapper;
@@ -63,7 +65,7 @@ public class SimpleGemsContainerBlock extends Block implements EntityBlock {
         if (!worldIn.isClientSide) {
             BlockEntity tileEntity = worldIn.getBlockEntity(pos);
             if (tileEntity instanceof MenuProvider) {
-                NetworkHooks.openGui((ServerPlayer) player, (MenuProvider) tileEntity, tileEntity.getBlockPos());
+                NetworkHooks.openScreen((ServerPlayer) player, (MenuProvider) tileEntity, tileEntity.getBlockPos());
             }
 
             return InteractionResult.SUCCESS;

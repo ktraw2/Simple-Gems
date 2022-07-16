@@ -4,6 +4,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Material;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class BaseGemBlock extends Block {
     public BaseGemBlock() {
         super(Properties.of(Material.STONE)

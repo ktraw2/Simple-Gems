@@ -18,7 +18,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class PlayerEvents {
     @SubscribeEvent
     public void entityInteract(PlayerInteractEvent.EntityInteract event) {
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         ItemStack heldItem = player.getItemInHand(event.getHand());
         Entity target = event.getTarget();
 

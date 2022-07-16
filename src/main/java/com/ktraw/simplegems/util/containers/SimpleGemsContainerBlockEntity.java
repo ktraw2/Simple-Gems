@@ -89,7 +89,7 @@ public abstract class SimpleGemsContainerBlockEntity<I extends ItemStackHandler>
 
     @Override
     public Component getDisplayName() {
-        return Component.literal(ForgeRegistries.BLOCK_ENTITIES.getKey(getType()).getPath());
+        return Component.literal(ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(getType()).getPath());
     }
 
     @Nullable

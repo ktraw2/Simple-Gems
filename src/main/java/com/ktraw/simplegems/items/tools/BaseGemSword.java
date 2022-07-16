@@ -8,6 +8,8 @@ import net.minecraft.world.item.Tier;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class BaseGemSword extends SwordItem {
 
     private static final int ATTACK_DAMAGE_MODIFIER = 5;

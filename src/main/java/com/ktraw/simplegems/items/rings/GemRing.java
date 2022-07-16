@@ -28,6 +28,8 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class GemRing extends Item {
     private static final int ENERGY_PER_TICK = 100;
     private static final Style GREEN_STYLE = Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN));

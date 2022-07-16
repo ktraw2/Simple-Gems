@@ -14,6 +14,8 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class RubyOre extends DropExperienceBlock {
 
     public static String getRegistryName(boolean deepslate) {

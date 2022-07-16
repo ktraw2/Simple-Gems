@@ -8,6 +8,8 @@ import net.minecraft.world.item.Tier;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class BaseGemHoe extends HoeItem {
 
     private static final float ATTACK_SPEED_MOFIFIER = 0.0f;

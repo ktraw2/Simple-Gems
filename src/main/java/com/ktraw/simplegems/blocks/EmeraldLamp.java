@@ -19,6 +19,8 @@ import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class EmeraldLamp extends Block {
     public static final IntegerProperty LIGHT_LEVEL = BlockStateProperties.LEVEL;
     public static final int MAX_LEVEL = BlockStateProperties.MAX_LEVEL_15;
