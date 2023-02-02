@@ -12,8 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -93,7 +93,7 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
                 return switch (slot) {
                     case FUEL_SLOT -> stack.getItem().equals(Items.CHARGED_EMERALD_DUST.get());
-                    case CHARGE_SLOT -> stack.getCapability(CapabilityEnergy.ENERGY).isPresent();
+                    case CHARGE_SLOT -> stack.getCapability(ForgeCapabilities.ENERGY).isPresent();
                     default -> false;
                 };
             }
@@ -157,7 +157,7 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
         energy.ifPresent(energy -> {
             AtomicInteger storedEnergy = new AtomicInteger(energy.getEnergyStored());
             if (storedEnergy.get() > 0) {
-                stack.getCapability(CapabilityEnergy.ENERGY).ifPresent(e -> {
+                stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(e -> {
                     int received = e.receiveEnergy(Math.min(storedEnergy.get(), ENERGY_TRANSFER_RATE), false);
                     storedEnergy.addAndGet(-received);
                     energy.consumeEnergy(received);
@@ -174,7 +174,7 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
                 for (Direction direction : Direction.values()) {
                     BlockEntity te = level.getBlockEntity(worldPosition.offset(direction.getNormal()));
                     if (te != null) {
-                        boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction).map(handler -> {
+                        boolean doContinue = te.getCapability(ForgeCapabilities.ENERGY, direction).map(handler -> {
                             if (handler.canReceive()) {
                                 int received = handler.receiveEnergy(Math.min(storedEnergy.get(), ENERGY_TRANSFER_RATE), false);
                                 storedEnergy.addAndGet(-received);

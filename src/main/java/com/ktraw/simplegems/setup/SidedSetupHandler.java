@@ -1,5 +1,5 @@
 package com.ktraw.simplegems.setup;
 
-public interface IProxy {
+public interface SidedSetupHandler {
     void init();
 }

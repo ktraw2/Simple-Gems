@@ -1,7 +1,7 @@
 package com.ktraw.simplegems.util.containers;
 
-import com.ktraw.simplegems.util.energy.SimpleGemsEnergyStorage;
 import com.ktraw.simplegems.util.containers.SimpleGemsContainerMenuFactory.SimpleGemsContainerMenuType;
+import com.ktraw.simplegems.util.energy.SimpleGemsEnergyStorage;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,9 +18,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -78,10 +77,10 @@ public abstract class SimpleGemsContainerBlockEntity<I extends ItemStackHandler>
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (cap == ForgeCapabilities.ITEM_HANDLER) {
             return items.cast();
         }
-        else if (cap == CapabilityEnergy.ENERGY) {
+        else if (cap == ForgeCapabilities.ENERGY) {
             return energy.cast();
         }
         return super.getCapability(cap, side);

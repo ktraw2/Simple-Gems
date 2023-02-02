@@ -2,7 +2,6 @@ package com.ktraw.simplegems.items.rings;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import com.ktraw.simplegems.SimpleGems;
 import com.ktraw.simplegems.util.mobeffects.IMobEffectProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -22,13 +21,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.energy.CapabilityEnergy;
 
 import javax.annotation.Nullable;
 import java.util.List;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class GemRing extends Item {
     private static final int ENERGY_PER_TICK = 100;
@@ -50,11 +47,9 @@ public class GemRing extends Item {
 
     public GemRing(@Nullable IMobEffectProvider ringEffect) {
         super(new Properties()
-                .tab(SimpleGems.setup.getCreativeTab())
                 .stacksTo(1));
 
         this.ringEffect = ringEffect;
-//        setRegistryName(registryName);
     }
 
     @Nullable
@@ -89,7 +84,7 @@ public class GemRing extends Item {
             return 0;
         }
 
-        return stack.getCapability(CapabilityEnergy.ENERGY)
+        return stack.getCapability(ForgeCapabilities.ENERGY)
                 .map(e -> Math.min(13 * e.getEnergyStored() / e.getMaxEnergyStored(), 13))
                 .orElse(0);
     }
@@ -103,7 +98,7 @@ public class GemRing extends Item {
         }
 
         if (slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND) {
-            stack.getCapability(CapabilityEnergy.ENERGY).ifPresent(e -> {
+            stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(e -> {
                 CompoundTag tag = stack.getOrCreateTag();
                 if (e.getEnergyStored() > 0 && tag.getBoolean("active")) {
                     multimap.putAll(attributeModifierMultimap);
@@ -149,7 +144,7 @@ public class GemRing extends Item {
             LivingEntity casted = (LivingEntity) entityIn;
 
             // get energy capability
-            stack.getCapability(CapabilityEnergy.ENERGY).ifPresent(e -> {
+            stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(e -> {
                 CompoundTag tag = stack.getOrCreateTag();
                 final boolean isCreative = entityIsCreative(casted);
                 final int energyStored = e.getEnergyStored();

@@ -20,7 +20,6 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.List;
 import java.util.Optional;
 
-
 public abstract class SimpleGemsContainerMenu<T extends AbstractContainerMenu> extends AbstractContainerMenu {
     protected IItemHandler playerInventory;
     protected Container inventory;

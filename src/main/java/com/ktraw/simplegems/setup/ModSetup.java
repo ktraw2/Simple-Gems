@@ -1,20 +1,11 @@
 package com.ktraw.simplegems.setup;
 
-import com.ktraw.simplegems.SimpleGems;
-import com.ktraw.simplegems.registry.Blocks;
-import com.ktraw.simplegems.functions.CopyNbt;
-import com.ktraw.simplegems.functions.Lore;
 import com.ktraw.simplegems.registry.Items;
 import lombok.Getter;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
 import java.lang.reflect.Method;
 
@@ -22,21 +13,8 @@ import java.lang.reflect.Method;
 public final class ModSetup {
     @Getter
     private static ModSetup setup = new ModSetup();
-    private CreativeModeTab creativeTab;
-
-    private ModSetup() {
-        creativeTab = new CreativeModeTab("simplegems") {
-            @Override
-            public ItemStack makeIcon() {
-                return new ItemStack(Blocks.EMERALD_LAMP.get());
-            }
-        };
-    }
 
     public void init() {
-        Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(SimpleGems.MODID,"lore"), new LootItemFunctionType(new Lore.Serializer()));
-        Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(SimpleGems.MODID, "copy_nbt"), new LootItemFunctionType(new CopyNbt.Serializer()));
-
         try {
             Method addMix = PotionBrewing.class.getDeclaredMethod("addMix", Potion.class, Item.class, Potion.class);
             addMix.setAccessible(true);

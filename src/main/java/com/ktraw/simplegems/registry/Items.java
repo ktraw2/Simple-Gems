@@ -1,8 +1,6 @@
 package com.ktraw.simplegems.registry;
 
 import com.ktraw.simplegems.SimpleGems;
-import com.ktraw.simplegems.blocks.EmeraldLamp;
-import com.ktraw.simplegems.blocks.RubyOre;
 import com.ktraw.simplegems.items.BaseItem;
 import com.ktraw.simplegems.items.ChargedEmeraldDust;
 import com.ktraw.simplegems.items.PurpleApple;
@@ -26,19 +24,28 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ObjectHolder;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Arrays;
+import java.util.Collection;
 
-import static com.ktraw.simplegems.SimpleGems.*;
+import static com.ktraw.simplegems.SimpleGems.POTION_TICKS;
+import static com.ktraw.simplegems.SimpleGems.heavyRingAttributes;
+
 
 public class Items {
+    public static Collection<ItemStack> getAllRegisteredItems() {
+        return ITEMS.getEntries().stream()
+                .map(RegistryObject::get)
+                .map(ItemStack::new)
+                .toList();
+    }
 
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, SimpleGems.MODID);
 
@@ -58,7 +65,7 @@ public class Items {
     }
 
     private static RegistryObject<BlockItem> createBlockItem(RegistryObject<? extends Block> block, Rarity rarity) {
-        return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), new Item.Properties().tab(setup.getCreativeTab()).rarity(rarity)));
+        return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), new Item.Properties()/*.tab(setup.getCreativeTab())*/.rarity(rarity)));
     }
 
     /* Regular items */
@@ -98,10 +105,6 @@ public class Items {
     public static RegistryObject<BaseGemArmorItem> NETHERGEM_CHESTPLATE = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), EquipmentSlot.CHEST, Rarity.EPIC, "nether");
     public static RegistryObject<BaseGemArmorItem> NETHERGEM_LEGGINGS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), EquipmentSlot.LEGS, Rarity.EPIC, "nether");
     public static RegistryObject<BaseGemArmorItem> NETHERGEM_BOOTS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), EquipmentSlot.FEET, Rarity.EPIC, "nether");
-
-    private static Item.Properties getCreativeTab() {
-        return new Item.Properties().tab(setup.getCreativeTab());
-    }
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

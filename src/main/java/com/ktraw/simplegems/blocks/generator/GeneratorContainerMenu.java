@@ -9,7 +9,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 import java.util.Arrays;
 import java.util.List;
@@ -64,7 +64,7 @@ public class GeneratorContainerMenu extends SimpleGemsContainerMenu<GeneratorCon
         addSlot(new Slot(inventory, GeneratorBlockEntity.CHARGE_SLOT, Slots.Charge.start_x, Slots.Charge.start_y){
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.getCapability(CapabilityEnergy.ENERGY).isPresent();
+                return stack.getCapability(ForgeCapabilities.ENERGY).isPresent();
             }
         });
     }

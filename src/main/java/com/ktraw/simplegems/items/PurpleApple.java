@@ -1,6 +1,5 @@
 package com.ktraw.simplegems.items;
 
-import com.ktraw.simplegems.setup.ModSetup;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
@@ -22,7 +21,6 @@ public class PurpleApple extends Item {
         super(new Item.Properties()
                     .stacksTo(64)
                     .rarity(Rarity.RARE)
-                    .tab(ModSetup.getSetup().getCreativeTab())
                     .food(foodProperties));
     }
 }

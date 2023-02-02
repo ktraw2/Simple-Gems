@@ -1,14 +1,11 @@
 package com.ktraw.simplegems.items.tools;
 
-import com.ktraw.simplegems.setup.ModSetup;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.Tier;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class BaseGemPickaxe extends PickaxeItem {
 
@@ -26,7 +23,6 @@ public class BaseGemPickaxe extends PickaxeItem {
     private BaseGemPickaxe(Tier itemTier, Rarity rarity) {
         super(itemTier, ATTACK_DAMAGE_MODIFIER, ATTACK_SPEED_MODIFIER, new Properties()
                 .stacksTo(1)
-                .tab(ModSetup.getSetup().getCreativeTab())
                 .rarity(rarity));
     }
 }

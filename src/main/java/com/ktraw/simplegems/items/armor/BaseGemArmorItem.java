@@ -1,6 +1,5 @@
 package com.ktraw.simplegems.items.armor;
 
-import com.ktraw.simplegems.setup.ModSetup;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
@@ -32,7 +31,6 @@ public class BaseGemArmorItem extends ArmorItem {
     private BaseGemArmorItem(ArmorMaterial armorMaterial, EquipmentSlot equipmentSlot, Rarity rarity) {
         super(armorMaterial, equipmentSlot, new Item.Properties()
                 .stacksTo(1)
-                .tab(ModSetup.getSetup().getCreativeTab())
                 .rarity(rarity));
     }
 }

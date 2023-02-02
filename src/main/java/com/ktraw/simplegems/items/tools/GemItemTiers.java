@@ -10,7 +10,6 @@ import java.util.function.Supplier;
 
 @Getter
 public class GemItemTiers {
-
     public static final int GEM_ENCHANTABILITY = 25;
     public static final int NETHERGEM_ENCHANTABILITY = 30;
 

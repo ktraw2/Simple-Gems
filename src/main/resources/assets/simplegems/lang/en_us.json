@@ -60,6 +60,8 @@
   "advancements.simplegems.a_curious_dust.title": "A Curious Dust",
   "advancements.simplegems.a_curious_dust.description": "Legends say Villagers and Wandering Traders go crazy for the stuff",
 
+  "tabs.simplegems.main_tab": "Simple Gems",
+
   "_comment": "Creative Tabs",
   "itemGroup.simplegems": "Simple Gems"
 }

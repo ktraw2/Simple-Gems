@@ -12,7 +12,6 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
-
 public class CopyNbt extends LootItemConditionalFunction {
 
     public CopyNbt(LootItemCondition[] conditionsIn) {

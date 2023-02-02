@@ -25,7 +25,7 @@ public class PlayerEvents {
         if ((target instanceof Villager || target instanceof WanderingTrader) && heldItem.getItem() instanceof ChargedEmeraldDust) {
             // Play firework launch sound
             ResourceLocation location = new ResourceLocation("minecraft", "entity.firework_rocket.launch");
-            SoundEvent soundEvent = new SoundEvent(location);
+            SoundEvent soundEvent = SoundEvent.createVariableRangeEvent(location);
             player.playSound(soundEvent, 100, 1);
 
             // Launch villager and give potion effect

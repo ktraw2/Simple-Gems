@@ -1,6 +1,5 @@
 package com.ktraw.simplegems.blocks.infuser;
 
-import com.ktraw.simplegems.registry.Blocks;
 import com.ktraw.simplegems.registry.Menus;
 import com.ktraw.simplegems.util.containers.SimpleGemsContainerMenu;
 import net.minecraft.world.Container;
@@ -8,7 +7,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-
 
 public class InfuserContainerMenu extends SimpleGemsContainerMenu<InfuserContainerMenu> {
 
