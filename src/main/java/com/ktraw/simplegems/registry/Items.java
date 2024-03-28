@@ -21,7 +21,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -96,15 +96,15 @@ public class Items {
     public static RegistryObject<BaseGemHoe> NETHERGEM_HOE = BaseGemHoe.create(ITEMS, GemItemTiers.getNetherGemItemTier(), Rarity.EPIC, "nether");
     // Armor
     // Gem
-    public static RegistryObject<BaseGemArmorItem> GEM_HELMET = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getGemArmorMaterial(), EquipmentSlot.HEAD, Rarity.RARE);
-    public static RegistryObject<BaseGemArmorItem> GEM_CHESTPLATE = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getGemArmorMaterial(), EquipmentSlot.CHEST, Rarity.RARE);
-    public static RegistryObject<BaseGemArmorItem> GEM_LEGGINGS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getGemArmorMaterial(), EquipmentSlot.LEGS, Rarity.RARE);
-    public static RegistryObject<BaseGemArmorItem> GEM_BOOTS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getGemArmorMaterial(), EquipmentSlot.FEET, Rarity.RARE);
+    public static RegistryObject<BaseGemArmorItem> GEM_HELMET = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getGemArmorMaterial(), ArmorItem.Type.HELMET, Rarity.RARE);
+    public static RegistryObject<BaseGemArmorItem> GEM_CHESTPLATE = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getGemArmorMaterial(), ArmorItem.Type.CHESTPLATE, Rarity.RARE);
+    public static RegistryObject<BaseGemArmorItem> GEM_LEGGINGS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getGemArmorMaterial(), ArmorItem.Type.LEGGINGS, Rarity.RARE);
+    public static RegistryObject<BaseGemArmorItem> GEM_BOOTS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getGemArmorMaterial(), ArmorItem.Type.BOOTS, Rarity.RARE);
     // Nethergem
-    public static RegistryObject<BaseGemArmorItem> NETHERGEM_HELMET = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), EquipmentSlot.HEAD, Rarity.EPIC, "nether");
-    public static RegistryObject<BaseGemArmorItem> NETHERGEM_CHESTPLATE = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), EquipmentSlot.CHEST, Rarity.EPIC, "nether");
-    public static RegistryObject<BaseGemArmorItem> NETHERGEM_LEGGINGS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), EquipmentSlot.LEGS, Rarity.EPIC, "nether");
-    public static RegistryObject<BaseGemArmorItem> NETHERGEM_BOOTS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), EquipmentSlot.FEET, Rarity.EPIC, "nether");
+    public static RegistryObject<BaseGemArmorItem> NETHERGEM_HELMET = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), ArmorItem.Type.HELMET, Rarity.EPIC, "nether");
+    public static RegistryObject<BaseGemArmorItem> NETHERGEM_CHESTPLATE = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), ArmorItem.Type.CHESTPLATE, Rarity.EPIC, "nether");
+    public static RegistryObject<BaseGemArmorItem> NETHERGEM_LEGGINGS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), ArmorItem.Type.LEGGINGS, Rarity.EPIC, "nether");
+    public static RegistryObject<BaseGemArmorItem> NETHERGEM_BOOTS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), ArmorItem.Type.BOOTS, Rarity.EPIC, "nether");
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

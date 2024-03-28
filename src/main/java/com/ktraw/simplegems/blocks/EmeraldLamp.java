@@ -1,9 +1,7 @@
 package com.ktraw.simplegems.blocks;
 
+import com.ktraw.simplegems.util.Material;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -13,13 +11,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.material.Material;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class EmeraldLamp extends Block {
     public static final IntegerProperty LIGHT_LEVEL = BlockStateProperties.LEVEL;
@@ -32,7 +25,7 @@ public class EmeraldLamp extends Block {
     }
 
     public EmeraldLamp(boolean inverted) {
-        super(Properties.of(Material.BUILDABLE_GLASS)
+        super(Material.BUILDABLE_GLASS.properties()
                 .sound(SoundType.GLASS)
                 .strength(0.5f, 15f)
                 .lightLevel(value -> inverted ? MAX_LEVEL : 0));

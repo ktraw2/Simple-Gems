@@ -1,21 +1,19 @@
 package com.ktraw.simplegems.blocks;
 
+import com.ktraw.simplegems.util.Material;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BaseGemBlock extends Block {
     public BaseGemBlock() {
-        super(Properties.of(Material.STONE)
+        super(Material.STONE.properties()
                 .sound(SoundType.METAL)
                 .strength(5f, 30f)
                 .requiresCorrectToolForDrops());
     }
 
     public BaseGemBlock(Material material, float hardness, float resistance) {
-        super(Properties.of(material)
+        super(material.properties()
                 .sound(SoundType.METAL)
                 .strength(hardness, resistance)
                 .requiresCorrectToolForDrops());

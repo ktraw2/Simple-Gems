@@ -1,6 +1,7 @@
 package com.ktraw.simplegems.blocks;
 
-import com.ktraw.simplegems.SimpleGems;
+import com.ktraw.simplegems.util.DirectionUtil;
+import com.ktraw.simplegems.util.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,7 +21,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.RegistryObject;
@@ -29,8 +29,6 @@ import javax.annotation.Nullable;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
 public class SimpleGemsContainerBlock extends Block implements EntityBlock {
 
     private final Supplier<RegistryObject<BlockEntityType<? extends BlockEntity>>> blockEntityTypeWrapper;
@@ -38,7 +36,7 @@ public class SimpleGemsContainerBlock extends Block implements EntityBlock {
     private final BiFunction<BlockPos, BlockState, ? extends BlockEntity> blockEntityFactory;
 
     public SimpleGemsContainerBlock(Supplier<RegistryObject<BlockEntityType<? extends BlockEntity>>> blockEntityTypeWrapper, BlockEntityTicker<? extends BlockEntity> blockEntityTicker, BiFunction<BlockPos, BlockState, ? extends BlockEntity> blockEntityFactory) {
-        super(Properties.of(Material.METAL)
+        super(Material.METAL.properties()
                 .sound(SoundType.METAL)
                 .strength(5f, 15f));
         registerDefaultState(defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
@@ -51,7 +49,7 @@ public class SimpleGemsContainerBlock extends Block implements EntityBlock {
     @Override
     public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) { // TODO: onBlockPlacedBy?
         if (placer != null) {
-            worldIn.setBlock(pos, state.setValue(BlockStateProperties.HORIZONTAL_FACING, SimpleGems.getFacingFromEntity(pos, placer, true)), 2);
+            worldIn.setBlock(pos, state.setValue(BlockStateProperties.HORIZONTAL_FACING, DirectionUtil.getFacingFromEntity(pos, placer, true)), 2);
         }
     }
 

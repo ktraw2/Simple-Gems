@@ -6,10 +6,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.util.Lazy;
+
+import javax.annotation.Nonnull;
 
 import static com.ktraw.simplegems.items.tools.GemItemTiers.GEM_ENCHANTABILITY;
 import static com.ktraw.simplegems.items.tools.GemItemTiers.NETHERGEM_ENCHANTABILITY;
@@ -43,7 +45,6 @@ public class GemArmorMaterials {
 
     @RequiredArgsConstructor
     @Getter
-    @SuppressWarnings("ClassCanBeRecord")
     public static class GemArmorMaterial implements ArmorMaterial {
         private final int[] durabilityForSlot;
         private final int[] defenseForSlot;
@@ -55,20 +56,22 @@ public class GemArmorMaterials {
         private final float knockbackResistance;
 
         @Override
-        public int getDurabilityForSlot(EquipmentSlot slotIn) {
-            return durabilityForSlot[slotIn.getIndex()];
+        public int getDurabilityForType(final ArmorItem.Type type) {
+            return durabilityForSlot[type.getSlot().getIndex()];
         }
 
         @Override
-        public int getDefenseForSlot(EquipmentSlot slotIn) {
-            return defenseForSlot[slotIn.getIndex()];
+        public int getDefenseForType(final ArmorItem.Type type) {
+            return defenseForSlot[type.getSlot().getIndex()];
         }
 
+        @Nonnull
         @Override
         public String getName() {
             return SimpleGems.MODID + ":" + name;
         }
 
+        @Nonnull
         @Override
         public Ingredient getRepairIngredient() {
             return this.repairIngredient.get();

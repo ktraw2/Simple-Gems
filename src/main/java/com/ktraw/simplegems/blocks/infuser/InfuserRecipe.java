@@ -14,6 +14,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -29,12 +30,12 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 @Getter
 @ToString
 public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
-
     public static final ResourceLocation NAME = new ResourceLocation(SimpleGems.MODID, "infuser");
     private static final ResourceLocation.Serializer resourceLocationSerializer = new ResourceLocation.Serializer();
     private final RecipeType<InfuserRecipe> type = RecipeTypes.INFUSER_RECIPE_TYPE.get();
@@ -101,7 +102,6 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
 
     @Override
     public boolean matches(InfuserBlockEntity inv, Level worldIn) {
-
         StackedContents recipeitemhelper = new StackedContents();
         List<ItemStack> inputs = new java.util.ArrayList<>();
         int i = 0;
@@ -123,9 +123,19 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
 
     }
 
+    @Nonnull
     @Override
-    public ItemStack assemble(InfuserBlockEntity inv) {
+    public ItemStack assemble(
+            @Nonnull final InfuserBlockEntity inv,
+            @Nonnull final RegistryAccess registryAccess
+    ) {
         return resultItem.copy();
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack getResultItem(@Nonnull final RegistryAccess registryAccess) {
+        return resultItem;
     }
 
     @Override

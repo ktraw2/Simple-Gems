@@ -4,10 +4,9 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.ktraw.simplegems.SimpleGems;
-import com.ktraw.simplegems.registry.Blocks;
 import com.ktraw.simplegems.blocks.infuser.InfuserContainerMenu.Slots;
 import com.ktraw.simplegems.blocks.infuser.InfuserRecipe;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.ktraw.simplegems.registry.Blocks;
 import lombok.AccessLevel;
 import lombok.Getter;
 import mezz.jei.api.constants.VanillaTypes;
@@ -22,6 +21,7 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -29,7 +29,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
-import static com.ktraw.simplegems.blocks.infuser.InfuserScreen.*;
+import javax.annotation.Nonnull;
+
+import static com.ktraw.simplegems.blocks.infuser.InfuserScreen.ARROW_HEIGHT;
+import static com.ktraw.simplegems.blocks.infuser.InfuserScreen.ARROW_WIDTH;
+import static com.ktraw.simplegems.blocks.infuser.InfuserScreen.textureLocation;
 
 @Getter
 public class InfuserRecipeCategory implements IRecipeCategory<InfuserRecipe> {
@@ -65,17 +69,23 @@ public class InfuserRecipeCategory implements IRecipeCategory<InfuserRecipe> {
                 });
     }
     @Override
-    public void draw(InfuserRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+    public void draw(
+            final InfuserRecipe recipe,
+            @Nonnull final IRecipeSlotsView recipeSlotsView,
+            @Nonnull final GuiGraphics graphics,
+            final double mouseX,
+            final double mouseY
+    ) {
         final Font font = Minecraft.getInstance().font;
         final MutableComponent energy = Component.translatable("gui.simplegems.jei.energy", recipe.getEnergy());
         final MutableComponent time = Component.translatable("gui.simplegems.jei.time", recipe.getProcessTime() / 20);
         final int color = 0xFF808080;
         final int y = background.getHeight() - font.lineHeight + 2;
 
-        font.draw(stack, energy, 0, y, color);
-        font.draw(stack, time, background.getWidth() - font.width(time), y, color);
+        graphics.drawString(font, energy, 0, y, color, false);
+        graphics.drawString(font, time, background.getWidth() - font.width(time), y, color, false);
 
-        this.cachedArrows.getUnchecked(recipe.getProcessTime()).draw(stack, 81 - Slots.Input.start_x + 2, 35 - Slots.Input.start_y);
+        this.cachedArrows.getUnchecked(recipe.getProcessTime()).draw(graphics, 81 - Slots.Input.start_x + 2, 35 - Slots.Input.start_y);
     }
 
     @Override

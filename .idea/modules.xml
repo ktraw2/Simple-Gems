@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Simple-Gems.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Simple-Gems.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.ktraw.simplegems.Simple-Gems.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.ktraw.simplegems.Simple-Gems.main.iml" />
     </modules>
   </component>
 </project>

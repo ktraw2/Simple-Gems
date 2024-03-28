@@ -3,9 +3,9 @@ package com.ktraw.simplegems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.ktraw.simplegems.events.PlayerEvents;
-import com.ktraw.simplegems.events.TabEvents;
 import com.ktraw.simplegems.registry.BlockEntities;
 import com.ktraw.simplegems.registry.Blocks;
+import com.ktraw.simplegems.registry.CreativeModeTabs;
 import com.ktraw.simplegems.registry.Items;
 import com.ktraw.simplegems.registry.LootFunctions;
 import com.ktraw.simplegems.registry.Menus;
@@ -15,9 +15,6 @@ import com.ktraw.simplegems.setup.ClientProxy;
 import com.ktraw.simplegems.setup.ModSetup;
 import com.ktraw.simplegems.setup.ServerProxy;
 import com.ktraw.simplegems.setup.SidedSetupHandler;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -59,7 +56,6 @@ public class SimpleGems
         // Register the setup method for modloading
         eventBus.addListener(this::setup);
         MinecraftForge.EVENT_BUS.register(new PlayerEvents());
-        eventBus.register(new TabEvents());
 
         Blocks.register(eventBus);
         BlockEntities.register(eventBus);
@@ -68,20 +64,11 @@ public class SimpleGems
         RecipeSerializers.register(eventBus);
         Items.register(eventBus);
         LootFunctions.register(eventBus);
+        CreativeModeTabs.register(eventBus);
     }
 
     private void setup(final FMLCommonSetupEvent event) {
         setup.init();
         proxy.init();
-    }
-
-
-    public static Direction getFacingFromEntity(BlockPos clickedBlock, LivingEntity entity, boolean horizontalOnly) {
-        if (horizontalOnly) {
-            return entity.getDirection().getOpposite();
-        }
-        else {
-            return Direction.getNearest((float) (entity.getX() - clickedBlock.getX()), (float) (entity.getY() - clickedBlock.getY()), (float) (entity.getZ() - clickedBlock.getZ()));
-        }
     }
 }

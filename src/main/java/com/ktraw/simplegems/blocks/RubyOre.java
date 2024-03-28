@@ -1,5 +1,6 @@
 package com.ktraw.simplegems.blocks;
 
+import com.ktraw.simplegems.util.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -7,7 +8,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
 public class RubyOre extends DropExperienceBlock {
 
@@ -16,8 +16,8 @@ public class RubyOre extends DropExperienceBlock {
     }
 
     public RubyOre(boolean deepslate) {
-        super(Properties.of(Material.STONE)
-                .sound(SoundType.STONE)
+        super(Material.STONE.properties()
+                .sound(deepslate ? SoundType.DEEPSLATE : SoundType.STONE)
                 .strength((deepslate ? 1.5f : 0.0f) + 3f, 15f)
                 .requiresCorrectToolForDrops());
     }

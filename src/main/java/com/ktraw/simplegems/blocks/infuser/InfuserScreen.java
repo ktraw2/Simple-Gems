@@ -1,10 +1,12 @@
 package com.ktraw.simplegems.blocks.infuser;
 
 import com.ktraw.simplegems.util.containers.SimpleGemsContainerScreen;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
+
+import javax.annotation.Nonnull;
 
 public class InfuserScreen extends SimpleGemsContainerScreen<InfuserContainerMenu> {
     public static final String textureLocation = "textures/gui/infuser_gui.png";
@@ -17,15 +19,28 @@ public class InfuserScreen extends SimpleGemsContainerScreen<InfuserContainerMen
     }
 
     @Override
-    protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
-        Pair<Integer, Integer> shiftedXY = super.renderBaseBg(stack, partialTicks, mouseX, mouseY);
+    protected void renderBg(
+            @Nonnull final GuiGraphics graphics,
+            final float partialTicks,
+            final int mouseX,
+            final int mouseY
+    ) {
+        Pair<Integer, Integer> shiftedXY = super.renderBaseBg(graphics, partialTicks, mouseX, mouseY);
 
         final int timer = typedContainerMenu.getDataAt(InfuserBlockEntity.INT_TIMER);
         if (timer > 0) {
             final int processTime = typedContainerMenu.getDataAt(InfuserBlockEntity.INT_RECIPE_PROCESS_TIME);
             final int scaledProgress = (timer) / (processTime / ARROW_WIDTH);
 
-            blit(stack, shiftedXY.getFirst() + 82, shiftedXY.getSecond() + 34, 177, 0, ARROW_WIDTH - scaledProgress, ARROW_HEIGHT);
+            graphics.blit(
+                    gui,
+                    shiftedXY.getFirst() + 82,
+                    shiftedXY.getSecond() + 34,
+                    177,
+                    0,
+                    ARROW_WIDTH - scaledProgress,
+                    ARROW_HEIGHT
+            );
         }
     }
 }

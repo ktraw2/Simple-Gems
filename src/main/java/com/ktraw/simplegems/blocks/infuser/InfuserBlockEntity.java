@@ -101,7 +101,7 @@ public class InfuserBlockEntity extends SimpleGemsContainerBlockEntity<InfuserIt
     }
 
     private boolean canInfuse(@Nonnull InfuserRecipe recipe) {
-        boolean sufficientEnergy = energy.map(e -> e.getEnergyStored() >= recipe.getEnergy()).orElse(false);
+        final boolean sufficientEnergy = energy.map(e -> e.getEnergyStored() >= recipe.getEnergy()).orElse(false);
         if (!sufficientEnergy) {
             return false;
         }
@@ -117,23 +117,23 @@ public class InfuserBlockEntity extends SimpleGemsContainerBlockEntity<InfuserIt
                 return false;
             }
             else {
-                ItemStack recipeOutput = recipe.getResultItem();
+                final ItemStack recipeOutput = recipe.getResultItem();
                 if (recipeOutput.isEmpty()) {
                     return false;
                 }
                 else {
-                    ItemStack infuserOutputSlot = getItem(OUTPUT_SLOT_INDEX);
-                    int combinedTotal = infuserOutputSlot.getCount() + recipeOutput.getCount();
-                    if (infuserOutputSlot.isEmpty()) {
+                    final ItemStack infuserOutputSlotItemStack = getItem(OUTPUT_SLOT_INDEX);
+                    int combinedTotal = infuserOutputSlotItemStack.getCount() + recipeOutput.getCount();
+                    if (infuserOutputSlotItemStack.isEmpty()) {
                         return true;
-                    } else if (!infuserOutputSlot.sameItem(recipeOutput)) {
+                    } else if (!infuserOutputSlotItemStack.is(recipeOutput.getItem())) {
                         return false;
                     }
-                    else if (combinedTotal <= getMaxStackSize() && combinedTotal <= infuserOutputSlot.getMaxStackSize()) {
+                    else if (combinedTotal <= getMaxStackSize() && combinedTotal <= infuserOutputSlotItemStack.getMaxStackSize()) {
                         return true;
                     }
                     else {
-                        return combinedTotal <= infuserOutputSlot.getMaxStackSize();
+                        return combinedTotal <= infuserOutputSlotItemStack.getMaxStackSize();
                     }
                 }
             }

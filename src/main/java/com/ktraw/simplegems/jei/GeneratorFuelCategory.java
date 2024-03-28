@@ -6,7 +6,6 @@ import com.google.common.cache.LoadingCache;
 import com.ktraw.simplegems.SimpleGems;
 import com.ktraw.simplegems.blocks.generator.GeneratorContainerMenu.Slots;
 import com.ktraw.simplegems.blocks.generator.GeneratorFuelRecipe;
-import com.mojang.blaze3d.vertex.PoseStack;
 import lombok.AccessLevel;
 import lombok.Getter;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -20,13 +19,15 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 
+import javax.annotation.Nonnull;
+
 import static com.ktraw.simplegems.blocks.generator.GeneratorScreen.FLAME_SIDE;
 import static com.ktraw.simplegems.blocks.generator.GeneratorScreen.textureLocation;
-import static net.minecraft.client.gui.GuiComponent.fill;
 
 @Getter
 public class GeneratorFuelCategory implements IRecipeCategory<GeneratorFuelRecipe> {
@@ -75,7 +76,13 @@ public class GeneratorFuelCategory implements IRecipeCategory<GeneratorFuelRecip
     }
 
     @Override
-    public void draw(GeneratorFuelRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+    public void draw(
+            final GeneratorFuelRecipe recipe,
+            @Nonnull final IRecipeSlotsView recipeSlotsView,
+            @Nonnull final GuiGraphics graphics,
+            final double mouseX,
+            final double mouseY
+    ) {
         final Font font = Minecraft.getInstance().font;
         final MutableComponent energy = Component.translatable("gui.simplegems.jei.energy", recipe.getEnergy());
         final MutableComponent time = Component.translatable("gui.simplegems.jei.time", recipe.getProcessTime() / 20);
@@ -83,11 +90,11 @@ public class GeneratorFuelCategory implements IRecipeCategory<GeneratorFuelRecip
         final int x = Slots.width + 3;
         final int y = background.getHeight() - font.lineHeight + 2;
 
-        fill(stack, 54, 18, 72, 34, 0xFFC6C6C6);
+        graphics.fill(54, 18, 72, 34, 0xFFC6C6C6);
 
-        font.draw(stack, energy, x, (background.getHeight() / 2.0f) - font.lineHeight - 1, color);
-        font.draw(stack, time, x, (background.getHeight() / 2.0f) + 1, color);
+        graphics.drawString(font, energy, x, (background.getHeight() / 2) - font.lineHeight - 1, color, false);
+        graphics.drawString(font, time, x, (background.getHeight() / 2) + 1, color, false);
 
-        this.cachedFlames.getUnchecked(recipe.getProcessTime()).draw(stack, 1, GUI_HEIGHT - FLAME_SIDE);
+        this.cachedFlames.getUnchecked(recipe.getProcessTime()).draw(graphics, 1, GUI_HEIGHT - FLAME_SIDE);
     }
 }
