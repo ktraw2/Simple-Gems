@@ -6,6 +6,7 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.util.Lazy;
 
+import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
 @Getter
@@ -30,7 +31,14 @@ public class GemItemTiers {
         private final int enchantmentValue; // enchantability
         private final Lazy<Ingredient> repairIngredient; // repairingredient
 
-        private GemItemTier(int harvestLevelIn, int maxUsesIn, float efficiencyIn, float attackDamageIn, int enchantabilityIn, Supplier<Ingredient> repairMaterialIn) {
+        private GemItemTier(
+                final int harvestLevelIn,
+                final int maxUsesIn,
+                final float efficiencyIn,
+                final float attackDamageIn,
+                final int enchantabilityIn,
+                final Supplier<Ingredient> repairMaterialIn
+        ) {
             this.level = harvestLevelIn;
             this.uses = maxUsesIn;
             this.speed = efficiencyIn;
@@ -39,6 +47,7 @@ public class GemItemTiers {
             this.repairIngredient = Lazy.of(repairMaterialIn);
         }
 
+        @Nonnull
         @Override
         public Ingredient getRepairIngredient() {
             return this.repairIngredient.get();

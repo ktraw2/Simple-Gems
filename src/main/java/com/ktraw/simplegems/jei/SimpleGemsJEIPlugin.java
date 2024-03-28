@@ -1,7 +1,6 @@
 package com.ktraw.simplegems.jei;
 
 import com.ktraw.simplegems.SimpleGems;
-import com.ktraw.simplegems.registry.Blocks;
 import com.ktraw.simplegems.blocks.generator.GeneratorBlockEntity;
 import com.ktraw.simplegems.blocks.generator.GeneratorContainerMenu;
 import com.ktraw.simplegems.blocks.generator.GeneratorFuelRecipe;
@@ -10,6 +9,7 @@ import com.ktraw.simplegems.blocks.infuser.InfuserBlockEntity;
 import com.ktraw.simplegems.blocks.infuser.InfuserContainerMenu;
 import com.ktraw.simplegems.blocks.infuser.InfuserRecipe;
 import com.ktraw.simplegems.blocks.infuser.InfuserScreen;
+import com.ktraw.simplegems.registry.Blocks;
 import com.ktraw.simplegems.registry.Items;
 import com.ktraw.simplegems.registry.Menus;
 import com.ktraw.simplegems.registry.RecipeTypes;
@@ -43,8 +43,8 @@ public class SimpleGemsJEIPlugin implements IModPlugin {
     private final ResourceLocation pluginUid = new ResourceLocation(SimpleGems.MODID, "jei");
 
     @Override
-    public void registerCategories(IRecipeCategoryRegistration registration) {
-        IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
+    public void registerCategories(final IRecipeCategoryRegistration registration) {
+        final IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
 
         infuserCategory = new InfuserRecipeCategory(guiHelper);
         generatorFuelCategory = new GeneratorFuelCategory(guiHelper);
@@ -53,25 +53,25 @@ public class SimpleGemsJEIPlugin implements IModPlugin {
     }
 
     @Override
-    public void registerGuiHandlers(IGuiHandlerRegistration registration) {
+    public void registerGuiHandlers(final IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(InfuserScreen.class, 80, 32, 28, 23, infuserCategory.getRecipeType());
         registration.addRecipeClickArea(GeneratorScreen.class, 80, 50, FLAME_SIDE, FLAME_SIDE, generatorFuelCategory.getRecipeType());
     }
 
     @Override
-    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+    public void registerRecipeCatalysts(final IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(Blocks.INFUSER.get()), infuserCategory.getRecipeType());
         registration.addRecipeCatalyst(new ItemStack(Blocks.GENERATOR.get()), generatorFuelCategory.getRecipeType());
     }
 
     @Override
-    public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
+    public void registerRecipeTransferHandlers(final IRecipeTransferRegistration registration) {
         registration.addRecipeTransferHandler(InfuserContainerMenu.class, Menus.INFUSER.get(), infuserCategory.getRecipeType(), 0, InfuserBlockEntity.TOTAL_CRAFTING_SLOTS, InfuserBlockEntity.TOTAL_SLOTS, 36);
         registration.addRecipeTransferHandler(GeneratorContainerMenu.class, Menus.GENERATOR.get(), generatorFuelCategory.getRecipeType(), 0, 1, GeneratorBlockEntity.TOTAL_SLOTS, 36);
     }
 
     @Override
-    public void registerRecipes(IRecipeRegistration registration) {
+    public void registerRecipes(final IRecipeRegistration registration) {
         final ItemStack chargedEmeraldDust = new ItemStack(Items.CHARGED_EMERALD_DUST.get());
 
         registration.addRecipes(infuserCategory.getRecipeType(), Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeTypes.INFUSER_RECIPE_TYPE.get()));

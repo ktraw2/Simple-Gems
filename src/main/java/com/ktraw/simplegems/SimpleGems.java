@@ -31,18 +31,18 @@ import java.util.UUID;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("simplegems")
-public class SimpleGems
-{
+public class SimpleGems {
     public static final String MODID = "simplegems";
 
-    public static SidedSetupHandler proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
+    public static final SidedSetupHandler proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
-    public static ModSetup setup = ModSetup.getSetup();
+    public static final ModSetup setup = ModSetup.getSetup();
 
     public static final int POTION_TICKS = 20;
 
     public static final Multimap<Attribute, AttributeModifier> heavyRingAttributes = HashMultimap.create();
     private static final UUID MAX_HEALTH_UUID = UUID.fromString("5aabe6ee-9d50-408d-a46d-e74375bbf931");
+
     static {
         heavyRingAttributes.put(Attributes.MAX_HEALTH, new AttributeModifier(MAX_HEALTH_UUID, "Ring modifier", 10.0, AttributeModifier.Operation.ADDITION));
     }

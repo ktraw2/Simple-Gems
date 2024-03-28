@@ -44,7 +44,7 @@ public class GeneratorFuelCategory implements IRecipeCategory<GeneratorFuelRecip
     @Getter(AccessLevel.NONE)
     private final LoadingCache<Integer, IDrawableAnimated> cachedFlames;
 
-    public GeneratorFuelCategory(IGuiHelper guiHelper) {
+    public GeneratorFuelCategory(final IGuiHelper guiHelper) {
         final ResourceLocation GUI_LOCATION = new ResourceLocation(SimpleGems.MODID, textureLocation);
 
         this.Uid = new ResourceLocation(SimpleGems.MODID, "jei_generator_fuel");
@@ -53,26 +53,28 @@ public class GeneratorFuelCategory implements IRecipeCategory<GeneratorFuelRecip
         this.background = guiHelper.createDrawable(GUI_LOCATION, Slots.Fuel.start_x - 1, Slots.Fuel.start_y - 1, GUI_WIDTH, GUI_HEIGHT);
         this.icon = guiHelper.createDrawable(GUI_LOCATION, 176, 0, FLAME_SIDE, FLAME_SIDE);
 
-        this.cachedFlames = CacheBuilder.newBuilder()
-                .maximumSize(1)
-                .build(new CacheLoader<>() {
-                    @Override
-                    public IDrawableAnimated load(Integer processTime) {
-                        return guiHelper.drawableBuilder(GUI_LOCATION, 176, 0, FLAME_SIDE, FLAME_SIDE)
-                                .buildAnimated(processTime, IDrawableAnimated.StartDirection.BOTTOM, false);
-                    }
-                });
+        this.cachedFlames = CacheBuilder.newBuilder().maximumSize(1).build(new CacheLoader<>() {
+            @Nonnull
+            @Override
+            public IDrawableAnimated load(@Nonnull final Integer processTime) {
+                return guiHelper.drawableBuilder(GUI_LOCATION, 176, 0, FLAME_SIDE, FLAME_SIDE).buildAnimated(processTime, IDrawableAnimated.StartDirection.BOTTOM, false);
+            }
+        });
     }
 
+    @Nonnull
     @Override
     public RecipeType<GeneratorFuelRecipe> getRecipeType() {
         return new RecipeType<>(getUid(), getRecipeClass());
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, GeneratorFuelRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 1, 1)
-                .addItemStack(recipe.getFuel());
+    public void setRecipe(
+            final IRecipeLayoutBuilder builder,
+            final GeneratorFuelRecipe recipe,
+            @Nonnull final IFocusGroup focuses
+    ) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addItemStack(recipe.fuel());
     }
 
     @Override
@@ -84,8 +86,8 @@ public class GeneratorFuelCategory implements IRecipeCategory<GeneratorFuelRecip
             final double mouseY
     ) {
         final Font font = Minecraft.getInstance().font;
-        final MutableComponent energy = Component.translatable("gui.simplegems.jei.energy", recipe.getEnergy());
-        final MutableComponent time = Component.translatable("gui.simplegems.jei.time", recipe.getProcessTime() / 20);
+        final MutableComponent energy = Component.translatable("gui.simplegems.jei.energy", recipe.energy());
+        final MutableComponent time = Component.translatable("gui.simplegems.jei.time", recipe.processTime() / 20);
         final int color = 0xFF808080;
         final int x = Slots.width + 3;
         final int y = background.getHeight() - font.lineHeight + 2;
@@ -95,6 +97,6 @@ public class GeneratorFuelCategory implements IRecipeCategory<GeneratorFuelRecip
         graphics.drawString(font, energy, x, (background.getHeight() / 2) - font.lineHeight - 1, color, false);
         graphics.drawString(font, time, x, (background.getHeight() / 2) + 1, color, false);
 
-        this.cachedFlames.getUnchecked(recipe.getProcessTime()).draw(graphics, 1, GUI_HEIGHT - FLAME_SIDE);
+        this.cachedFlames.getUnchecked(recipe.processTime()).draw(graphics, 1, GUI_HEIGHT - FLAME_SIDE);
     }
 }

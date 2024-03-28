@@ -25,6 +25,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.RegistryObject;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
@@ -35,7 +36,11 @@ public class SimpleGemsContainerBlock extends Block implements EntityBlock {
     private final BlockEntityTicker<? extends BlockEntity> blockEntityTicker;
     private final BiFunction<BlockPos, BlockState, ? extends BlockEntity> blockEntityFactory;
 
-    public SimpleGemsContainerBlock(Supplier<RegistryObject<BlockEntityType<? extends BlockEntity>>> blockEntityTypeWrapper, BlockEntityTicker<? extends BlockEntity> blockEntityTicker, BiFunction<BlockPos, BlockState, ? extends BlockEntity> blockEntityFactory) {
+    public SimpleGemsContainerBlock(
+            final Supplier<RegistryObject<BlockEntityType<? extends BlockEntity>>> blockEntityTypeWrapper,
+            final BlockEntityTicker<? extends BlockEntity> blockEntityTicker,
+            final BiFunction<BlockPos, BlockState, ? extends BlockEntity> blockEntityFactory
+    ) {
         super(Material.METAL.properties()
                 .sound(SoundType.METAL)
                 .strength(5f, 15f));
@@ -47,41 +52,61 @@ public class SimpleGemsContainerBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) { // TODO: onBlockPlacedBy?
+    public void setPlacedBy(
+            @Nonnull final Level worldIn,
+            @Nonnull final BlockPos pos,
+            @Nonnull final BlockState state,
+            @Nullable final LivingEntity placer,
+            @Nonnull final ItemStack stack
+    ) { // TODO: onBlockPlacedBy?
         if (placer != null) {
             worldIn.setBlock(pos, state.setValue(BlockStateProperties.HORIZONTAL_FACING, DirectionUtil.getFacingFromEntity(pos, placer, true)), 2);
         }
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(BlockStateProperties.HORIZONTAL_FACING);
     }
 
+    @Nonnull
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public InteractionResult use(
+            @Nonnull final BlockState state,
+            final Level worldIn,
+            @Nonnull final BlockPos pos,
+            @Nonnull final Player player,
+            @Nonnull final InteractionHand handIn,
+            @Nonnull final BlockHitResult hit
+    ) {
         if (!worldIn.isClientSide) {
-            BlockEntity tileEntity = worldIn.getBlockEntity(pos);
+            final BlockEntity tileEntity = worldIn.getBlockEntity(pos);
             if (tileEntity instanceof MenuProvider) {
                 NetworkHooks.openScreen((ServerPlayer) player, (MenuProvider) tileEntity, tileEntity.getBlockPos());
             }
 
             return InteractionResult.SUCCESS;
-        }
-        else {
+        } else {
             return super.use(state, worldIn, pos, player, handIn, hit);
         }
     }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(
+            @Nonnull final BlockPos pos,
+            @Nonnull final BlockState state
+    ) {
         return blockEntityFactory.apply(pos, state);
     }
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+            @Nonnull final Level world,
+            @Nonnull final BlockState state,
+            @Nonnull final BlockEntityType<T> type
+    ) {
         return type == blockEntityTypeWrapper.get().get() ? ((BlockEntityTicker<T>) blockEntityTicker) : null; // evil cast
     }
 }

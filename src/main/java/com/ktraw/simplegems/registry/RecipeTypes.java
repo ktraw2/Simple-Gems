@@ -12,9 +12,9 @@ import net.minecraftforge.registries.RegistryObject;
 public class RecipeTypes {
     private static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, SimpleGems.MODID);
 
-    public static RegistryObject<RecipeType<InfuserRecipe>> INFUSER_RECIPE_TYPE = RECIPE_TYPES.register("infuser", () -> RecipeType.simple(new ResourceLocation(SimpleGems.MODID, "infuser")));
+    public static final RegistryObject<RecipeType<InfuserRecipe>> INFUSER_RECIPE_TYPE = RECIPE_TYPES.register("infuser", () -> RecipeType.simple(new ResourceLocation(SimpleGems.MODID, "infuser")));
 
-    public static void register(IEventBus eventBus) {
+    public static void register(final IEventBus eventBus) {
         RECIPE_TYPES.register(eventBus);
     }
 }

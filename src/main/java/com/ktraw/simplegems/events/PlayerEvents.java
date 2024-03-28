@@ -17,15 +17,15 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class PlayerEvents {
     @SubscribeEvent
-    public void entityInteract(PlayerInteractEvent.EntityInteract event) {
-        Player player = event.getEntity();
-        ItemStack heldItem = player.getItemInHand(event.getHand());
-        Entity target = event.getTarget();
+    public void entityInteract(final PlayerInteractEvent.EntityInteract event) {
+        final Player player = event.getEntity();
+        final ItemStack heldItem = player.getItemInHand(event.getHand());
+        final Entity target = event.getTarget();
 
         if ((target instanceof Villager || target instanceof WanderingTrader) && heldItem.getItem() instanceof ChargedEmeraldDust) {
             // Play firework launch sound
-            ResourceLocation location = new ResourceLocation("minecraft", "entity.firework_rocket.launch");
-            SoundEvent soundEvent = SoundEvent.createVariableRangeEvent(location);
+            final ResourceLocation location = new ResourceLocation("minecraft", "entity.firework_rocket.launch");
+            final SoundEvent soundEvent = SoundEvent.createVariableRangeEvent(location);
             player.playSound(soundEvent, 100, 1);
 
             // Launch villager and give potion effect
@@ -40,9 +40,9 @@ public class PlayerEvents {
     }
 
     @SubscribeEvent
-    public void playerTick(TickEvent.PlayerTickEvent event) {
+    public void playerTick(final TickEvent.PlayerTickEvent event) {
         // fix for health not resetting
-        float maxHealth = event.player.getMaxHealth();
+        final float maxHealth = event.player.getMaxHealth();
         if (event.player.getHealth() > maxHealth) {
             event.player.setHealth(maxHealth);
         }

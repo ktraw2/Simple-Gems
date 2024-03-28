@@ -8,6 +8,8 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
+import javax.annotation.Nonnull;
+
 public class InfuserContainerMenu extends SimpleGemsContainerMenu<InfuserContainerMenu> {
 
     public static final class Slots {
@@ -28,21 +30,31 @@ public class InfuserContainerMenu extends SimpleGemsContainerMenu<InfuserContain
 
     /**
      * Client side constructor
-     * @param windowId the ID of the window
+     *
+     * @param windowId        the ID of the window
      * @param playerInventory the inventory of the player
      */
-    public InfuserContainerMenu(int windowId, Inventory playerInventory) {
+    public InfuserContainerMenu(
+            final int windowId,
+            final Inventory playerInventory
+    ) {
         super(Menus.INFUSER, windowId, playerInventory, InfuserBlockEntity.TOTAL_SLOTS, InfuserBlockEntity.DATA_SIZE);
     }
 
     /**
      * Server side constructor
-     * @param windowId the ID of the window
+     *
+     * @param windowId        the ID of the window
      * @param playerInventory the inventory of the player
-     * @param inventory the inventory of the container
-     * @param dataIn the serverside tile entity data
+     * @param inventory       the inventory of the container
+     * @param dataIn          the serverside tile entity data
      */
-    public InfuserContainerMenu(int windowId, Inventory playerInventory, Container inventory, ContainerData dataIn) {
+    public InfuserContainerMenu(
+            final int windowId,
+            final Inventory playerInventory,
+            final Container inventory,
+            final ContainerData dataIn
+    ) {
         super(Menus.INFUSER, windowId, playerInventory, inventory, dataIn);
     }
 
@@ -57,7 +69,7 @@ public class InfuserContainerMenu extends SimpleGemsContainerMenu<InfuserContain
              * @return false, don't allow insertion into this slot
              */
             @Override
-            public boolean mayPlace(ItemStack stack) {
+            public boolean mayPlace(@Nonnull final ItemStack stack) {
                 return false;
             }
         });

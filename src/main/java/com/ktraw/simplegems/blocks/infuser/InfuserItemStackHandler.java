@@ -6,26 +6,37 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 
 public class InfuserItemStackHandler extends ItemStackHandler {
-    private InfuserBlockEntity tile;
+    private final InfuserBlockEntity tile;
 
-    public InfuserItemStackHandler(int size, InfuserBlockEntity tile) {
+    public InfuserItemStackHandler(
+            final int size,
+            final InfuserBlockEntity tile
+    ) {
         super(size);
         this.tile = tile;
     }
 
     @Nonnull
     @Override
-    public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+    public ItemStack insertItem(
+            final int slot,
+            @Nonnull final ItemStack stack,
+            final boolean simulate
+    ) {
         return (slot == InfuserBlockEntity.OUTPUT_SLOT_INDEX) ? stack : super.insertItem(slot, stack, simulate);
     }
 
     @Nonnull
-    public ItemStack insertItemNoCheck(int slot, @Nonnull ItemStack stack, boolean simulate) {
+    public ItemStack insertItemNoCheck(
+            final int slot,
+            @Nonnull final ItemStack stack,
+            final boolean simulate
+    ) {
         return super.insertItem(slot, stack, simulate);
     }
 
     @Override
-    protected void onContentsChanged(int slot) {
+    protected void onContentsChanged(final int slot) {
         tile.setChanged();
     }
 }

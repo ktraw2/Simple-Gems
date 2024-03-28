@@ -11,15 +11,27 @@ public class BaseGemHoe extends HoeItem {
 
     private static final float ATTACK_SPEED_MOFIFIER = 0.0f;
 
-    public static RegistryObject<BaseGemHoe> create(DeferredRegister<Item> registry, Tier itemTier, Rarity rarity, String registryNamePrefix) {
+    public static RegistryObject<BaseGemHoe> create(
+            final DeferredRegister<Item> registry,
+            final Tier itemTier,
+            final Rarity rarity,
+            final String registryNamePrefix
+    ) {
         return registry.register(registryNamePrefix + "gem_hoe", () -> new BaseGemHoe(itemTier, rarity));
     }
 
-    public static RegistryObject<BaseGemHoe> create(DeferredRegister<Item> registry, Tier itemTier, Rarity rarity) {
+    public static RegistryObject<BaseGemHoe> create(
+            final DeferredRegister<Item> registry,
+            final Tier itemTier,
+            final Rarity rarity
+    ) {
         return create(registry, itemTier, rarity, "");
     }
 
-    private BaseGemHoe(Tier itemTier, Rarity rarity) {
+    private BaseGemHoe(
+            final Tier itemTier,
+            final Rarity rarity
+    ) {
         super(itemTier, ((int) -itemTier.getAttackDamageBonus()), ATTACK_SPEED_MOFIFIER, new Properties()
                 .stacksTo(1)
                 .rarity(rarity));

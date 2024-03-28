@@ -12,7 +12,11 @@ public class BaseGemBlock extends Block {
                 .requiresCorrectToolForDrops());
     }
 
-    public BaseGemBlock(Material material, float hardness, float resistance) {
+    public BaseGemBlock(
+            final Material material,
+            final float hardness,
+            final float resistance
+    ) {
         super(material.properties()
                 .sound(SoundType.METAL)
                 .strength(hardness, resistance)

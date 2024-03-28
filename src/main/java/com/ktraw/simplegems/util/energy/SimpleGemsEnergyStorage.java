@@ -6,26 +6,33 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.EnergyStorage;
 
 public class SimpleGemsEnergyStorage extends EnergyStorage implements INBTSerializable<Tag> { // TODO: we want this to be compoundTag
-    public SimpleGemsEnergyStorage(int capacity, int maxTransfer) {
+    public SimpleGemsEnergyStorage(
+            final int capacity,
+            final int maxTransfer
+    ) {
         super(capacity, maxTransfer);
     }
 
-    public SimpleGemsEnergyStorage(int capacity, int maxTransfer, int energy) {
+    public SimpleGemsEnergyStorage(
+            final int capacity,
+            final int maxTransfer,
+            final int energy
+    ) {
         super(capacity, maxTransfer, maxTransfer, energy);
     }
 
-    public void setEnergy(int energy) {
+    public void setEnergy(final int energy) {
         this.energy = energy;
     }
 
-    public void addEnergy(int energy) {
+    public void addEnergy(final int energy) {
         this.energy += energy;
         if (this.energy > getMaxEnergyStored()) {
             this.energy = getEnergyStored();
         }
     }
 
-    public void consumeEnergy(int energy) {
+    public void consumeEnergy(final int energy) {
         this.energy -= energy;
         if (this.energy < 0) {
             this.energy = 0;
@@ -34,15 +41,15 @@ public class SimpleGemsEnergyStorage extends EnergyStorage implements INBTSerial
 
     @Override
     public CompoundTag serializeNBT() {
-        CompoundTag tag = new CompoundTag();
+        final CompoundTag tag = new CompoundTag();
         tag.putInt("energy", getEnergyStored());
         return tag;
     }
 
     @Override
-    public void deserializeNBT(Tag nbt) {
+    public void deserializeNBT(final Tag nbt) {
         if (nbt instanceof CompoundTag) {
-            setEnergy(((CompoundTag)nbt).getInt("energy"));
+            setEnergy(((CompoundTag) nbt).getInt("energy"));
         }
     }
 }

@@ -11,15 +11,27 @@ public class BaseGemShovel extends ShovelItem {
     private static final float ATTACK_DAMAGE_MODIFIER = 1.5f;
     private static final float ATTACK_SPEED_MODIFIER = -3.0f;
 
-    public static RegistryObject<BaseGemShovel> create(DeferredRegister<Item> registry, Tier itemTier, Rarity rarity, String registryNamePrefix) {
+    public static RegistryObject<BaseGemShovel> create(
+            final DeferredRegister<Item> registry,
+            final Tier itemTier,
+            final Rarity rarity,
+            final String registryNamePrefix
+    ) {
         return registry.register(registryNamePrefix + "gem_shovel", () -> new BaseGemShovel(itemTier, rarity));
     }
 
-    public static RegistryObject<BaseGemShovel> create(DeferredRegister<Item> registry, Tier itemTier, Rarity rarity) {
+    public static RegistryObject<BaseGemShovel> create(
+            final DeferredRegister<Item> registry,
+            final Tier itemTier,
+            final Rarity rarity
+    ) {
         return create(registry, itemTier, rarity, "");
     }
 
-    private BaseGemShovel(Tier itemTier, Rarity rarity) {
+    private BaseGemShovel(
+            final Tier itemTier,
+            final Rarity rarity
+    ) {
         super(itemTier, ATTACK_DAMAGE_MODIFIER, ATTACK_SPEED_MODIFIER, new Properties()
                 .stacksTo(1)
                 .rarity(rarity));

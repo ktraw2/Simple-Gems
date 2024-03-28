@@ -12,19 +12,25 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+import javax.annotation.Nonnull;
+
 public class CopyNbt extends LootItemConditionalFunction {
 
-    public CopyNbt(LootItemCondition[] conditionsIn) {
-        super(conditionsIn);
+    public CopyNbt(final LootItemCondition[] conditions) {
+        super(conditions);
     }
 
+    @Nonnull
     @Override
-    protected ItemStack run(ItemStack stack, LootContext context) {
-        CompoundTag compoundNBT = context.getParam(LootContextParams.BLOCK_ENTITY).serializeNBT();
+    protected ItemStack run(
+            @Nonnull final ItemStack stack,
+            final LootContext context
+    ) {
+        final CompoundTag compoundNBT = context.getParam(LootContextParams.BLOCK_ENTITY).serializeNBT();
         if (compoundNBT != null) {
             CompoundTag stackTag = null;
 
-            boolean processing = compoundNBT.getBoolean("processing");
+            final boolean processing = compoundNBT.getBoolean("processing");
             if (processing) {
                 if (stackTag == null) {
                     stackTag = stack.getOrCreateTagElement("BlockEntityTag");
@@ -32,7 +38,7 @@ public class CopyNbt extends LootItemConditionalFunction {
                 stackTag.putBoolean("processing", processing);
             }
 
-            int timer = compoundNBT.getInt("timer");
+            final int timer = compoundNBT.getInt("timer");
             if (timer != 0) {
                 if (stackTag == null) {
                     stackTag = stack.getOrCreateTagElement("BlockEntityTag");
@@ -40,8 +46,8 @@ public class CopyNbt extends LootItemConditionalFunction {
                 stackTag.putInt("timer", timer);
             }
 
-            CompoundTag energy = compoundNBT.getCompound("energy");
-            int energyValue = energy.getInt("energy");
+            final CompoundTag energy = compoundNBT.getCompound("energy");
+            final int energyValue = energy.getInt("energy");
             if (energyValue != 0) {
                 if (stackTag == null) {
                     stackTag = stack.getOrCreateTagElement("BlockEntityTag");
@@ -49,9 +55,9 @@ public class CopyNbt extends LootItemConditionalFunction {
                 stackTag.put("energy", energy);
             }
 
-            CompoundTag inventory = compoundNBT.getCompound("inventory");
+            final CompoundTag inventory = compoundNBT.getCompound("inventory");
 
-            ListTag inventoryItems = inventory.getList("Items", Tag.TAG_COMPOUND);
+            final ListTag inventoryItems = inventory.getList("Items", Tag.TAG_COMPOUND);
             if (!inventoryItems.isEmpty()) {
                 if (stackTag == null) {
                     stackTag = stack.getOrCreateTagElement("BlockEntityTag");
@@ -59,7 +65,7 @@ public class CopyNbt extends LootItemConditionalFunction {
                 stackTag.put("inventory", inventory);
             }
 
-            CompoundTag currentRecipe = compoundNBT.getCompound("currentRecipe");
+            final CompoundTag currentRecipe = compoundNBT.getCompound("currentRecipe");
             if (!currentRecipe.isEmpty()) {
                 if (stackTag == null) {
                     stackTag = stack.getOrCreateTagElement("BlockEntityTag");
@@ -71,14 +77,20 @@ public class CopyNbt extends LootItemConditionalFunction {
         return stack;
     }
 
+    @Nonnull
     @Override
     public LootItemFunctionType getType() {
         return new LootItemFunctionType(new Serializer());
     }
 
     public static class Serializer extends LootItemConditionalFunction.Serializer<CopyNbt> {
+        @Nonnull
         @Override
-        public CopyNbt deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditionsIn) {
+        public CopyNbt deserialize(
+                @Nonnull final JsonObject object,
+                @Nonnull final JsonDeserializationContext deserializationContext,
+                @Nonnull final LootItemCondition[] conditionsIn
+        ) {
             return new CopyNbt(conditionsIn);
         }
     }

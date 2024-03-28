@@ -17,13 +17,14 @@ public class CreativeModeTabs {
             () -> CreativeModeTab.builder()
                     .icon(() -> new ItemStack(Blocks.EMERALD_LAMP.get()))
                     .title(Component.translatable("tabs.simplegems.main_tab"))
-                    .displayItems((parameters, output) -> {
-                        output.acceptAll(Items.getAllRegisteredItems());
-                    })
+                    .displayItems(
+                            (parameters, output) ->
+                                    output.acceptAll(Items.getAllRegisteredItems())
+                    )
                     .build()
     );
 
-    public static void register(IEventBus eventBus) {
+    public static void register(final IEventBus eventBus) {
         CREATIVE_MODE_TABS.register(eventBus);
     }
 }

@@ -20,7 +20,9 @@
       "trigger": "minecraft:player_interacted_with_entity",
       "conditions": {
         "item": {
-          "items": ["simplegems:charged_emerald_dust"]
+          "items": [
+            "simplegems:charged_emerald_dust"
+          ]
         },
         "entity": [
           {

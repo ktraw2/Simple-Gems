@@ -20,7 +20,9 @@
       "trigger": "minecraft:consume_item",
       "conditions": {
         "item": {
-          "items": ["simplegems:purple_apple"]
+          "items": [
+            "simplegems:purple_apple"
+          ]
         }
       }
     }

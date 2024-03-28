@@ -38,13 +38,13 @@ public abstract class SimpleGemsContainerBlockEntity<I extends ItemStackHandler>
     @Getter
     protected int timer;
 
-    private SimpleGemsContainerMenuType menuType;
+    private final SimpleGemsContainerMenuType menuType;
 
     public SimpleGemsContainerBlockEntity(
-            RegistryObject<BlockEntityType<?>> type,
-            BlockPos pos,
-            BlockState state,
-            SimpleGemsContainerMenuType menuType
+            final RegistryObject<BlockEntityType<?>> type,
+            final BlockPos pos,
+            final BlockState state,
+            final SimpleGemsContainerMenuType menuType
     ) {
         super(type.get(), pos, state);
         this.menuType = menuType;
@@ -52,7 +52,7 @@ public abstract class SimpleGemsContainerBlockEntity<I extends ItemStackHandler>
     }
 
     @Override
-    public void load(CompoundTag compound) {
+    public void load(final CompoundTag compound) {
         items.ifPresent(h -> h.deserializeNBT(compound.getCompound("inventory")));
         energy.ifPresent(h -> h.deserializeNBT(compound.getCompound("energy")));
         timer = compound.getInt("timer");
@@ -60,7 +60,7 @@ public abstract class SimpleGemsContainerBlockEntity<I extends ItemStackHandler>
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound) {
+    protected void saveAdditional(@Nonnull final CompoundTag compound) {
         super.saveAdditional(compound);
         items.ifPresent(h -> compound.put("inventory", h.serializeNBT()));
         energy.ifPresent(h -> compound.put("energy", h.serializeNBT()));
@@ -69,23 +69,26 @@ public abstract class SimpleGemsContainerBlockEntity<I extends ItemStackHandler>
 
     @Override
     public CompoundTag serializeNBT() {
-        CompoundTag compound = saveWithFullMetadata();
+        final CompoundTag compound = saveWithFullMetadata();
         saveAdditional(compound);
         return compound;
     }
 
     @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(
+            @Nonnull final Capability<T> cap,
+            @Nullable final Direction side
+    ) {
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
             return items.cast();
-        }
-        else if (cap == ForgeCapabilities.ENERGY) {
+        } else if (cap == ForgeCapabilities.ENERGY) {
             return energy.cast();
         }
         return super.getCapability(cap, side);
     }
 
+    @Nonnull
     @Override
     public Component getDisplayName() {
         return Component.literal(ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(getType()).getPath());
@@ -93,7 +96,11 @@ public abstract class SimpleGemsContainerBlockEntity<I extends ItemStackHandler>
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int i, Inventory playerInventory, Player playerEntity) {
+    public AbstractContainerMenu createMenu(
+            final int i,
+            @Nonnull final Inventory playerInventory,
+            @Nonnull final Player playerEntity
+    ) {
         return SimpleGemsContainerMenuFactory.newMenu(menuType, i, playerInventory, this, data);
     }
 
@@ -119,34 +126,41 @@ public abstract class SimpleGemsContainerBlockEntity<I extends ItemStackHandler>
         }).orElse(true);
     }
 
+    @Nonnull
     @Override
-    public ItemStack getItem(int index) {
+    public ItemStack getItem(final int index) {
         return items.map(h -> h.getStackInSlot(index)).orElse(ItemStack.EMPTY);
     }
 
+    @Nonnull
     @Override
-    public ItemStack removeItem(int index, int count) {
+    public ItemStack removeItem(
+            final int index,
+            final int count
+    ) {
         return items.map(h -> h.extractItem(index, count, false)).orElse(ItemStack.EMPTY);
     }
 
+    @Nonnull
     @Override
-    public ItemStack removeItemNoUpdate(int index) { // TODO: removeStackFromSlot?
+    public ItemStack removeItemNoUpdate(final int index) { // TODO: removeStackFromSlot?
         return items.map(h -> {
-            ItemStack stackInSlot = h.getStackInSlot(index);
+            final ItemStack stackInSlot = h.getStackInSlot(index);
             h.setStackInSlot(index, ItemStack.EMPTY);
             return stackInSlot;
         }).orElse(ItemStack.EMPTY);
     }
 
     @Override
-    public void setItem(int index, ItemStack stack) {
-        items.ifPresent(h -> {
-            h.setStackInSlot(index, stack);
-        });
+    public void setItem(
+            final int index,
+            @Nonnull final ItemStack stack
+    ) {
+        items.ifPresent(h -> h.setStackInSlot(index, stack));
     }
 
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(@Nonnull final Player player) {
         return true;
     }
 
@@ -165,7 +179,7 @@ public abstract class SimpleGemsContainerBlockEntity<I extends ItemStackHandler>
 
     /* End IInventory */
 
-    protected void setEnergy(int value) {
+    protected void setEnergy(final int value) {
         energy.ifPresent(e -> e.setEnergy(value));
     }
 }

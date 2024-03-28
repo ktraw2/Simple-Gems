@@ -1,20 +1,52 @@
 {
   "variants": {
-    "level=0": {"model":  "simplegems:block/emerald_lamp"},
-    "level=1": {"model":  "simplegems:block/emerald_lamp_on"},
-    "level=2": {"model":  "simplegems:block/emerald_lamp_on"},
-    "level=3": {"model":  "simplegems:block/emerald_lamp_on"},
-    "level=4": {"model":  "simplegems:block/emerald_lamp_on"},
-    "level=5": {"model":  "simplegems:block/emerald_lamp_on"},
-    "level=6": {"model":  "simplegems:block/emerald_lamp_on"},
-    "level=7": {"model":  "simplegems:block/emerald_lamp_on"},
-    "level=8": {"model":  "simplegems:block/emerald_lamp_on"},
-    "level=9": {"model":  "simplegems:block/emerald_lamp_on"},
-    "level=10": {"model":  "simplegems:block/emerald_lamp_on"},
-    "level=11": {"model":  "simplegems:block/emerald_lamp_on"},
-    "level=12": {"model":  "simplegems:block/emerald_lamp_on"},
-    "level=13": {"model":  "simplegems:block/emerald_lamp_on"},
-    "level=14": {"model":  "simplegems:block/emerald_lamp_on"},
-    "level=15": {"model":  "simplegems:block/emerald_lamp_on"}
+    "level=0": {
+      "model": "simplegems:block/emerald_lamp"
+    },
+    "level=1": {
+      "model": "simplegems:block/emerald_lamp_on"
+    },
+    "level=2": {
+      "model": "simplegems:block/emerald_lamp_on"
+    },
+    "level=3": {
+      "model": "simplegems:block/emerald_lamp_on"
+    },
+    "level=4": {
+      "model": "simplegems:block/emerald_lamp_on"
+    },
+    "level=5": {
+      "model": "simplegems:block/emerald_lamp_on"
+    },
+    "level=6": {
+      "model": "simplegems:block/emerald_lamp_on"
+    },
+    "level=7": {
+      "model": "simplegems:block/emerald_lamp_on"
+    },
+    "level=8": {
+      "model": "simplegems:block/emerald_lamp_on"
+    },
+    "level=9": {
+      "model": "simplegems:block/emerald_lamp_on"
+    },
+    "level=10": {
+      "model": "simplegems:block/emerald_lamp_on"
+    },
+    "level=11": {
+      "model": "simplegems:block/emerald_lamp_on"
+    },
+    "level=12": {
+      "model": "simplegems:block/emerald_lamp_on"
+    },
+    "level=13": {
+      "model": "simplegems:block/emerald_lamp_on"
+    },
+    "level=14": {
+      "model": "simplegems:block/emerald_lamp_on"
+    },
+    "level=15": {
+      "model": "simplegems:block/emerald_lamp_on"
+    }
   }
 }

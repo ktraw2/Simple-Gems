@@ -12,13 +12,19 @@ import net.minecraft.world.entity.player.Inventory;
 
 import javax.annotation.Nonnull;
 
-public abstract class SimpleGemsContainerScreen<T extends SimpleGemsContainerMenu> extends AbstractContainerScreen<T> {
+public abstract class SimpleGemsContainerScreen<T extends SimpleGemsContainerMenu<T>> extends AbstractContainerScreen<T> {
 
     protected final T typedContainerMenu;
     protected final ResourceLocation gui;
     protected final String containerTitle;
 
-    public SimpleGemsContainerScreen(T screenContainerMenu, Inventory inv, Component titleIn, String containerTitle, String textureLocation) {
+    public SimpleGemsContainerScreen(
+            final T screenContainerMenu,
+            final Inventory inv,
+            final Component titleIn,
+            final String containerTitle,
+            final String textureLocation
+    ) {
         super(screenContainerMenu, inv, titleIn);
         this.typedContainerMenu = screenContainerMenu;
         this.containerTitle = containerTitle;
@@ -66,8 +72,8 @@ public abstract class SimpleGemsContainerScreen<T extends SimpleGemsContainerMen
     @Override
     protected void renderLabels(
             @Nonnull final GuiGraphics graphics,
-            int mouseX,
-            int mouseY
+            final int mouseX,
+            final int mouseY
     ) {
         graphics.drawString(font, containerTitle, 8, 6, 4210752, false);
         graphics.drawString(font, "Energy: " + menu.getEnergy() + " FE", 8, 70, 0x00FF00);

@@ -12,15 +12,27 @@ public class BaseGemAxe extends AxeItem {
     private static final float ATTACK_DAMAGE_MODIFIER = 7.0f;
     private static final float ATTACK_SPEED_MODIFIER = -3.0f;
 
-    public static RegistryObject<BaseGemAxe> create(DeferredRegister<Item> registry, Tier itemTier, Rarity rarity, String registryNamePrefix) {
+    public static RegistryObject<BaseGemAxe> create(
+            final DeferredRegister<Item> registry,
+            final Tier itemTier,
+            final Rarity rarity,
+            final String registryNamePrefix
+    ) {
         return registry.register(registryNamePrefix + "gem_axe", () -> new BaseGemAxe(itemTier, rarity));
     }
 
-    public static RegistryObject<BaseGemAxe> create(DeferredRegister<Item> registry, Tier itemTier, Rarity rarity) {
+    public static RegistryObject<BaseGemAxe> create(
+            final DeferredRegister<Item> registry,
+            final Tier itemTier,
+            final Rarity rarity
+    ) {
         return create(registry, itemTier, rarity, "");
     }
 
-    private BaseGemAxe(Tier itemTier, Rarity rarity) {
+    private BaseGemAxe(
+            final Tier itemTier,
+            final Rarity rarity
+    ) {
         super(itemTier, ATTACK_DAMAGE_MODIFIER, ATTACK_SPEED_MODIFIER, new Properties()
                 .stacksTo(1)
                 .rarity(rarity));

@@ -13,7 +13,13 @@ public class SimpleGemsContainerMenuFactory {
         INFUSER
     }
 
-    public static AbstractContainerMenu newMenu(SimpleGemsContainerMenuType type, int i, Inventory playerInventory, SimpleGemsContainerBlockEntity<?> blockEntity, ContainerData data) {
+    public static AbstractContainerMenu newMenu(
+            final SimpleGemsContainerMenuType type,
+            final int i,
+            final Inventory playerInventory,
+            final SimpleGemsContainerBlockEntity<?> blockEntity,
+            final ContainerData data
+    ) {
         return switch (type) {
             case GENERATOR -> new GeneratorContainerMenu(i, playerInventory, blockEntity, data);
             case INFUSER -> new InfuserContainerMenu(i, playerInventory, blockEntity, data);

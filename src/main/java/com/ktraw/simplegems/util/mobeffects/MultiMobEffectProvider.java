@@ -11,16 +11,21 @@ import java.util.List;
 
 public record MultiMobEffectProvider(List<MobEffectInstanceWrapper> effects) implements IMobEffectProvider {
     @Override
-    public void doEffect(LivingEntity entity) {
-        for (MobEffectInstanceWrapper effect : effects) {
+    public void doEffect(final LivingEntity entity) {
+        for (final MobEffectInstanceWrapper effect : effects) {
             entity.addEffect(effect.getNewEffectInstance());
         }
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void addInformation(
+            final ItemStack stack,
+            @Nullable final Level worldIn,
+            final List<Component> tooltip,
+            final TooltipFlag flagIn
+    ) {
         tooltip.add(IMobEffectProvider.EFFECTS);
-        for (MobEffectInstanceWrapper effect : effects) {
+        for (final MobEffectInstanceWrapper effect : effects) {
             tooltip.add(IMobEffectProvider.getComponentFromEffect(effect));
         }
     }

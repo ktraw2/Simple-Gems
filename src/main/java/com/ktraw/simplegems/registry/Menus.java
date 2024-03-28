@@ -13,10 +13,10 @@ import net.minecraftforge.registries.RegistryObject;
 public class Menus {
     private static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, SimpleGems.MODID);
 
-    public static RegistryObject<MenuType<GeneratorContainerMenu>> GENERATOR = MENUS.register("generator", () -> IForgeMenuType.create((windowId, inv, data) -> new GeneratorContainerMenu(windowId, inv)));
-    public static RegistryObject<MenuType<InfuserContainerMenu>> INFUSER = MENUS.register("infuser", () -> IForgeMenuType.create(((windowId, inv, data) -> new InfuserContainerMenu(windowId, inv))));
+    public static final RegistryObject<MenuType<GeneratorContainerMenu>> GENERATOR = MENUS.register("generator", () -> IForgeMenuType.create((windowId, inv, data) -> new GeneratorContainerMenu(windowId, inv)));
+    public static final RegistryObject<MenuType<InfuserContainerMenu>> INFUSER = MENUS.register("infuser", () -> IForgeMenuType.create(((windowId, inv, data) -> new InfuserContainerMenu(windowId, inv))));
 
-    public static void register(IEventBus eventBus) {
+    public static void register(final IEventBus eventBus) {
         MENUS.register(eventBus);
     }
 

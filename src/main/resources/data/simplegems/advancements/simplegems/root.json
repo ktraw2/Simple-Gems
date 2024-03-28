@@ -3,10 +3,10 @@
     "icon": {
       "item": "simplegems:emerald_lamp"
     },
-    "title":  {
+    "title": {
       "translate": "advancements.simplegems.root.title"
     },
-    "description":  {
+    "description": {
       "translate": "advancements.simplegems.root.description"
     },
     "frame": "task",

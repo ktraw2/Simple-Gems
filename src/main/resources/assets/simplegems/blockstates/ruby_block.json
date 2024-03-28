@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": {"model":  "simplegems:block/ruby_block"}
+    "": {
+      "model": "simplegems:block/ruby_block"
+    }
   }
 }

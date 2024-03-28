@@ -17,34 +17,49 @@ import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.PlayerInvWrapper;
 import net.minecraftforge.registries.RegistryObject;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 
 public abstract class SimpleGemsContainerMenu<T extends AbstractContainerMenu> extends AbstractContainerMenu {
-    protected IItemHandler playerInventory;
-    protected Container inventory;
+    protected final IItemHandler playerInventory;
+    protected final Container inventory;
     protected final int slots;
-    protected ContainerData data;
+    protected final ContainerData data;
 
     /**
      * Client side constructor, fills in data that client doesn't know with default values
-     * @param type
-     * @param windowId
-     * @param playerInventory
+     *
+     * @param type            type of the container
+     * @param windowId        the ID of the window
+     * @param playerInventory the inventory of the player
      */
-    protected SimpleGemsContainerMenu(RegistryObject<MenuType<T>> type, int windowId, Inventory playerInventory, int inventorySize, int dataSize) {
+    protected SimpleGemsContainerMenu(
+            final RegistryObject<MenuType<T>> type,
+            final int windowId,
+            final Inventory playerInventory,
+            final int inventorySize,
+            final int dataSize
+    ) {
         this(type, windowId, playerInventory, new SimpleContainer(inventorySize), new SimpleContainerData(dataSize));
     }
 
     /**
      * Server side constructor
-     * @param type type of the container
-     * @param windowId the ID of the window
+     *
+     * @param type            type of the container
+     * @param windowId        the ID of the window
      * @param playerInventory the inventory of the player
-     * @param inventory the inventory container
-     * @param data the serverside tile entity data
+     * @param inventory       the inventory container
+     * @param data            the serverside tile entity data
      */
-    protected SimpleGemsContainerMenu(RegistryObject<MenuType<T>> type, int windowId, Inventory playerInventory, Container inventory, ContainerData data) {
+    protected SimpleGemsContainerMenu(
+            final RegistryObject<MenuType<T>> type,
+            final int windowId,
+            final Inventory playerInventory,
+            final Container inventory,
+            final ContainerData data
+    ) {
         super(type.get(), windowId);
         this.playerInventory = new PlayerInvWrapper(playerInventory);
         this.inventory = inventory;
@@ -65,18 +80,24 @@ public abstract class SimpleGemsContainerMenu<T extends AbstractContainerMenu> e
 
     /**
      * Handle shift-clicking, merge valid items into container, otherwise merge within inventory
+     *
      * @param playerIn the player that is transferring
-     * @param index the index they are transferring from
+     * @param index    the index they are transferring from
+     *
      * @return the ItemStack transferred if successful, ItemStack.EMPTY if no transfer occurred
      */
+    @Nonnull
     @Override
-    public ItemStack quickMoveStack(Player playerIn, int index) {
-        Optional<List<Item>> validMergeItems = this.getValidMergeItems();
+    public ItemStack quickMoveStack(
+            @Nonnull final Player playerIn,
+            final int index
+    ) {
+        final Optional<List<Item>> validMergeItems = this.getValidMergeItems();
         ItemStack itemStack = ItemStack.EMPTY;
-        Slot slot = getSlot(index);
+        final Slot slot = getSlot(index);
 
         if (slot != null && slot.hasItem()) {
-            ItemStack stack = slot.getItem();
+            final ItemStack stack = slot.getItem();
             itemStack = stack.copy();
 
             if (index < slots) {
@@ -84,19 +105,16 @@ public abstract class SimpleGemsContainerMenu<T extends AbstractContainerMenu> e
                     return ItemStack.EMPTY;
                 }
                 slot.onQuickCraft(stack, itemStack); // TODO: onSlotChange?
-            }
-            else {
+            } else {
                 if (validMergeItems.map(h -> h.contains(stack.getItem())).orElse(false)) {
                     if (!this.moveItemStackTo(stack, 0, slots, false)) {
                         return ItemStack.EMPTY;
                     }
-                }
-                else if (index < slots + 27) {
+                } else if (index < slots + 27) {
                     if (!this.moveItemStackTo(stack, slots + 27, slots + 36, false)) {
                         return ItemStack.EMPTY;
                     }
-                }
-                else if (index < slots + 36) {
+                } else if (index < slots + 36) {
                     if (!this.moveItemStackTo(stack, slots, slots + 27, false)) {
                         return ItemStack.EMPTY;
                     }
@@ -105,8 +123,7 @@ public abstract class SimpleGemsContainerMenu<T extends AbstractContainerMenu> e
 
             if (stack.isEmpty()) {
                 slot.set(ItemStack.EMPTY);
-            }
-            else {
+            } else {
                 slot.setChanged();
             }
 
@@ -121,7 +138,7 @@ public abstract class SimpleGemsContainerMenu<T extends AbstractContainerMenu> e
     }
 
     @Override
-    public boolean stillValid(Player playerIn) { // TODO: canInteractWith?
+    public boolean stillValid(@Nonnull final Player playerIn) { // TODO: canInteractWith?
         return true;
         // TODO: return inventory.isUsableByPlayer(playerIn);
     }
@@ -130,7 +147,14 @@ public abstract class SimpleGemsContainerMenu<T extends AbstractContainerMenu> e
         return data.get(InfuserBlockEntity.INT_ENERGY);
     }
 
-    protected int addSlotRow(IItemHandler handler, int index, int x, int y, int width, int dx) {
+    protected int addSlotRow(
+            final IItemHandler handler,
+            int index,
+            int x,
+            final int y,
+            final int width,
+            final int dx
+    ) {
         for (int i = 0; i < width; i++) {
             addSlot(new SlotItemHandler(handler, index, x, y));
             x += dx;
@@ -139,7 +163,16 @@ public abstract class SimpleGemsContainerMenu<T extends AbstractContainerMenu> e
         return index;
     }
 
-    protected int addSlotBox(IItemHandler handler, int index, int x, int y, int width, int dx, int height, int dy) {
+    protected int addSlotBox(
+            final IItemHandler handler,
+            int index,
+            final int x,
+            int y,
+            final int width,
+            final int dx,
+            final int height,
+            final int dy
+    ) {
         for (int i = 0; i < height; i++) {
             index = addSlotRow(handler, index, x, y, width, dx);
             y += dy;
@@ -148,7 +181,14 @@ public abstract class SimpleGemsContainerMenu<T extends AbstractContainerMenu> e
     }
 
 
-    protected int addSlotRow(Container inventory, int index, int x, int y, int width, int dx) {
+    protected int addSlotRow(
+            final Container inventory,
+            int index,
+            int x,
+            final int y,
+            final int width,
+            final int dx
+    ) {
         for (int i = 0; i < width; i++) {
             addSlot(new Slot(inventory, index, x, y));
             x += dx;
@@ -157,7 +197,16 @@ public abstract class SimpleGemsContainerMenu<T extends AbstractContainerMenu> e
         return index;
     }
 
-    protected int addSlotBox(Container inventory, int index, int x, int y, int width, int dx, int height, int dy) {
+    protected int addSlotBox(
+            final Container inventory,
+            int index,
+            final int x,
+            int y,
+            final int width,
+            final int dx,
+            final int height,
+            final int dy
+    ) {
         for (int i = 0; i < height; i++) {
             index = addSlotRow(inventory, index, x, y, width, dx);
             y += dy;
@@ -165,7 +214,10 @@ public abstract class SimpleGemsContainerMenu<T extends AbstractContainerMenu> e
         return index;
     }
 
-    private void layoutPlayerInventorySlots(int leftCol, int topRow) {
+    private void layoutPlayerInventorySlots(
+            final int leftCol,
+            int topRow
+    ) {
         // Inventory
         addSlotBox(playerInventory, 9, leftCol, topRow, 9, 18, 3, 18);
 
@@ -174,7 +226,7 @@ public abstract class SimpleGemsContainerMenu<T extends AbstractContainerMenu> e
         addSlotRow(playerInventory, 0, leftCol, topRow, 9, 18);
     }
 
-    public int getDataAt(int index) {
+    public int getDataAt(final int index) {
         return data.get(index);
     }
 }

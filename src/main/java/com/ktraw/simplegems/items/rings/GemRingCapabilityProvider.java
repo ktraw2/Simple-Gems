@@ -23,11 +23,13 @@ public class GemRingCapabilityProvider implements ICapabilityProvider {
 
     @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(
+            @Nonnull final Capability<T> cap,
+            @Nullable final Direction side
+    ) {
         if (cap == ForgeCapabilities.ENERGY) {
             return energy.cast();
-        }
-        else {
+        } else {
             return LazyOptional.empty();
         }
     }

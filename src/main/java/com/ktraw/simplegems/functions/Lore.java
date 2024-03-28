@@ -18,79 +18,79 @@ import net.minecraft.world.level.storage.loot.functions.SetLoreFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class Lore extends SetLoreFunction {
-
-    private static ArrayList<Component> fallbackLore = new ArrayList<>();
-    static {
-        fallbackLore.add(Component.literal("Error"));
-    }
-
     private final boolean replace;
 
+    @Nonnull
     @Override
-    public ItemStack run(ItemStack stack, LootContext context) {
-        CompoundTag tag = stack.getTagElement("BlockEntityTag");
-        ArrayList<Component> generatorLore = new ArrayList<>();
+    public ItemStack run(
+            final ItemStack stack,
+            @Nonnull final LootContext context
+    ) {
+        final CompoundTag tag = stack.getTagElement("BlockEntityTag");
+        final ArrayList<Component> generatorLore = new ArrayList<>();
         if (tag != null) {
             try {
                 // Get access to the lore field so we can change it
-                Field loreField = SetLoreFunction.class.getDeclaredField("lore");
+                final Field loreField = SetLoreFunction.class.getDeclaredField("lore");
                 loreField.setAccessible(true);
 
                 // Get the amount of energy and add it to lore if there is energy
-                int energy = tag.getCompound("energy").getInt("energy");
+                final int energy = tag.getCompound("energy").getInt("energy");
                 if (energy > 0) {
                     generatorLore.add(Component.literal("Energy: " + energy + " FE"));
                 }
 
                 // Get the inventory and process it to see if lore is needed
-                ListTag inventory = tag.getCompound("inventory").getList("Items", Tag.TAG_COMPOUND);
+                final ListTag inventory = tag.getCompound("inventory").getList("Items", Tag.TAG_COMPOUND);
                 if (!inventory.isEmpty()) {
-                    int size = inventory.size();
+                    final int size = inventory.size();
                     // Make sure the item is Charged Emerald Dust
                     if (size == 1 && inventory.getCompound(0).getString("id").equals(ForgeRegistries.ITEMS.getKey(Items.CHARGED_EMERALD_DUST.get()).toString())) {
                         generatorLore.add(Component.literal("Dust: " + inventory.getCompound(0).getByte("Count")));
-                    }
-                    else {
+                    } else {
                         // Iterate through inventory
                         generatorLore.add(Component.literal("Contents:"));
                         for (int i = 0; i < size; i++) {
-                            CompoundTag current = inventory.getCompound(i);
+                            final CompoundTag current = inventory.getCompound(i);
                             generatorLore.add(Component.literal(" - " + current.getByte("Count") + " x " + (new ResourceLocation(current.getString("id"))).getPath()));
                         }
                     }
                 }
 
                 loreField.set(this, generatorLore);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
 
         // Only put the lore if there is lore to put
-        if (generatorLore.size() > 0) {
-            ItemStack result = super.run(stack, context);
+        if (!generatorLore.isEmpty()) {
+            final ItemStack result = super.run(stack, context);
 
             // Add colors
-            CompoundTag resultDisplayTag = result.getTagElement("display");
-            ListTag loreList = resultDisplayTag.getList("Lore", Tag.TAG_STRING);
+            final CompoundTag resultDisplayTag = result.getTagElement("display");
+            final ListTag loreList = resultDisplayTag.getList("Lore", Tag.TAG_STRING);
             for (int i = 0; i < loreList.size(); i++) {
-                String lore = loreList.getString(i);
+                final String lore = loreList.getString(i);
                 loreList.set(i, StringTag.valueOf(lore.substring(0, lore.length() - 1) + ",\"color\":\"green\",\"italic\":false}"));
             }
 
             return result;
-        }
-        else {
+        } else {
             return stack;
         }
     }
 
-    public Lore(LootItemCondition[] p_i51220_1_, boolean replace) {
-        super(p_i51220_1_, replace, new ArrayList<Component>(), LootContext.EntityTarget.THIS);
+    public Lore(
+            final LootItemCondition[] conditions,
+            final boolean replace
+    ) {
+        super(conditions, replace, new ArrayList<>(), LootContext.EntityTarget.THIS);
 
         this.replace = replace;
     }
@@ -98,14 +98,23 @@ public class Lore extends SetLoreFunction {
     public static class Serializer extends LootItemConditionalFunction.Serializer<Lore> {
 
         @Override
-        public void serialize(JsonObject object, Lore functionClazz, JsonSerializationContext serializationContext) {
+        public void serialize(
+                @Nonnull final JsonObject object,
+                @Nonnull final Lore functionClazz,
+                @Nonnull final JsonSerializationContext serializationContext
+        ) {
             super.serialize(object, functionClazz, serializationContext);
             object.addProperty("replace", functionClazz.replace);
         }
 
+        @Nonnull
         @Override
-        public Lore deserialize(JsonObject object, JsonDeserializationContext deserializationContext, LootItemCondition[] conditionsIn) {
-            boolean flag = JSONHelper.getBooleanOrDefault("replace", object, false);
+        public Lore deserialize(
+                @Nonnull final JsonObject object,
+                @Nonnull final JsonDeserializationContext deserializationContext,
+                @Nonnull final LootItemCondition[] conditionsIn
+        ) {
+            final boolean flag = JSONHelper.getBooleanOrDefault("replace", object, false);
             return new Lore(conditionsIn, flag);
         }
     }

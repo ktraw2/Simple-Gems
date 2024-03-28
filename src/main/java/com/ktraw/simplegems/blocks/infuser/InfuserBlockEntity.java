@@ -29,14 +29,17 @@ public class InfuserBlockEntity extends SimpleGemsContainerBlockEntity<InfuserIt
     // TODO Serialize and deserialize any local fields I add here
     private InfuserRecipe currentRecipe;
 
-    public InfuserBlockEntity(BlockPos pos, BlockState state) {
+    public InfuserBlockEntity(
+            final BlockPos pos,
+            final BlockState state
+    ) {
         super(BlockEntities.INFUSER, pos, state, INFUSER);
 
         this.items = LazyOptional.of(this::createItemHandler);
         this.energy = LazyOptional.of(this::createEnergyStorage);
         this.data = new ContainerData() {
             @Override
-            public int get(int index) {
+            public int get(final int index) {
                 switch (index) {
                     case INT_TIMER:
                         return timer;
@@ -47,8 +50,7 @@ public class InfuserBlockEntity extends SimpleGemsContainerBlockEntity<InfuserIt
                     case INT_RECIPE_PROCESS_TIME:
                         if (currentRecipe == null) {
                             return 0;
-                        }
-                        else {
+                        } else {
                             return currentRecipe.getProcessTime();
                         }
 
@@ -58,7 +60,10 @@ public class InfuserBlockEntity extends SimpleGemsContainerBlockEntity<InfuserIt
             }
 
             @Override
-            public void set(int index, int value) {
+            public void set(
+                    final int index,
+                    final int value
+            ) {
                 switch (index) {
                     case INT_TIMER:
                         timer = value;
@@ -86,26 +91,25 @@ public class InfuserBlockEntity extends SimpleGemsContainerBlockEntity<InfuserIt
     }
 
     @Override
-    public void load(CompoundTag compound) {
+    public void load(final CompoundTag compound) {
         final CompoundTag currentRecipeTag = compound.getCompound("currentRecipe");
         currentRecipe = (currentRecipeTag.isEmpty()) ? null : new InfuserRecipe(currentRecipeTag);
         super.load(compound);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound) {
+    protected void saveAdditional(final CompoundTag compound) {
         super.saveAdditional(compound);
         if (currentRecipe != null) {
             compound.put("currentRecipe", currentRecipe.serializeNBT());
         }
     }
 
-    private boolean canInfuse(@Nonnull InfuserRecipe recipe) {
+    private boolean canInfuse(@Nonnull final InfuserRecipe recipe) {
         final boolean sufficientEnergy = energy.map(e -> e.getEnergyStored() >= recipe.getEnergy()).orElse(false);
         if (!sufficientEnergy) {
             return false;
-        }
-        else {
+        } else {
             int numOccupiedSlots = 0;
             for (int i = 0; i < TOTAL_CRAFTING_SLOTS; i++) {
                 if (!getItem(i).isEmpty()) {
@@ -115,24 +119,20 @@ public class InfuserBlockEntity extends SimpleGemsContainerBlockEntity<InfuserIt
 
             if (numOccupiedSlots != recipe.getIngredients().size()) {
                 return false;
-            }
-            else {
+            } else {
                 final ItemStack recipeOutput = recipe.getResultItem();
                 if (recipeOutput.isEmpty()) {
                     return false;
-                }
-                else {
+                } else {
                     final ItemStack infuserOutputSlotItemStack = getItem(OUTPUT_SLOT_INDEX);
-                    int combinedTotal = infuserOutputSlotItemStack.getCount() + recipeOutput.getCount();
+                    final int combinedTotal = infuserOutputSlotItemStack.getCount() + recipeOutput.getCount();
                     if (infuserOutputSlotItemStack.isEmpty()) {
                         return true;
                     } else if (!infuserOutputSlotItemStack.is(recipeOutput.getItem())) {
                         return false;
-                    }
-                    else if (combinedTotal <= getMaxStackSize() && combinedTotal <= infuserOutputSlotItemStack.getMaxStackSize()) {
+                    } else if (combinedTotal <= getMaxStackSize() && combinedTotal <= infuserOutputSlotItemStack.getMaxStackSize()) {
                         return true;
-                    }
-                    else {
+                    } else {
                         return combinedTotal <= infuserOutputSlotItemStack.getMaxStackSize();
                     }
                 }
@@ -140,34 +140,38 @@ public class InfuserBlockEntity extends SimpleGemsContainerBlockEntity<InfuserIt
         }
     }
 
-    public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T be) {
-        InfuserBlockEntity tile = (InfuserBlockEntity) be;
+    public static <T extends BlockEntity> void tick(
+            final Level level,
+            final BlockPos pos,
+            final BlockState state,
+            final T be
+    ) {
+        final InfuserBlockEntity tile = (InfuserBlockEntity) be;
 
         // your code here
         if (!level.isClientSide) {
             if (tile.timer <= 0) {
-                InfuserRecipe recipe = level.getRecipeManager().getRecipeFor(RecipeTypes.INFUSER_RECIPE_TYPE.get(), tile, level).orElse(null);
+                final InfuserRecipe recipe = level.getRecipeManager().getRecipeFor(RecipeTypes.INFUSER_RECIPE_TYPE.get(), tile, level).orElse(null);
                 if (recipe != null && tile.canInfuse(recipe)) {
                     tile.timer = recipe.getProcessTime();
-                    tile.energy.ifPresent(e -> {
-                        e.consumeEnergy(recipe.getEnergy());
-                    });
+                    tile.energy.ifPresent(e -> e.consumeEnergy(recipe.getEnergy()));
                     for (int i = 0; i < TOTAL_CRAFTING_SLOTS; i++) {
-                        int finalI = i;
-                        tile.items.ifPresent(h -> {
-                            h.extractItem(finalI, 1, false);
-                        });
+                        final int finalI = i;
+                        tile.items.ifPresent(h -> h.extractItem(finalI, 1, false));
                     }
                     tile.currentRecipe = recipe;
                     tile.setChanged();
                 }
-            }
-            else {
+            } else {
                 tile.timer--;
                 if (tile.timer <= 0 && tile.currentRecipe != null) {
-                    tile.items.ifPresent(h -> {
-                        h.insertItemNoCheck(OUTPUT_SLOT_INDEX, tile.currentRecipe.getResultItem().copy(), false);
-                    });
+                    tile.items.ifPresent(h ->
+                            h.insertItemNoCheck(
+                                    OUTPUT_SLOT_INDEX,
+                                    tile.currentRecipe.getResultItem().copy(),
+                                    false
+                            )
+                    );
                     tile.currentRecipe = null;
                 }
 
@@ -180,15 +184,14 @@ public class InfuserBlockEntity extends SimpleGemsContainerBlockEntity<InfuserIt
     /* MARK IInventory */
 
     @Override
-    public boolean canPlaceItem(int index, ItemStack stack) {
+    public boolean canPlaceItem(
+            final int index,
+            @Nonnull final ItemStack stack
+    ) {
         return index != OUTPUT_SLOT_INDEX;
     }
 
     public int getEnergy() {
         return energy.map(EnergyStorage::getEnergyStored).orElse(0);
-    }
-
-    public InfuserRecipe getCurrentRecipe() {
-        return currentRecipe;
     }
 }

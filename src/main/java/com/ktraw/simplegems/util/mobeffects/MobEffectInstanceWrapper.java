@@ -14,11 +14,14 @@ public class MobEffectInstanceWrapper {
     private final int duration;
     private final int amplifier;
 
-    public MobEffectInstanceWrapper(MobEffect effect, int duration) {
+    public MobEffectInstanceWrapper(
+            final MobEffect effect,
+            final int duration
+    ) {
         this(effect, duration, 0);
     }
 
-    public MobEffectInstanceWrapper(MobEffect effect) {
+    public MobEffectInstanceWrapper(final MobEffect effect) {
         this(effect, 0);
     }
 

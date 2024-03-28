@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": {"model":  "simplegems:block/deepslate_ruby_ore"}
+    "": {
+      "model": "simplegems:block/deepslate_ruby_ore"
+    }
   }
 }

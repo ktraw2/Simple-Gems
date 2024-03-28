@@ -4,9 +4,9 @@
     "particle": "simplegems:block/generator_top_bottom",
     "down": "simplegems:block/generator_top_bottom",
     "up": "simplegems:block/generator_top_bottom",
-    "east":"simplegems:block/generator_side",
-    "west":"simplegems:block/generator_side",
-    "north":"simplegems:block/generator_front",
-    "south":"simplegems:block/generator_side"
+    "east": "simplegems:block/generator_side",
+    "west": "simplegems:block/generator_side",
+    "north": "simplegems:block/generator_front",
+    "south": "simplegems:block/generator_side"
   }
 }

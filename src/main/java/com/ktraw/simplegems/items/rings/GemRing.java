@@ -24,6 +24,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -35,17 +36,21 @@ public class GemRing extends Item {
     private static final Component BLANK_LINE = Component.literal("");
     private static final Component PRESS_CTRL = Component.literal("Press <Shift>").setStyle(HINT_STYLE);
 
-    private IMobEffectProvider ringEffect;
+    private final IMobEffectProvider ringEffect;
     private Component firstLineOfTooltip;
     private Multimap<Attribute, AttributeModifier> attributeModifierMultimap;
 
-    public GemRing(@Nullable IMobEffectProvider ringEffect, @Nullable Multimap<Attribute, AttributeModifier> attributeModifierMultimap, @Nullable Component firstLineOfTooltip) {
+    public GemRing(
+            @Nullable final IMobEffectProvider ringEffect,
+            @Nullable final Multimap<Attribute, AttributeModifier> attributeModifierMultimap,
+            @Nullable final Component firstLineOfTooltip
+    ) {
         this(ringEffect);
         this.attributeModifierMultimap = attributeModifierMultimap;
         this.firstLineOfTooltip = firstLineOfTooltip;
     }
 
-    public GemRing(@Nullable IMobEffectProvider ringEffect) {
+    public GemRing(@Nullable final IMobEffectProvider ringEffect) {
         super(new Properties()
                 .stacksTo(1));
 
@@ -54,32 +59,42 @@ public class GemRing extends Item {
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
+    public ICapabilityProvider initCapabilities(
+            final ItemStack stack,
+            @Nullable final CompoundTag nbt
+    ) {
         return (ringEffect != null) ? new GemRingCapabilityProvider(stack) : null;
     }
 
     @Override
-    public boolean isFoil(ItemStack stack) {
+    public boolean isFoil(@Nonnull final ItemStack stack) {
         return (ringEffect != null) && (stack.getOrCreateTag().getBoolean("active"));
     }
 
     @Override
-    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+    public boolean shouldCauseReequipAnimation(
+            final ItemStack oldStack,
+            final ItemStack newStack,
+            final boolean slotChanged
+    ) {
         return slotChanged;
     }
 
     @Override
-    public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
+    public boolean shouldCauseBlockBreakReset(
+            final ItemStack oldStack,
+            final ItemStack newStack
+    ) {
         return false;
     }
 
     @Override
-    public boolean isBarVisible(ItemStack stack) {
+    public boolean isBarVisible(@Nonnull final ItemStack stack) {
         return ringEffect != null;
     }
 
     @Override
-    public int getBarWidth(ItemStack stack) {
+    public int getBarWidth(@Nonnull final ItemStack stack) {
         if (ringEffect == null) {
             return 0;
         }
@@ -90,8 +105,11 @@ public class GemRing extends Item {
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        Multimap<Attribute, AttributeModifier> multimap = ArrayListMultimap.create();
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(
+            final EquipmentSlot slot,
+            final ItemStack stack
+    ) {
+        final Multimap<Attribute, AttributeModifier> multimap = ArrayListMultimap.create();
 
         if (attributeModifierMultimap == null) {
             return multimap;
@@ -99,7 +117,7 @@ public class GemRing extends Item {
 
         if (slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND) {
             stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(e -> {
-                CompoundTag tag = stack.getOrCreateTag();
+                final CompoundTag tag = stack.getOrCreateTag();
                 if (e.getEnergyStored() > 0 && tag.getBoolean("active")) {
                     multimap.putAll(attributeModifierMultimap);
                 }
@@ -109,12 +127,17 @@ public class GemRing extends Item {
     }
 
     @Override
-    public int getBarColor(ItemStack stack) {
+    public int getBarColor(@Nonnull final ItemStack stack) {
         return 0x00FF00;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(
+            @Nonnull final ItemStack stack,
+            @Nullable final Level worldIn,
+            @Nonnull final List<Component> tooltip,
+            @Nonnull final TooltipFlag flagIn
+    ) {
         if (ringEffect == null) {
             return;
         }
@@ -127,25 +150,28 @@ public class GemRing extends Item {
             tooltip.add(Component.literal("Energy: " + stack.getOrCreateTag().getInt("energy") + " FE").setStyle(GREEN_STYLE));
             tooltip.add(BLANK_LINE);
             ringEffect.addInformation(stack, worldIn, tooltip, flagIn);
-        }
-        else {
+        } else {
             tooltip.add(PRESS_CTRL);
         }
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+    public void inventoryTick(
+            @Nonnull final ItemStack stack,
+            @Nonnull final Level worldIn,
+            @Nonnull final Entity entityIn,
+            final int itemSlot,
+            final boolean isSelected
+    ) {
         if (ringEffect == null) {
             return;
         }
 
         // check is a living entity
-        if (entityIn instanceof LivingEntity) {
-            LivingEntity casted = (LivingEntity) entityIn;
-
+        if (entityIn instanceof LivingEntity casted) {
             // get energy capability
             stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(e -> {
-                CompoundTag tag = stack.getOrCreateTag();
+                final CompoundTag tag = stack.getOrCreateTag();
                 final boolean isCreative = entityIsCreative(casted);
                 final int energyStored = e.getEnergyStored();
                 if (tag.getBoolean("active")) {
@@ -163,8 +189,7 @@ public class GemRing extends Item {
                                 stack.getOrCreateTag().putBoolean("active", false);
                             }
                         }
-                    }
-                    else if (energyStored < ENERGY_PER_TICK && !isCreative) {
+                    } else if (energyStored < ENERGY_PER_TICK && !isCreative) {
                         // set to inactive so glow goes away
                         stack.getOrCreateTag().putBoolean("active", false);
                     }
@@ -173,24 +198,27 @@ public class GemRing extends Item {
         }
     }
 
-    private boolean entityIsCreative(Entity entity) {
-        if (entity instanceof Player) {
-            Player casted = (Player)entity;
+    private boolean entityIsCreative(final Entity entity) {
+        if (entity instanceof Player casted) {
             return casted.isCreative();
         }
-        else {
-            return false;
-        }
+
+        return false;
     }
 
+    @Nonnull
     @Override
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+    public InteractionResultHolder<ItemStack> use(
+            @Nonnull final Level worldIn,
+            @Nonnull final Player playerIn,
+            @Nonnull final InteractionHand handIn
+    ) {
         if (ringEffect == null) {
             return super.use(worldIn, playerIn, handIn);
         }
 
-        ItemStack currentStack = playerIn.getItemInHand(handIn);
-        CompoundTag tag = currentStack.getOrCreateTag();
+        final ItemStack currentStack = playerIn.getItemInHand(handIn);
+        final CompoundTag tag = currentStack.getOrCreateTag();
 
         tag.putBoolean("active", !tag.getBoolean("active"));
         tag.putInt("energy", tag.getInt("energy"));

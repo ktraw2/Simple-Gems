@@ -49,7 +49,7 @@ public class InfuserRecipeCategory implements IRecipeCategory<InfuserRecipe> {
     @Getter(AccessLevel.NONE)
     private final LoadingCache<Integer, IDrawableAnimated> cachedArrows;
 
-    public InfuserRecipeCategory (IGuiHelper guiHelper) {
+    public InfuserRecipeCategory(final IGuiHelper guiHelper) {
         final ResourceLocation GUI_LOCATION = new ResourceLocation(SimpleGems.MODID, textureLocation);
 
         this.Uid = InfuserRecipe.NAME;
@@ -61,13 +61,15 @@ public class InfuserRecipeCategory implements IRecipeCategory<InfuserRecipe> {
         this.cachedArrows = CacheBuilder.newBuilder()
                 .maximumSize(25)
                 .build(new CacheLoader<>() {
+                    @Nonnull
                     @Override
-                    public IDrawableAnimated load(Integer cookTime) {
+                    public IDrawableAnimated load(@Nonnull final Integer cookTime) {
                         return guiHelper.drawableBuilder(GUI_LOCATION, 177, 0, ARROW_WIDTH, ARROW_HEIGHT)
                                 .buildAnimated(cookTime, IDrawableAnimated.StartDirection.LEFT, false);
                     }
                 });
     }
+
     @Override
     public void draw(
             final InfuserRecipe recipe,
@@ -88,13 +90,18 @@ public class InfuserRecipeCategory implements IRecipeCategory<InfuserRecipe> {
         this.cachedArrows.getUnchecked(recipe.getProcessTime()).draw(graphics, 81 - Slots.Input.start_x + 2, 35 - Slots.Input.start_y);
     }
 
+    @Nonnull
     @Override
     public RecipeType<InfuserRecipe> getRecipeType() {
         return new RecipeType<>(getUid(), getRecipeClass());
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, InfuserRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(
+            final IRecipeLayoutBuilder builder,
+            final InfuserRecipe recipe,
+            @Nonnull final IFocusGroup focuses
+    ) {
         final NonNullList<Ingredient> ingredients = recipe.getIngredients();
         final int size = ingredients.size();
 

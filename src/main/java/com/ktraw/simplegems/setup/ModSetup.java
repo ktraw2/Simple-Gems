@@ -12,15 +12,14 @@ import java.lang.reflect.Method;
 @Getter
 public final class ModSetup {
     @Getter
-    private static ModSetup setup = new ModSetup();
+    private static final ModSetup setup = new ModSetup();
 
     public void init() {
         try {
-            Method addMix = PotionBrewing.class.getDeclaredMethod("addMix", Potion.class, Item.class, Potion.class);
+            final Method addMix = PotionBrewing.class.getDeclaredMethod("addMix", Potion.class, Item.class, Potion.class);
             addMix.setAccessible(true);
             addMix.invoke(null, Potions.AWKWARD, Items.RUBY.get(), Potions.LUCK);
-        }
-        catch (Exception e) {
+        } catch (final Exception e) {
             System.err.println("Error adding custom potions.");
             e.printStackTrace();
         }

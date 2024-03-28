@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class EmeraldLamp extends Block {
@@ -20,11 +21,11 @@ public class EmeraldLamp extends Block {
 
     private final boolean inverted;
 
-    public static String getRegistryName(boolean inverted) {
-        return (inverted ? "inverted_" : "" ) + "emerald_lamp";
+    public static String getRegistryName(final boolean inverted) {
+        return (inverted ? "inverted_" : "") + "emerald_lamp";
     }
 
-    public EmeraldLamp(boolean inverted) {
+    public EmeraldLamp(final boolean inverted) {
         super(Material.BUILDABLE_GLASS.properties()
                 .sound(SoundType.GLASS)
                 .strength(0.5f, 15f)
@@ -36,20 +37,31 @@ public class EmeraldLamp extends Block {
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
+    public BlockState getStateForPlacement(final BlockPlaceContext context) {
         return defaultBlockState().setValue(LIGHT_LEVEL, context.getLevel().getBestNeighborSignal(context.getClickedPos()));
     }
 
     @Override
-    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
+    public int getLightEmission(
+            final BlockState state,
+            final BlockGetter world,
+            final BlockPos pos
+    ) {
         final int stateLevel = state.getValue(LIGHT_LEVEL);
         return inverted ? MAX_LEVEL - stateLevel : stateLevel;
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+    public void neighborChanged(
+            @Nonnull final BlockState state,
+            final Level worldIn,
+            @Nonnull final BlockPos pos,
+            @Nonnull final Block blockIn,
+            @Nonnull final BlockPos fromPos,
+            final boolean isMoving
+    ) {
         if (!worldIn.isClientSide) {
-            int power = worldIn.getBestNeighborSignal(pos);
+            final int power = worldIn.getBestNeighborSignal(pos);
             if (power != state.getValue(LIGHT_LEVEL)) {
                 worldIn.setBlock(pos, state.setValue(LIGHT_LEVEL, power), 2);
             }
@@ -57,7 +69,7 @@ public class EmeraldLamp extends Block {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(LIGHT_LEVEL);
     }
 }

@@ -15,7 +15,7 @@ public class LootFunctions {
     public static final RegistryObject<LootItemFunctionType> LORE = LOOT_FUNCTIONS.register("lore", () -> new LootItemFunctionType(new Lore.Serializer()));
     public static final RegistryObject<LootItemFunctionType> COPY_NBT = LOOT_FUNCTIONS.register("copy_nbt", () -> new LootItemFunctionType(new CopyNbt.Serializer()));
 
-    public static void register(IEventBus eventBus) {
+    public static void register(final IEventBus eventBus) {
         LOOT_FUNCTIONS.register(eventBus);
     }
 }

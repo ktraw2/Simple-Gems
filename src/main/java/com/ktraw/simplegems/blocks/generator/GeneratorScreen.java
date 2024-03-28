@@ -13,7 +13,11 @@ public class GeneratorScreen extends SimpleGemsContainerScreen<GeneratorContaine
 
     public static final int FLAME_SIDE = 14;
 
-    public GeneratorScreen(GeneratorContainerMenu screenContainer, Inventory inv, Component titleIn) {
+    public GeneratorScreen(
+            final GeneratorContainerMenu screenContainer,
+            final Inventory inv,
+            final Component titleIn
+    ) {
         super(screenContainer, inv, titleIn, "Generator", textureLocation);
     }
 
@@ -24,7 +28,7 @@ public class GeneratorScreen extends SimpleGemsContainerScreen<GeneratorContaine
             final int mouseX,
             final int mouseY
     ) {
-        Pair<Integer, Integer> shiftedXY = super.renderBaseBg(graphics, partialTicks, mouseX, mouseY);
+        final Pair<Integer, Integer> shiftedXY = super.renderBaseBg(graphics, partialTicks, mouseX, mouseY);
 
         final int timer = typedContainerMenu.getDataAt(GeneratorBlockEntity.INT_TIMER);
         if (timer > 0) {

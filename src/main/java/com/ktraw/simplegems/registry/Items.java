@@ -60,53 +60,56 @@ public class Items {
     public static final RegistryObject<BlockItem> GENERATOR = createBlockItem(Blocks.GENERATOR, Rarity.RARE);
     public static final RegistryObject<BlockItem> INFUSER = createBlockItem(Blocks.INFUSER);
 
-    private static RegistryObject<BlockItem> createBlockItem(RegistryObject<? extends Block> block) {
+    private static RegistryObject<BlockItem> createBlockItem(final RegistryObject<? extends Block> block) {
         return createBlockItem(block, Rarity.COMMON);
     }
 
-    private static RegistryObject<BlockItem> createBlockItem(RegistryObject<? extends Block> block, Rarity rarity) {
+    private static RegistryObject<BlockItem> createBlockItem(
+            final RegistryObject<? extends Block> block,
+            final Rarity rarity
+    ) {
         return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), new Item.Properties()/*.tab(setup.getCreativeTab())*/.rarity(rarity)));
     }
 
     /* Regular items */
-    public static RegistryObject<BaseItem> RUBY = ITEMS.register("ruby", BaseItem::new);
-    public static RegistryObject<BaseItem> AMETHYST = ITEMS.register("amethyst", BaseItem::new);
-    public static RegistryObject<BaseItem> GEM = ITEMS.register("gem", () -> new BaseItem(Rarity.RARE));
-    public static RegistryObject<ChargedEmeraldDust> CHARGED_EMERALD_DUST = ITEMS.register("charged_emerald_dust", ChargedEmeraldDust::new);
-    public static RegistryObject<PurpleApple> PURPLE_APPLE = ITEMS.register("purple_apple", PurpleApple::new);
+    public static final RegistryObject<BaseItem> RUBY = ITEMS.register("ruby", BaseItem::new);
+    public static final RegistryObject<BaseItem> AMETHYST = ITEMS.register("amethyst", BaseItem::new);
+    public static final RegistryObject<BaseItem> GEM = ITEMS.register("gem", () -> new BaseItem(Rarity.RARE));
+    public static final RegistryObject<ChargedEmeraldDust> CHARGED_EMERALD_DUST = ITEMS.register("charged_emerald_dust", ChargedEmeraldDust::new);
+    public static final RegistryObject<PurpleApple> PURPLE_APPLE = ITEMS.register("purple_apple", PurpleApple::new);
     // Rings
-    public static RegistryObject<BaseItem> GOLD_RING = ITEMS.register("gold_ring", () -> new BaseItem(1));
-    public static RegistryObject<GemRing> GEM_RING = ITEMS.register("gem_ring", () -> new GemRing(null));
-    public static RegistryObject<GemRing> RING_OF_HASTE = ITEMS.register("ring_of_haste", () -> new GemRing(new SingleMobEffectProvider(new MobEffectInstanceWrapper(MobEffects.DIG_SPEED, POTION_TICKS, 1))));
-    public static RegistryObject<GemRing> RING_OF_LEVITATION = ITEMS.register("ring_of_levitation", () -> new GemRing(new SingleMobEffectProvider(new MobEffectInstanceWrapper(MobEffects.LEVITATION, POTION_TICKS))));
-    public static RegistryObject<GemRing> RING_OF_VULNERABLE_STRENGTH = ITEMS.register("ring_of_vulnerable_strength", () -> new GemRing(new MultiMobEffectProvider(Arrays.asList(new MobEffectInstanceWrapper(MobEffects.DAMAGE_BOOST, POTION_TICKS, 1), new MobEffectInstanceWrapper(MobEffects.DAMAGE_RESISTANCE, POTION_TICKS, -5)))));
-    public static RegistryObject<GemRing> RING_OF_HEAVY = ITEMS.register("ring_of_heavy", () -> new GemRing(new SingleMobEffectProvider(new MobEffectInstanceWrapper(MobEffects.MOVEMENT_SLOWDOWN, POTION_TICKS, 3)), heavyRingAttributes, Component.translatable("tooltip.simplegems.heavy").setStyle( Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)))));
+    public static final RegistryObject<BaseItem> GOLD_RING = ITEMS.register("gold_ring", () -> new BaseItem(1));
+    public static final RegistryObject<GemRing> GEM_RING = ITEMS.register("gem_ring", () -> new GemRing(null));
+    public static final RegistryObject<GemRing> RING_OF_HASTE = ITEMS.register("ring_of_haste", () -> new GemRing(new SingleMobEffectProvider(new MobEffectInstanceWrapper(MobEffects.DIG_SPEED, POTION_TICKS, 1))));
+    public static final RegistryObject<GemRing> RING_OF_LEVITATION = ITEMS.register("ring_of_levitation", () -> new GemRing(new SingleMobEffectProvider(new MobEffectInstanceWrapper(MobEffects.LEVITATION, POTION_TICKS))));
+    public static final RegistryObject<GemRing> RING_OF_VULNERABLE_STRENGTH = ITEMS.register("ring_of_vulnerable_strength", () -> new GemRing(new MultiMobEffectProvider(Arrays.asList(new MobEffectInstanceWrapper(MobEffects.DAMAGE_BOOST, POTION_TICKS, 1), new MobEffectInstanceWrapper(MobEffects.DAMAGE_RESISTANCE, POTION_TICKS, -5)))));
+    public static final RegistryObject<GemRing> RING_OF_HEAVY = ITEMS.register("ring_of_heavy", () -> new GemRing(new SingleMobEffectProvider(new MobEffectInstanceWrapper(MobEffects.MOVEMENT_SLOWDOWN, POTION_TICKS, 3)), heavyRingAttributes, Component.translatable("tooltip.simplegems.heavy").setStyle(Style.EMPTY.withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)))));
     // Tools/Weapons
     // Gem
-    public static RegistryObject<BaseGemPickaxe> GEM_PICKAXE = BaseGemPickaxe.create(ITEMS, GemItemTiers.getGemItemTier(), Rarity.RARE);
-    public static RegistryObject<BaseGemSword> GEM_SWORD = BaseGemSword.create(ITEMS, GemItemTiers.getGemItemTier(), Rarity.RARE);
-    public static RegistryObject<BaseGemAxe> GEM_AXE = BaseGemAxe.create(ITEMS, GemItemTiers.getGemItemTier(), Rarity.RARE);
-    public static RegistryObject<BaseGemShovel> GEM_SHOVEL = BaseGemShovel.create(ITEMS, GemItemTiers.getGemItemTier(), Rarity.RARE);
-    public static RegistryObject<BaseGemHoe> GEM_HOE = BaseGemHoe.create(ITEMS, GemItemTiers.getGemItemTier(), Rarity.RARE);
+    public static final RegistryObject<BaseGemPickaxe> GEM_PICKAXE = BaseGemPickaxe.create(ITEMS, GemItemTiers.getGemItemTier(), Rarity.RARE);
+    public static final RegistryObject<BaseGemSword> GEM_SWORD = BaseGemSword.create(ITEMS, GemItemTiers.getGemItemTier(), Rarity.RARE);
+    public static final RegistryObject<BaseGemAxe> GEM_AXE = BaseGemAxe.create(ITEMS, GemItemTiers.getGemItemTier(), Rarity.RARE);
+    public static final RegistryObject<BaseGemShovel> GEM_SHOVEL = BaseGemShovel.create(ITEMS, GemItemTiers.getGemItemTier(), Rarity.RARE);
+    public static final RegistryObject<BaseGemHoe> GEM_HOE = BaseGemHoe.create(ITEMS, GemItemTiers.getGemItemTier(), Rarity.RARE);
     // Nethergem
-    public static RegistryObject<BaseGemPickaxe> NETHERGEM_PICKAXE = BaseGemPickaxe.create(ITEMS, GemItemTiers.getNetherGemItemTier(), Rarity.EPIC, "nether");
-    public static RegistryObject<BaseGemSword> NETHERGEM_SWORD = BaseGemSword.create(ITEMS, GemItemTiers.getNetherGemItemTier(), Rarity.EPIC, "nether");
-    public static RegistryObject<BaseGemAxe> NETHERGEM_AXE = BaseGemAxe.create(ITEMS, GemItemTiers.getNetherGemItemTier(), Rarity.EPIC, "nether");
-    public static RegistryObject<BaseGemShovel> NETHERGEM_SHOVEL = BaseGemShovel.create(ITEMS, GemItemTiers.getNetherGemItemTier(), Rarity.EPIC, "nether");
-    public static RegistryObject<BaseGemHoe> NETHERGEM_HOE = BaseGemHoe.create(ITEMS, GemItemTiers.getNetherGemItemTier(), Rarity.EPIC, "nether");
+    public static final RegistryObject<BaseGemPickaxe> NETHERGEM_PICKAXE = BaseGemPickaxe.create(ITEMS, GemItemTiers.getNetherGemItemTier(), Rarity.EPIC, "nether");
+    public static final RegistryObject<BaseGemSword> NETHERGEM_SWORD = BaseGemSword.create(ITEMS, GemItemTiers.getNetherGemItemTier(), Rarity.EPIC, "nether");
+    public static final RegistryObject<BaseGemAxe> NETHERGEM_AXE = BaseGemAxe.create(ITEMS, GemItemTiers.getNetherGemItemTier(), Rarity.EPIC, "nether");
+    public static final RegistryObject<BaseGemShovel> NETHERGEM_SHOVEL = BaseGemShovel.create(ITEMS, GemItemTiers.getNetherGemItemTier(), Rarity.EPIC, "nether");
+    public static final RegistryObject<BaseGemHoe> NETHERGEM_HOE = BaseGemHoe.create(ITEMS, GemItemTiers.getNetherGemItemTier(), Rarity.EPIC, "nether");
     // Armor
     // Gem
-    public static RegistryObject<BaseGemArmorItem> GEM_HELMET = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getGemArmorMaterial(), ArmorItem.Type.HELMET, Rarity.RARE);
-    public static RegistryObject<BaseGemArmorItem> GEM_CHESTPLATE = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getGemArmorMaterial(), ArmorItem.Type.CHESTPLATE, Rarity.RARE);
-    public static RegistryObject<BaseGemArmorItem> GEM_LEGGINGS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getGemArmorMaterial(), ArmorItem.Type.LEGGINGS, Rarity.RARE);
-    public static RegistryObject<BaseGemArmorItem> GEM_BOOTS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getGemArmorMaterial(), ArmorItem.Type.BOOTS, Rarity.RARE);
+    public static final RegistryObject<BaseGemArmorItem> GEM_HELMET = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getGemArmorMaterial(), ArmorItem.Type.HELMET, Rarity.RARE);
+    public static final RegistryObject<BaseGemArmorItem> GEM_CHESTPLATE = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getGemArmorMaterial(), ArmorItem.Type.CHESTPLATE, Rarity.RARE);
+    public static final RegistryObject<BaseGemArmorItem> GEM_LEGGINGS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getGemArmorMaterial(), ArmorItem.Type.LEGGINGS, Rarity.RARE);
+    public static final RegistryObject<BaseGemArmorItem> GEM_BOOTS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getGemArmorMaterial(), ArmorItem.Type.BOOTS, Rarity.RARE);
     // Nethergem
-    public static RegistryObject<BaseGemArmorItem> NETHERGEM_HELMET = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), ArmorItem.Type.HELMET, Rarity.EPIC, "nether");
-    public static RegistryObject<BaseGemArmorItem> NETHERGEM_CHESTPLATE = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), ArmorItem.Type.CHESTPLATE, Rarity.EPIC, "nether");
-    public static RegistryObject<BaseGemArmorItem> NETHERGEM_LEGGINGS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), ArmorItem.Type.LEGGINGS, Rarity.EPIC, "nether");
-    public static RegistryObject<BaseGemArmorItem> NETHERGEM_BOOTS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), ArmorItem.Type.BOOTS, Rarity.EPIC, "nether");
+    public static final RegistryObject<BaseGemArmorItem> NETHERGEM_HELMET = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), ArmorItem.Type.HELMET, Rarity.EPIC, "nether");
+    public static final RegistryObject<BaseGemArmorItem> NETHERGEM_CHESTPLATE = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), ArmorItem.Type.CHESTPLATE, Rarity.EPIC, "nether");
+    public static final RegistryObject<BaseGemArmorItem> NETHERGEM_LEGGINGS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), ArmorItem.Type.LEGGINGS, Rarity.EPIC, "nether");
+    public static final RegistryObject<BaseGemArmorItem> NETHERGEM_BOOTS = BaseGemArmorItem.create(ITEMS, GemArmorMaterials.getNethergemArmorMaterial(), ArmorItem.Type.BOOTS, Rarity.EPIC, "nether");
 
-    public static void register(IEventBus eventBus) {
+    public static void register(final IEventBus eventBus) {
         ITEMS.register(eventBus);
     }
 }

@@ -14,7 +14,11 @@ public class InfuserScreen extends SimpleGemsContainerScreen<InfuserContainerMen
     public static final int ARROW_WIDTH = 22;
     public static final int ARROW_HEIGHT = 17;
 
-    public InfuserScreen(InfuserContainerMenu screenContainer, Inventory inv, Component titleIn) {
+    public InfuserScreen(
+            final InfuserContainerMenu screenContainer,
+            final Inventory inv,
+            final Component titleIn
+    ) {
         super(screenContainer, inv, titleIn, "Infuser", textureLocation);
     }
 
@@ -25,7 +29,7 @@ public class InfuserScreen extends SimpleGemsContainerScreen<InfuserContainerMen
             final int mouseX,
             final int mouseY
     ) {
-        Pair<Integer, Integer> shiftedXY = super.renderBaseBg(graphics, partialTicks, mouseX, mouseY);
+        final Pair<Integer, Integer> shiftedXY = super.renderBaseBg(graphics, partialTicks, mouseX, mouseY);
 
         final int timer = typedContainerMenu.getDataAt(InfuserBlockEntity.INT_TIMER);
         if (timer > 0) {

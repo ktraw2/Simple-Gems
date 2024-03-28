@@ -19,7 +19,6 @@
               "function": "simplegems:lore",
               "replace": true
             }
-
           ],
           "name": "simplegems:infuser"
         }

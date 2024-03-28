@@ -6,25 +6,43 @@ import net.minecraftforge.energy.EnergyStorage;
 public class SimpleGemsItemEnergyStorage extends EnergyStorage {
     private final ItemStack stack;
 
-    public SimpleGemsItemEnergyStorage(int capacity, ItemStack stack) {
+    public SimpleGemsItemEnergyStorage(
+            final int capacity,
+            final ItemStack stack
+    ) {
         super(capacity);
         this.stack = stack;
         this.energy = getEnergyStored();
     }
 
-    public SimpleGemsItemEnergyStorage(int capacity, int maxTransfer, ItemStack stack) {
+    public SimpleGemsItemEnergyStorage(
+            final int capacity,
+            final int maxTransfer,
+            final ItemStack stack
+    ) {
         super(capacity, maxTransfer);
         this.stack = stack;
         this.energy = getEnergyStored();
     }
 
-    public SimpleGemsItemEnergyStorage(int capacity, int maxReceive, int maxExtract, ItemStack stack) {
+    public SimpleGemsItemEnergyStorage(
+            final int capacity,
+            final int maxReceive,
+            final int maxExtract,
+            final ItemStack stack
+    ) {
         super(capacity, maxReceive, maxExtract);
         this.stack = stack;
         this.energy = getEnergyStored();
     }
 
-    public SimpleGemsItemEnergyStorage(int capacity, int maxReceive, int maxExtract, int energy, ItemStack stack) {
+    public SimpleGemsItemEnergyStorage(
+            final int capacity,
+            final int maxReceive,
+            final int maxExtract,
+            final int energy,
+            final ItemStack stack
+    ) {
         super(capacity, maxReceive, maxExtract, energy);
         this.stack = stack;
         // TODO do I want this behavior?
@@ -32,17 +50,23 @@ public class SimpleGemsItemEnergyStorage extends EnergyStorage {
     }
 
     @Override
-    public int receiveEnergy(int maxReceive, boolean simulate) {
+    public int receiveEnergy(
+            final int maxReceive,
+            final boolean simulate
+    ) {
         energy = getEnergyStored();
-        int result = super.receiveEnergy(maxReceive, simulate);
+        final int result = super.receiveEnergy(maxReceive, simulate);
         stack.getOrCreateTag().putInt("energy", energy);
         return result;
     }
 
     @Override
-    public int extractEnergy(int maxExtract, boolean simulate) {
+    public int extractEnergy(
+            final int maxExtract,
+            final boolean simulate
+    ) {
         energy = getEnergyStored();
-        int result = super.extractEnergy(maxExtract, simulate);
+        final int result = super.extractEnergy(maxExtract, simulate);
         stack.getOrCreateTag().putInt("energy", energy);
         return result;
     }

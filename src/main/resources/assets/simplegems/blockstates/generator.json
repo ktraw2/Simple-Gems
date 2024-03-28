@@ -1,8 +1,19 @@
 {
   "variants": {
-    "facing=north": { "model": "simplegems:block/generator" },
-    "facing=south": { "model": "simplegems:block/generator", "y": 180 },
-    "facing=west": { "model": "simplegems:block/generator", "y": 270 },
-    "facing=east": { "model": "simplegems:block/generator", "y": 90 }
+    "facing=north": {
+      "model": "simplegems:block/generator"
+    },
+    "facing=south": {
+      "model": "simplegems:block/generator",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "simplegems:block/generator",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "simplegems:block/generator",
+      "y": 90
+    }
   }
 }

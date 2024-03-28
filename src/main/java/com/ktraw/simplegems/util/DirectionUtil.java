@@ -5,11 +5,14 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 
 public class DirectionUtil {
-    public static Direction getFacingFromEntity(BlockPos clickedBlock, LivingEntity entity, boolean horizontalOnly) {
+    public static Direction getFacingFromEntity(
+            final BlockPos clickedBlock,
+            final LivingEntity entity,
+            final boolean horizontalOnly
+    ) {
         if (horizontalOnly) {
             return entity.getDirection().getOpposite();
-        }
-        else {
+        } else {
             return Direction.getNearest(
                     (float) (entity.getX() - clickedBlock.getX()),
                     (float) (entity.getY() - clickedBlock.getY()),

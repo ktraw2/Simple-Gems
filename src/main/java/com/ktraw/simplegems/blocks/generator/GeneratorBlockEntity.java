@@ -4,6 +4,7 @@ import com.ktraw.simplegems.registry.BlockEntities;
 import com.ktraw.simplegems.registry.Items;
 import com.ktraw.simplegems.util.containers.SimpleGemsContainerBlockEntity;
 import com.ktraw.simplegems.util.energy.SimpleGemsEnergyStorage;
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -22,6 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.ktraw.simplegems.util.containers.SimpleGemsContainerMenuFactory.SimpleGemsContainerMenuType.GENERATOR;
 
+@Getter
 public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemStackHandler> {
     public static final int PROCESS_TICKS = 80;
     public static final int ENERGY_PER_DUST = 10000;
@@ -35,14 +37,17 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
 
     private boolean processing;
 
-    public GeneratorBlockEntity(BlockPos pos, BlockState state) {
+    public GeneratorBlockEntity(
+            final BlockPos pos,
+            final BlockState state
+    ) {
         super(BlockEntities.GENERATOR, pos, state, GENERATOR);
 
         this.items = LazyOptional.of(this::createHandler);
         this.energy = LazyOptional.of(this::createEnergy);
         this.data = new ContainerData() {
             @Override
-            public int get(int index) {
+            public int get(final int index) {
                 return switch (index) {
                     case INT_TIMER -> getTimer();
                     case INT_ENERGY -> getEnergy();
@@ -51,7 +56,10 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
             }
 
             @Override
-            public void set(int index, int value) {
+            public void set(
+                    final int index,
+                    final int value
+            ) {
                 switch (index) {
                     case INT_TIMER:
                         timer = value;
@@ -71,13 +79,13 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
     }
 
     @Override
-    public void load(CompoundTag compound) {
+    public void load(final CompoundTag compound) {
         processing = compound.getBoolean("processing");
         super.load(compound);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound) {
+    protected void saveAdditional(final CompoundTag compound) {
         super.saveAdditional(compound);
         compound.putBoolean("processing", processing);
     }
@@ -85,12 +93,15 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
     private ItemStackHandler createHandler() {
         return new ItemStackHandler(TOTAL_SLOTS) {
             @Override
-            protected void onContentsChanged(int slot) {
+            protected void onContentsChanged(final int slot) {
                 setChanged();
             }
 
             @Override
-            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+            public boolean isItemValid(
+                    final int slot,
+                    @Nonnull final ItemStack stack
+            ) {
                 return switch (slot) {
                     case FUEL_SLOT -> stack.getItem().equals(Items.CHARGED_EMERALD_DUST.get());
                     case CHARGE_SLOT -> stack.getCapability(ForgeCapabilities.ENERGY).isPresent();
@@ -104,8 +115,13 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
         return new SimpleGemsEnergyStorage(1000000, ENERGY_TRANSFER_RATE);
     }
 
-    public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T be) {
-        GeneratorBlockEntity tile = (GeneratorBlockEntity) be;
+    public static <T extends BlockEntity> void tick(
+            final Level level,
+            final BlockPos pos,
+            final BlockState state,
+            final T be
+    ) {
+        final GeneratorBlockEntity tile = (GeneratorBlockEntity) be;
 
         // your code here
         if (!level.isClientSide) {
@@ -122,7 +138,7 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
                 tile.setChanged();
             } else {
                 tile.items.ifPresent(h -> {
-                    ItemStack stack = h.getStackInSlot(FUEL_SLOT);
+                    final ItemStack stack = h.getStackInSlot(FUEL_SLOT);
                     if (stack.getItem().equals(Items.CHARGED_EMERALD_DUST.get())) {
                         tile.energy.ifPresent(e -> {
                             if (e.getEnergyStored() < e.getMaxEnergyStored()) {
@@ -136,12 +152,11 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
                 });
             }
 
-            boolean sendPowerToBlocks = tile.items.map(h -> {
-                ItemStack stack = h.getStackInSlot(CHARGE_SLOT);
+            final boolean sendPowerToBlocks = tile.items.map(h -> {
+                final ItemStack stack = h.getStackInSlot(CHARGE_SLOT);
                 if (stack.isEmpty()) {
                     return true;
-                }
-                else {
+                } else {
                     tile.energizeItem(stack);
                     return false;
                 }
@@ -153,12 +168,12 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
         }
     }
 
-    private void energizeItem(@Nonnull ItemStack stack) {
+    private void energizeItem(@Nonnull final ItemStack stack) {
         energy.ifPresent(energy -> {
-            AtomicInteger storedEnergy = new AtomicInteger(energy.getEnergyStored());
+            final AtomicInteger storedEnergy = new AtomicInteger(energy.getEnergyStored());
             if (storedEnergy.get() > 0) {
                 stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(e -> {
-                    int received = e.receiveEnergy(Math.min(storedEnergy.get(), ENERGY_TRANSFER_RATE), false);
+                    final int received = e.receiveEnergy(Math.min(storedEnergy.get(), ENERGY_TRANSFER_RATE), false);
                     storedEnergy.addAndGet(-received);
                     energy.consumeEnergy(received);
                     setChanged();
@@ -169,20 +184,19 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
 
     private void sendOutPower() {
         energy.ifPresent(energy -> {
-            AtomicInteger storedEnergy = new AtomicInteger(energy.getEnergyStored());
+            final AtomicInteger storedEnergy = new AtomicInteger(energy.getEnergyStored());
             if (storedEnergy.get() > 0) {
-                for (Direction direction : Direction.values()) {
-                    BlockEntity te = level.getBlockEntity(worldPosition.offset(direction.getNormal()));
+                for (final Direction direction : Direction.values()) {
+                    final BlockEntity te = level.getBlockEntity(worldPosition.offset(direction.getNormal()));
                     if (te != null) {
-                        boolean doContinue = te.getCapability(ForgeCapabilities.ENERGY, direction).map(handler -> {
+                        final boolean doContinue = te.getCapability(ForgeCapabilities.ENERGY, direction).map(handler -> {
                             if (handler.canReceive()) {
-                                int received = handler.receiveEnergy(Math.min(storedEnergy.get(), ENERGY_TRANSFER_RATE), false);
+                                final int received = handler.receiveEnergy(Math.min(storedEnergy.get(), ENERGY_TRANSFER_RATE), false);
                                 storedEnergy.addAndGet(-received);
                                 energy.consumeEnergy(received);
                                 setChanged();
                                 return storedEnergy.get() > 0;
-                            }
-                            else {
+                            } else {
                                 return true;
                             }
                         }).orElse(true);
@@ -198,15 +212,14 @@ public class GeneratorBlockEntity extends SimpleGemsContainerBlockEntity<ItemSta
     /* MARK IInventory */
 
     @Override
-    public boolean canPlaceItem(int index, ItemStack stack) {
+    public boolean canPlaceItem(
+            final int index,
+            @Nonnull final ItemStack stack
+    ) {
         return items.map(h -> h.isItemValid(index, stack)).orElse(false);
     }
 
     public int getEnergy() {
         return energy.map(IEnergyStorage::getEnergyStored).orElse(0);
-    }
-
-    public boolean isProcessing() {
-        return processing;
     }
 }

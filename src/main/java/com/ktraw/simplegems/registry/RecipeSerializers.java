@@ -10,9 +10,9 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class RecipeSerializers {
     private static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, SimpleGems.MODID);
-    public static RegistryObject<RecipeSerializer<InfuserRecipe>> INFUSER_SERIALIZER = RECIPE_SERIALIZERS.register("infuser", InfuserRecipe.Serializer::new);
+    public static final RegistryObject<RecipeSerializer<InfuserRecipe>> INFUSER_SERIALIZER = RECIPE_SERIALIZERS.register("infuser", InfuserRecipe.Serializer::new);
 
-    public static void register(IEventBus eventBus) {
+    public static void register(final IEventBus eventBus) {
         RECIPE_SERIALIZERS.register(eventBus);
     }
 }

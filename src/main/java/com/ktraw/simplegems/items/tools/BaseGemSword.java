@@ -11,15 +11,27 @@ public class BaseGemSword extends SwordItem {
     private static final int ATTACK_DAMAGE_MODIFIER = 5;
     private static final float ATTACK_SPEED_MODIFIER = -2.4f;
 
-    public static RegistryObject<BaseGemSword> create(DeferredRegister<Item> registry, Tier itemTier, Rarity rarity, String registryNamePrefix) {
+    public static RegistryObject<BaseGemSword> create(
+            final DeferredRegister<Item> registry,
+            final Tier itemTier,
+            final Rarity rarity,
+            final String registryNamePrefix
+    ) {
         return registry.register(registryNamePrefix + "gem_sword", () -> new BaseGemSword(itemTier, rarity));
     }
 
-    public static RegistryObject<BaseGemSword> create(DeferredRegister<Item> registry, Tier itemTier, Rarity rarity) {
+    public static RegistryObject<BaseGemSword> create(
+            final DeferredRegister<Item> registry,
+            final Tier itemTier,
+            final Rarity rarity
+    ) {
         return create(registry, itemTier, rarity, "");
     }
 
-    private BaseGemSword(Tier itemTier, Rarity rarity) {
+    private BaseGemSword(
+            final Tier itemTier,
+            final Rarity rarity
+    ) {
         super(itemTier, ATTACK_DAMAGE_MODIFIER, ATTACK_SPEED_MODIFIER, new Properties()
                 .stacksTo(1)
                 .rarity(rarity));

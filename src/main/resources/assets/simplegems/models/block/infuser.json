@@ -4,9 +4,9 @@
     "particle": "minecraft:block/redstone_block",
     "down": "simplegems:block/infuser_bottom",
     "up": "minecraft:block/redstone_block",
-    "east":"simplegems:block/infuser_side",
-    "west":"simplegems:block/infuser_side",
-    "north":"simplegems:block/infuser_front",
-    "south":"simplegems:block/infuser_side"
+    "east": "simplegems:block/infuser_side",
+    "west": "simplegems:block/infuser_side",
+    "north": "simplegems:block/infuser_front",
+    "south": "simplegems:block/infuser_side"
   }
 }

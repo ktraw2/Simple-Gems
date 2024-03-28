@@ -9,13 +9,13 @@ public class BaseItem extends Item {
                 .stacksTo(64));
     }
 
-    public BaseItem(Rarity rarity) {
+    public BaseItem(final Rarity rarity) {
         super(new Item.Properties()
                 .stacksTo(64)
                 .rarity(rarity));
     }
 
-    public BaseItem(int stacksTo) {
+    public BaseItem(final int stacksTo) {
         super(new Properties()
                 .stacksTo(stacksTo));
     }

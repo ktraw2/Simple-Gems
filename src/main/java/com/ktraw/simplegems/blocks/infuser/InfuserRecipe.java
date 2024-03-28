@@ -9,7 +9,6 @@ import com.ktraw.simplegems.registry.Blocks;
 import com.ktraw.simplegems.registry.RecipeSerializers;
 import com.ktraw.simplegems.registry.RecipeTypes;
 import com.ktraw.simplegems.util.JSONHelper;
-import it.unimi.dsi.fastutil.ints.IntList;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
@@ -29,6 +28,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.RecipeMatcher;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -50,7 +50,14 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
     @Getter(AccessLevel.NONE)
     private final boolean isSimple;
 
-    public InfuserRecipe(ResourceLocation id, String group, ItemStack resultItem, NonNullList<Ingredient> ingredients, int energy, int processTime) {
+    public InfuserRecipe(
+            final ResourceLocation id,
+            final String group,
+            final ItemStack resultItem,
+            final NonNullList<Ingredient> ingredients,
+            final int energy,
+            final int processTime
+    ) {
         this.id = id;
         this.group = group;
         this.resultItem = resultItem;
@@ -60,13 +67,13 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
         isSimple = ingredients.stream().allMatch(Ingredient::isSimple);
     }
 
-    public InfuserRecipe(CompoundTag nbt) {
+    public InfuserRecipe(final CompoundTag nbt) {
         this.id = resourceLocationSerializer.deserialize(JsonParser.parseString(nbt.getString("id")), null, null);
         this.group = nbt.getString("group");
         this.resultItem = ItemStack.of(nbt.getCompound("resultItem"));
 
-        NonNullList<Ingredient> ingredients = NonNullList.create();
-        ListTag ingredientsListTag = nbt.getList("ingredients", Tag.TAG_STRING);
+        final NonNullList<Ingredient> ingredients = NonNullList.create();
+        final ListTag ingredientsListTag = nbt.getList("ingredients", Tag.TAG_STRING);
 
         final int size = ingredientsListTag.size();
         for (int i = 0; i < size; i++) {
@@ -81,13 +88,13 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
     }
 
     public CompoundTag serializeNBT() {
-        CompoundTag nbt = new CompoundTag();
+        final CompoundTag nbt = new CompoundTag();
         nbt.putString("id", resourceLocationSerializer.serialize(id, null, null).toString());
         nbt.putString("group", group);
         nbt.put("resultItem", resultItem.serializeNBT());
 
-        ListTag ingredientsListTag = new ListTag();
-        for (Ingredient i : ingredients) {
+        final ListTag ingredientsListTag = new ListTag();
+        for (final Ingredient i : ingredients) {
             ingredientsListTag.add(StringTag.valueOf(i.toJson().toString()));
         }
 
@@ -101,25 +108,32 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
     }
 
     @Override
-    public boolean matches(InfuserBlockEntity inv, Level worldIn) {
-        StackedContents recipeitemhelper = new StackedContents();
-        List<ItemStack> inputs = new java.util.ArrayList<>();
+    public boolean matches(
+            @Nonnull final InfuserBlockEntity inv,
+            @Nonnull final Level worldIn
+    ) {
+        final StackedContents recipeitemhelper = new StackedContents();
+        final List<ItemStack> inputs = new java.util.ArrayList<>();
         int i = 0;
 
-        for(int j = 0; j < InfuserBlockEntity.TOTAL_CRAFTING_SLOTS; ++j) {
-            ItemStack itemstack = inv.getItem(j);
+        for (int j = 0; j < InfuserBlockEntity.TOTAL_CRAFTING_SLOTS; ++j) {
+            final ItemStack itemstack = inv.getItem(j);
             if (!itemstack.isEmpty()) {
                 ++i;
                 if (isSimple) {
                     recipeitemhelper.accountStack(itemstack, 1);
-                }
-                else {
+                } else {
                     inputs.add(itemstack);
                 }
             }
         }
 
-        return i == this.ingredients.size() && (isSimple ? recipeitemhelper.canCraft(this, (IntList)null) : net.minecraftforge.common.util.RecipeMatcher.findMatches(inputs,  this.ingredients) != null);
+        return i == this.ingredients.size()
+                && (
+                isSimple
+                        ? recipeitemhelper.canCraft(this, null)
+                        : RecipeMatcher.findMatches(inputs, this.ingredients) != null
+        );
 
     }
 
@@ -139,21 +153,28 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
+    public boolean canCraftInDimensions(
+            final int width,
+            final int height
+    ) {
         return ingredients.size() <= width * height;
     }
 
     public static class Serializer implements RecipeSerializer<InfuserRecipe> {
+        @Nonnull
         @Override
-        public InfuserRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+        public InfuserRecipe fromJson(
+                @Nonnull final ResourceLocation recipeId,
+                @Nonnull final JsonObject json
+        ) {
             // get the group
-            String group = JSONHelper.getStringOrDefault("group", json, "");
+            final String group = JSONHelper.getStringOrDefault("group", json, "");
 
             // built the ingredients list
-            NonNullList<Ingredient> ingredients = NonNullList.create();
-            JsonArray jsonIngredients = json.get("ingredients").getAsJsonArray();
+            final NonNullList<Ingredient> ingredients = NonNullList.create();
+            final JsonArray jsonIngredients = json.get("ingredients").getAsJsonArray();
             for (int i = 0; i < jsonIngredients.size(); i++) {
-                Ingredient ingredient = Ingredient.fromJson(jsonIngredients.get(i));
+                final Ingredient ingredient = Ingredient.fromJson(jsonIngredients.get(i));
                 if (!ingredient.isEmpty()) {
                     ingredients.add(ingredient);
                 }
@@ -162,49 +183,52 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
             // validate the ingredients list
             if (ingredients.isEmpty()) {
                 throw new JsonParseException("No ingredients specified");
-            }
-            else if (ingredients.size() > InfuserBlockEntity.TOTAL_CRAFTING_SLOTS) {
+            } else if (ingredients.size() > InfuserBlockEntity.TOTAL_CRAFTING_SLOTS) {
                 throw new JsonParseException("Too many ingredients");
             }
 
-            int energy = JSONHelper.getIntOrDefault("energy", json, 0);
+            final int energy = JSONHelper.getIntOrDefault("energy", json, 0);
 
-            int processTime = JSONHelper.getIntOrDefault("processTime", json, 0);
+            final int processTime = JSONHelper.getIntOrDefault("processTime", json, 0);
 
             // get the output
-            ItemStack recipeOutput = ShapedRecipe.itemStackFromJson(json.get("result").getAsJsonObject());
+            final ItemStack recipeOutput = ShapedRecipe.itemStackFromJson(json.get("result").getAsJsonObject());
 
             // return a Java object with the parsed data
             return new InfuserRecipe(recipeId, group, recipeOutput, ingredients, energy, processTime);
         }
 
         @Override
-        public InfuserRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            String group = buffer.readUtf(0x7FFF);
+        public InfuserRecipe fromNetwork(
+                @Nonnull final ResourceLocation recipeId,
+                final FriendlyByteBuf buffer
+        ) {
+            final String group = buffer.readUtf(0x7FFF);
 
-            int sizeOfIngredients = buffer.readVarInt();
-            NonNullList<Ingredient> ingredients = NonNullList.withSize(sizeOfIngredients, Ingredient.EMPTY);
+            final int sizeOfIngredients = buffer.readVarInt();
+            final NonNullList<Ingredient> ingredients = NonNullList.withSize(sizeOfIngredients, Ingredient.EMPTY);
 
-            for (int i = 0; i < ingredients.size(); i++) {
-                ingredients.set(i, Ingredient.fromNetwork(buffer));
-            }
+            ingredients.replaceAll(ignored -> Ingredient.fromNetwork(buffer));
 
-            int energy = buffer.readVarInt();
+            final int energy = buffer.readVarInt();
 
-            int processTime = buffer.readVarInt();
+            final int processTime = buffer.readVarInt();
 
-            ItemStack recipeOutput = buffer.readItem();
+            final ItemStack recipeOutput = buffer.readItem();
 
             return new InfuserRecipe(recipeId, group, recipeOutput, ingredients, energy, processTime);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, InfuserRecipe recipe) {
+        public void toNetwork(
+                final FriendlyByteBuf buffer,
+                final InfuserRecipe recipe
+        ) {
             buffer.writeUtf(recipe.group, 0x7FFF);
 
             buffer.writeVarInt(recipe.ingredients.size());
 
-            for (Ingredient ingredient : recipe.ingredients) {
+            for (final Ingredient ingredient : recipe.ingredients) {
                 ingredient.toNetwork(buffer);
             }
 
@@ -216,6 +240,7 @@ public class InfuserRecipe implements Recipe<InfuserBlockEntity> {
         }
     }
 
+    @Nonnull
     @Override
     public ItemStack getToastSymbol() {
         return new ItemStack(Blocks.INFUSER.get());
